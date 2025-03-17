@@ -1,4 +1,7 @@
 package com.done.swim.domain.pool.repository;
 
-public interface PoolRepository {
+import com.done.swim.domain.pool.entity.Pool;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PoolRepository extends JpaRepository<Pool, Long> {
 }
