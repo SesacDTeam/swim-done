@@ -18,5 +18,6 @@ public class PoolController {
   @GetMapping("/{id}")
   public PoolDetailResponseDto poolsDetailPage(@PathVariable Long id) {
     return poolService.poolsDetailPage(id);
+    
   }
 }
