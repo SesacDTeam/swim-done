@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# 현재 브랜치 이름 가져오기
+current_branch=$(git symbolic-ref --short HEAD)
+
+# 보호된 브랜치
+PROTECTED_BRANCHES="^main$"
+
+# 보호된 브랜치인 경우 커밋 금지
+if [[ "$current_branch" =~ $PROTECTED_BRANCHES ]]; then
+    echo "❌ main 브랜치에 직접 커밋할 수 없습니다"
+    echo "✅ GitHub Flow 작업 방법"
+    echo "1. feature/[이슈ID]-개발내용 브랜치를 생성하여 작업"
+    echo "2. main 브랜치에 PR 요청"
+    echo "💡 모든 변경사항은 Pull Request를 통해 병합합니다"
+    exit 1
+fi
