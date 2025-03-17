@@ -10,6 +10,6 @@ services:
       TZ: Asia/Seoul
     volumes:
       - mysql-volume:/var/lib/mysql
-
+      - ./pools_data.csv:/var/lib/mysql-files/pools_data.csv
 volumes:
   mysql-volume:
