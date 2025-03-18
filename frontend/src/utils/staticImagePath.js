@@ -18,6 +18,7 @@ import pictureColor from '../assets/pictureColor.svg';
 import profile from '../assets/profile.svg';
 import swimming from '../assets/swimming.svg';
 import wave from '../assets/wave.svg';
+import kickPan from '../assets/kickPan.svg';
 
 
 export default {
@@ -41,4 +42,5 @@ export default {
   profile,
   swimming,
   wave,
+  kickPan,
 };
