@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 
 export default function SideBar() {
   const [selectedIndex, setSelectedIndex] = useState();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const sideBarItems = [
     {
@@ -23,16 +23,15 @@ export default function SideBar() {
   const handleClickItem = (index) => {
     setSelectedIndex(index);
     if (index === 0) {
-      navigate("/mypage")
+      navigate('/mypage');
     } else {
-      navigate("/mark-pools")
+      navigate('/mark-pools');
     }
-    
   };
 
   const handleToMain = () => {
-    navigate("/")
-    setSelectedIndex(null)
+    navigate('/');
+    setSelectedIndex(null);
   };
 
   return (
