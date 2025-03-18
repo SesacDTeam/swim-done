@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseTimeEntity/* implements UserDetails*/ {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +27,17 @@ public class User extends BaseTimeEntity/* implements UserDetails*/ {
     private String provider;
     private String providerId;
 
+    private String imageUrl;
+
 //    @Enumerated(EnumType.STRING)
 //    private Role role;
 
     @Builder
-    public User(String email, String nickname, String provider, String providerId) {
+    public User(String email, String nickname, String provider, String providerId, String imageUrl) {
         this.email = email;
         this.nickname = nickname;
         this.provider = provider;
         this.providerId = providerId;
+        this.imageUrl = imageUrl;
     }
 }
