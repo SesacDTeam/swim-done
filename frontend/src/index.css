@@ -36,4 +36,8 @@
     font: var(--font-pretendard);
     @apply font-medium;
   }
+
+  .main-container {
+    @apply h-screen
+  }
 }
