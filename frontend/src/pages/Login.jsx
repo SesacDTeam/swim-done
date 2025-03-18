@@ -1,5 +1,6 @@
 import React from 'react';
 import KakaoLoginButton from '../components/sociallogin/KakaoLoginButton';
+import NaverLoginButton from '../components/sociallogin/NaverLoginButton';
 
 export default function Login() {
   return (
@@ -10,6 +11,7 @@ export default function Login() {
         </h1>
         <h1>오수완에 오신 걸 환영해요.</h1>
       </div>
+      <NaverLoginButton></NaverLoginButton>
       <KakaoLoginButton></KakaoLoginButton>
     </>
   );
