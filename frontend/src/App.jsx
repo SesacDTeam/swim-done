@@ -1,11 +1,10 @@
-import imagePath from './utils/staticImagePath';
+import { RouterProvider } from 'react-router-dom';
+import router from './router/index.jsx';
 
 function App() {
   return (
     <>
-      {Object.keys(imagePath).map((key) => {
-        <img src={imagePath[key]} alt="" />;
-      })}
+      <RouterProvider router={router}></RouterProvider>
     </>
   );
 }
