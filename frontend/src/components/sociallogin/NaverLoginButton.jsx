@@ -1,10 +1,10 @@
 import React from 'react';
 
 export default function NaverLoginButton() {
-  const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
-  const NAVER_REDIRECT_URL = import.meta.env.VITE_NAVER_REDIRECT_URL;
-
-  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${NAVER_REDIRECT_URL}&state=1234`;
+  // 백엔드에서 제공하는 OAuth2 로그인 URL로 이동 (백엔드를 통해 인증하는 방법)
+  // 개발 환경에서는 백엔드 주소 기입
+  const DOMAIN = import.meta.env.VITE_DOMAIN;
+  const NAVER_AUTH_URL = `${DOMAIN}/api/login/oauth2/code/naver`;
 
   const handleNaverLogin = () => {
     window.location.href = NAVER_AUTH_URL;
@@ -14,11 +14,11 @@ export default function NaverLoginButton() {
     <div className="flex justify-center">
       <button
         onClick={handleNaverLogin}
-        style={{ backgroundColor: '#03C75A' }}
-        className="flex items-center text-white rounded-md px-4 py-2 gap-2 display-center mb-2"
+        className="font-pretendard font-semibold flex items-center bg-ngreen text-white rounded-md px-4 py-2 gap-2 mb-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 flex-shrink-0"
           width="20"
           height="20"
           viewBox="0 0 20 20"
@@ -29,7 +29,7 @@ export default function NaverLoginButton() {
             fill="white"
           />
         </svg>
-        네이버로 계속하기
+        <span className="leading-normal">네이버로 계속하기</span>
       </button>
     </div>
   );
