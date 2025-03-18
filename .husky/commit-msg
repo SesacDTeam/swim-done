@@ -58,7 +58,7 @@ echo "커밋 메세지"
 echo "$filtered_msg"
 
 # 커밋 메세지 패턴 검사
-if ! echo "$commit_msg" | grep -qE '^\[([A-Z]+-[0-9]+)\]\s+(feat|fix|docs|style|refactor|test|chore): .+'; then
+if ! echo "$commit_msg" | grep -qE '^\[([A-Z]+-[0-9]+)\]\s+(feat|fix|design|docs|refactor|chore): .+'; then
     echo "❌ 잘못된 커밋 메세지 형식입니다."
     echo "
     올바른 커밋 메세지 형식
