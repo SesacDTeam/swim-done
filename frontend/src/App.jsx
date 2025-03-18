@@ -4,7 +4,9 @@ import router from './router/index.jsx';
 function App() {
   return (
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <div className="main-container">
+        <RouterProvider router={router}></RouterProvider>
+      </div>
     </>
   );
 }

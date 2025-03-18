@@ -5,8 +5,10 @@ import SideBar from '../components/sidebar/SideBar';
 export default function Home() {
   return (
     <>
-      <SideBar></SideBar>
-      <Outlet></Outlet>
+      <div className="flex h-full">
+        <SideBar></SideBar>
+        <Outlet></Outlet>
+      </div>
     </>
   );
 }
