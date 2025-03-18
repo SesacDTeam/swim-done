@@ -1,7 +1,7 @@
 package com.done.swim.domain.pool.controller;
 
 import com.done.swim.common.ApiResponse;
-import com.done.swim.domain.pool.dto.responseDto.PoolDetailResponseDto;
+import com.done.swim.domain.pool.dto.responsedto.PoolDetailResponseDto;
 import com.done.swim.domain.pool.service.PoolService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

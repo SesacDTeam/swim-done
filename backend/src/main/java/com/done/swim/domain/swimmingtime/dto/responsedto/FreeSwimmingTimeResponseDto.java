@@ -1,4 +1,4 @@
-package com.done.swim.domain.swimmingtime.dto;
+package com.done.swim.domain.swimmingtime.dto.responsedto;
 
 import com.done.swim.domain.swimmingtime.entity.SwimmingTime;
 import java.time.LocalTime;

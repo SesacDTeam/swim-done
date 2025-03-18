@@ -1,4 +1,4 @@
-package com.done.swim.domain.poolreview.dto.responseDto;
+package com.done.swim.domain.poolreview.dto.responsedto;
 
 import com.done.swim.domain.poolreview.entity.PoolReview;
 import java.time.LocalDateTime;
@@ -13,6 +13,7 @@ public class PoolDetailPageReviewResponseDto {
   private final LocalDateTime createdAt;
 
   public static PoolDetailPageReviewResponseDto from(PoolReview dto) {
+
     return PoolDetailPageReviewResponseDto.builder()
         .content(dto.getContent())
         .createdAt(dto.getCreatedAt())

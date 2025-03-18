@@ -12,13 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
@@ -40,14 +37,6 @@ public class PoolReview extends BaseTimeEntity {
 
   @Column(nullable = false, length = 100)
   private String content;
-
-  @CreatedDate
-  @Column(updatable = false)
-  private LocalDateTime createdAt;
-
-  @LastModifiedDate
-  @Column
-  private LocalDateTime updatedAt;
 
   @Builder
   public PoolReview(Pool pool, User user, String content) {
