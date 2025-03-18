@@ -14,8 +14,8 @@ public class PoolService {
 
   private final PoolRepository poolRepository;
 
-  public PoolDetailResponseDto poolsDetailPage(Long id) {
-    Pool pool = poolRepository.findByIdWithCommentAndTimes(id)
+  public PoolDetailResponseDto fetchPoolDetail(Long poolId) {
+    Pool pool = poolRepository.findByIdWithCommentAndTimes(poolId)
         //이 후 GlobalException 정의 후 수정 예정
         .orElseThrow(() -> new IllegalArgumentException("해당 수영장이 존재하지 않습니다."));
     return PoolDetailResponseDto.from(pool);

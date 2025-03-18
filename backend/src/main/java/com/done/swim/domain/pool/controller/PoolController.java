@@ -17,8 +17,9 @@ public class PoolController {
 
   private final PoolService poolService;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<ApiResponse<PoolDetailResponseDto>> poolsDetailPage(@PathVariable Long id) {
-    return ResponseEntity.ok(ApiResponse.ok(poolService.poolsDetailPage(id)));
+  @GetMapping("/{poolId}")
+  public ResponseEntity<ApiResponse<PoolDetailResponseDto>> fetchPoolDetail(
+      @PathVariable Long poolId) {
+    return ResponseEntity.ok(ApiResponse.ok(poolService.fetchPoolDetail(poolId)));
   }
 }
