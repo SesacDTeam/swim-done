@@ -23,11 +23,10 @@ public class PoolMarkService {
 
   @Transactional
   public void createPoolMark(Long poolId) {
-    log.info("Create pool mark {}", poolId);
     Pool pool = poolRepository.findById(poolId)
       .orElseThrow(() -> new IllegalArgumentException("수영장이 없습니다."));
 
-    // 토큰 구현이 안되어있어서 임시로(토큰 구현 후에는 User를 파라미터로 받을 예정)
+    // TODO: 토큰 구현이 안되어있어서 임시로(토큰 구현 후에는 User를 파라미터로 받을 예정)
     User user = userRepository.findById(2L)
       .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다."));
 
