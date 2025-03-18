@@ -15,7 +15,7 @@ public class PoolService {
   private final PoolRepository poolRepository;
 
   public PoolDetailResponseDto poolsDetailPage(Long id) {
-    Pool pool = poolRepository.findByIdWithCommentAndtimes(id)
+    Pool pool = poolRepository.findByIdWithCommentAndTimes(id)
         .orElseThrow(() -> new IllegalArgumentException("해당 수영장이 존재하지 않습니다."));
 
     return PoolDetailResponseDto.from(pool);

@@ -9,7 +9,9 @@ import org.springframework.data.repository.query.Param;
 public interface PoolRepository extends JpaRepository<Pool, Long> {
 
   @Query("SELECT p FROM Pool p " +
-      "LEFT JOIN p.swimmingTimes " +
+      "LEFT JOIN FETCH p.swimmingTimes st " +
+      "LEFT JOIN FETCH p.poolReviews pr " +  // FETCH 추가
       "WHERE p.id = :id")
-  Optional<Pool> findByIdWithCommentAndtimes(@Param("id") Long id);
+  Optional<Pool> findByIdWithCommentAndTimes(@Param("id") Long id);
+
 }

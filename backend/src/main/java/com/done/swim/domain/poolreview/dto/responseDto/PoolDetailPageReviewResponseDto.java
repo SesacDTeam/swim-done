@@ -1,4 +1,4 @@
-package com.done.swim.domain.poolreview.dto;
+package com.done.swim.domain.poolreview.dto.responseDto;
 
 import com.done.swim.domain.poolreview.entity.PoolReview;
 import java.time.LocalDateTime;

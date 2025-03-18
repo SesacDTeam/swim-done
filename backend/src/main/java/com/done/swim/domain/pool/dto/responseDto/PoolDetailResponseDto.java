@@ -1,7 +1,7 @@
 package com.done.swim.domain.pool.dto.responseDto;
 
 import com.done.swim.domain.pool.entity.Pool;
-import com.done.swim.domain.poolreview.dto.PoolDetailPageReviewResponseDto;
+import com.done.swim.domain.poolreview.dto.responseDto.PoolDetailPageReviewResponseDto;
 import com.done.swim.domain.swimmingtime.dto.FreeSwimmingTimeResponseDto;
 import java.util.List;
 import lombok.Builder;

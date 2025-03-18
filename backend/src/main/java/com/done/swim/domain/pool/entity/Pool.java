@@ -10,7 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,10 +48,10 @@ public class Pool {
   private String additionalInfo;
 
   @OneToMany(mappedBy = "pool", fetch = FetchType.LAZY)
-  private List<SwimmingTime> swimmingTimes;
+  private Set<SwimmingTime> swimmingTimes;
 
   @OneToMany(mappedBy = "pool", fetch = FetchType.LAZY)
-  private List<PoolReview> poolReviews;
+  private Set<PoolReview> poolReviews;
 
 
   @Builder
