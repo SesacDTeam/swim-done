@@ -43,6 +43,26 @@
     @apply font-medium;
   }
 
+  .pretendard-normal {
+    font: var(--font-pretendard);
+    @apply font-normal;
+  }
+
+  .pretendard-light {
+    font: var(--font-pretendard);
+    @apply font-light;
+  }
+
+  .pretendard-extralight {
+    font: var(--font-pretendard);
+    @apply font-extralight;
+  }
+
+  .pretendard-thin {
+    font: var(--font-pretendard);
+    @apply font-thin;
+  }
+
   .main-container {
     @apply h-screen
   }
