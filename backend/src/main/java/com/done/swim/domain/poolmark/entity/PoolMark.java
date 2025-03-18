@@ -5,8 +5,10 @@ import com.done.swim.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "pool_marks")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
