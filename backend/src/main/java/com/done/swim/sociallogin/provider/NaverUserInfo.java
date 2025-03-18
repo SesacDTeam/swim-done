@@ -7,42 +7,40 @@ import java.util.Map;
 public class NaverUserInfo implements OAuth2UserInfo {
 
     // response 키 안에 사용자 정보 있음 (네이버)
-    private Map<String, Object> attributes;
+    private Map<String, Object> response;
 
     public NaverUserInfo(Map<String, Object> attributes) {
-        this.attributes = (Map<String, Object>) attributes.get("response");
+        this.response = (Map<String, Object>) attributes.get("response");
     }
 
-//    private Map<String, Object> attributes;
-//    private Map<String, Object> response;
-//
-//    public NaverUserInfo(Map<String, Object> attributes) {
-//        this.attributes = attributes;
-//        this.response = (Map<String, Object>) attributes.get("response");
+//    @Override
+//    public String getProvider() {
+//        return "NAVER";
 //    }
 
+    // enum으로 변경함
     @Override
-    public String getProvider() {
-        return "NAVER";
+    public Provider getProvider() {
+        return Provider.NAVER;
     }
 
     @Override
     public String getProviderId() {
-        return (String) attributes.get("id");
+        return (String) response.get("id");
     }
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("email");
+        return (String) response.get("email");
     }
 
     @Override
     public String getNickname() {
-        return (String) attributes.get("nickname");
+        return (String) response.get("nickname");
     }
 
     @Override
     public String getUserImageUrl() {
-        return (String) attributes.get("profile_image");
+        return (String) response.get("profile_image");
     }
 }

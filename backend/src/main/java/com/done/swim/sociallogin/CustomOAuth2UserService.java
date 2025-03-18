@@ -3,6 +3,7 @@ package com.done.swim.sociallogin;
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
 import com.done.swim.sociallogin.provider.NaverUserInfo;
+import com.done.swim.sociallogin.provider.Provider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -30,6 +31,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 네이버 사용자 정보 DTO 변환
         NaverUserInfo naverUserInfo = new NaverUserInfo(attributes);
 
+        Provider provider = naverUserInfo.getProvider();
+
         // TODO : 기존 회원 확인 및 없으면 회원가입 (근데 애초에 소셜로그인만 있으면 이게 무슨 상관일까? -> 그냥 바로 userepository에 저장?)
         User user = userRepository.findByEmail(naverUserInfo.getEmail())
                 .orElseGet(() -> {
@@ -37,7 +40,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             .email(naverUserInfo.getEmail())
                             .nickname(naverUserInfo.getNickname())
                             .imageUrl(naverUserInfo.getUserImageUrl())
-                            .provider("NAVER")
+                            .provider(provider.name()) // Provider enum 값 사용
                             .providerId(naverUserInfo.getProviderId())
                             .build();
 
