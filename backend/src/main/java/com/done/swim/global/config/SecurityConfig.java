@@ -4,7 +4,7 @@ import com.done.swim.global.jwt.JwtAuthenticationFilter;
 import com.done.swim.global.security.handler.CustomAccessDeniedHandler;
 import com.done.swim.global.security.handler.JwtAuthenticationEntryPoint;
 import com.done.swim.sociallogin.CustomOAuth2UserService;
-import com.done.swim.sociallogin.OAuth2SuccessHandler;
+import com.done.swim.sociallogin.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Value("${origin}")
     private String origin;
@@ -49,13 +49,13 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")  // 추가
                         .authorizationEndpoint(endpoint ->
-                                endpoint.baseUri("/oauth2/authorization") // 추가
+                                endpoint.baseUri("/oauth2/authorization")
                         )
                         .redirectionEndpoint(endpoint ->
-                                endpoint.baseUri("/login/oauth2/code/*") // 추가
+                                endpoint.baseUri("/login/oauth2/code/*")
                         )
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .successHandler(oAuth2SuccessHandler)
+                        .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception
