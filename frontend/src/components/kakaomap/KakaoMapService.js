@@ -1,7 +1,6 @@
 import { points } from './points';
-import staticImagePath from '../../utils/staticImagePath';
+import { kickPan } from '../../utils/staticImagePath';
 
-const {kickPan} = staticImagePath;
 
 export let map = null;
 /**
@@ -54,7 +53,7 @@ export function createMap(mapContainer) {
  * @param {number} lng - 경도
  * @returns {Object} LatLng 객체
  */
-export function createLatLng(lat, lng) {
+function createLatLng(lat, lng) {
   return new kakao.maps.LatLng(lat, lng);
 }
 
@@ -66,7 +65,7 @@ export function createLatLng(lat, lng) {
  * @param {Object} [map=null] - 마커를 추가할 지도 객체 (기본값: null)
  * @returns {Object} 생성된 마커 객체
  */
-export function createMarker(position, image, map = null) {
+function createMarker(position, image, map = null) {
   return new kakao.maps.Marker({
     position,
     image,
@@ -81,7 +80,7 @@ export function createMarker(position, image, map = null) {
  * @param {Object} imageSize - 이미지 크기 설정 객체 { imageWidth, imageHeight }
  * @returns {Object} 생성된 마커 이미지 객체
  */
-export function createMarkerImage(image, imageSize) {
+function createMarkerImage(image, imageSize) {
   const { imageWidth, imageHeight } = imageSize;
   const markerSize = new kakao.maps.Size(imageWidth, imageHeight);
   return new kakao.maps.MarkerImage(image, markerSize);
@@ -94,7 +93,7 @@ export function createMarkerImage(image, imageSize) {
  * @param {Object} marker - 마커 객체
  * @param {Object} point - 마커의 데이터 (title, lat, lng 등)
  */
-export function createInfoWindow(map, marker, point) {
+function createInfoWindow(map, marker, point) {
   const infoWindow = new kakao.maps.InfoWindow({
     content: `
       <div style='height:100px;'>
@@ -116,7 +115,7 @@ export function createInfoWindow(map, marker, point) {
  * @param {Array} points - 마커를 추가할 좌표 리스트
  * @param {Object} map - 지도 객체
  */
-export function addMarkers(points, map) {
+function addMarkers(points, map) {
   points.forEach((point) => {
     const position = createLatLng(point.lat, point.lng);
     const markerImage = createMarkerImage(kickPan, markerImageSize);
@@ -131,7 +130,7 @@ export function addMarkers(points, map) {
  * @param {Array} points - 마커를 추가할 좌표 리스트
  * @param {Object} map - 지도 객체
  */
-export function clustererHandler(points, map) {
+function clustererHandler(points, map) {
   const filteredPoints = {};
 
   points.forEach((point) => {
@@ -174,7 +173,7 @@ export function initCenterHandler(map) {
  * @description 줌 컨트롤 추가
  * @param {Object} map - 지도 객체
  */
-export function createZoomControl(map) {
+function createZoomControl(map) {
   const zoomControl = new kakao.maps.ZoomControl();
   map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 }
