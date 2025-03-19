@@ -14,7 +14,7 @@ public class PoolMarkResponseDto {
 
   public static PoolMarkResponseDto from(PoolMark poolMark) {
     return PoolMarkResponseDto.builder()
-      .id(poolMark.getId())
+      .id(poolMark.getPool().getId())
       .name(poolMark.getPool().getName())
       .address(poolMark.getPool().getAddress())
       .mark(true)
