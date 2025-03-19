@@ -2,15 +2,18 @@ package com.done.swim.sociallogin;
 
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
+import com.done.swim.sociallogin.provider.KakaoUserInfo;
 import com.done.swim.sociallogin.provider.NaverUserInfo;
+import com.done.swim.sociallogin.provider.OAuth2UserInfo;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 
 @Service
@@ -25,25 +28,31 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        Map<String, Object> attributes = oAuth2User.getAttributes();
+        // 어떤 OAuth2 제공자인지 확인 (네이버 or 카카오)
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        OAuth2UserInfo oAuth2UserInfo;
 
-        // 네이버 사용자 정보 DTO 변환
-        NaverUserInfo naverUserInfo = new NaverUserInfo(attributes);
+        if ("naver".equals(registrationId)) {
+            oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
+        } else if ("kakao".equals(registrationId)) {
+            oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+        } else {
+            throw new OAuth2AuthenticationException("지원하지 않는 소셜 로그인입니다.");
+        }
 
-        // TODO : 기존 회원 확인 및 없으면 회원가입 (근데 애초에 소셜로그인만 있으면 이게 무슨 상관일까? -> 그냥 바로 userepository에 저장?)
-        User user = userRepository.findByEmail(naverUserInfo.getEmail())
-                .orElseGet(() -> {
-                    User naverUser = User.builder()
-                            .email(naverUserInfo.getEmail())
-                            .nickname(naverUserInfo.getNickname())
-                            .imageUrl(naverUserInfo.getUserImageUrl())
-                            .provider("NAVER")
-                            .providerId(naverUserInfo.getProviderId())
-                            .build();
+        User user = userRepository.findByEmail(oAuth2UserInfo.getEmail())
+            .orElseGet(() -> userRepository.save(User.builder()
+                .email(oAuth2UserInfo.getEmail())
+                .nickname(oAuth2UserInfo.getNickname())
+                .imageUrl(oAuth2UserInfo.getUserImageUrl())
+                .provider(oAuth2UserInfo.getProvider())
+                .providerId(oAuth2UserInfo.getProviderId())
+                .build()));
 
-                    return userRepository.save(naverUser);
-                });
-
-        return new CustomOAuth2User(user, attributes);
+        return new DefaultOAuth2User(
+            Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+            oAuth2User.getAttributes(),
+            "id"
+        );
     }
 }
