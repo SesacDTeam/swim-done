@@ -48,10 +48,6 @@ public class PoolReviewService {
     Page<PoolReview> poolReviews = poolReviewRepository.findAllByUserId(userId,
         pageable);
 
-    if (poolReviews.isEmpty()) {
-      throw new IllegalArgumentException("해당 유저의 리뷰가 존재하지 않습니다.");
-    }
-
     return poolReviews.map(MyReviewResponseDto::from);
 
   }

@@ -29,11 +29,11 @@ public class PoolReviewController {
   @PostMapping("/pools/{poolId}/reviews")
   public ResponseEntity<ApiResponse<CreatePoolReviewResponseDto>> createReview(
       @PathVariable Long poolId,
-      @Valid @RequestBody CreatePoolReviewRequestDto requestDto) {
+      @Valid @RequestBody CreatePoolReviewRequestDto requesteDto) {
 
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(ApiResponse.ok("리뷰 생성 성공!!", "SUCCESS",
-            poolReviewService.createReview(poolId, requestDto)));
+            poolReviewService.createReview(poolId, requesteDto)));
   }
 
   @GetMapping("/my/reviews")
