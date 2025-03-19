@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PoolMarkRepository extends JpaRepository<PoolMark, Long> {
 
-  boolean existsByUserAndPool(User user, Pool pool);
+  PoolMark findByUserAndPool(User user, Pool pool);
 
   Page<PoolMark> findByUserId(Long userId, Pageable pageable);
 }
