@@ -6,6 +6,8 @@ import com.done.swim.domain.poolreview.dto.requestdto.CreatePoolReviewRequestDto
 import com.done.swim.domain.poolreview.dto.responsedto.CreatePoolReviewResponseDto;
 import com.done.swim.domain.poolreview.entity.PoolReview;
 import com.done.swim.domain.poolreview.repository.PoolReviewRepository;
+import com.done.swim.domain.user.entity.User;
+import com.done.swim.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,22 +19,21 @@ public class PoolReviewService {
 
   private final PoolReviewRepository poolReviewRepository;
   private final PoolRepository poolRepository;
+  private final UserRepository userRepository;
 
-
-  //유저아이디 추출방법 알아서 추후 유저아이디도 추가로 저장해야함
   @Transactional
   public CreatePoolReviewResponseDto createReview(Long poolId,
       CreatePoolReviewRequestDto requestDto) {
 
-    //GlobalException 확정 후 수정예정
+    //TODO : GlobalException 확정 후 수정예정
     Pool pool = poolRepository.findById(poolId)
         .orElseThrow(() -> new IllegalArgumentException("해당 수영장이 존재하지 않습니다."));
 
-    if (requestDto.getContent().length() > 30) {
-      throw new IllegalArgumentException("리뷰 내용은 30자 이하로 작성해야 합니다.");
-    }
+    // TODO: 토큰 구현이 안되어있어서 더미 데이터로 테스트
+    User user = userRepository.findById(requestDto.getUserId())
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-    PoolReview poolReview = requestDto.toEntity(pool);
+    PoolReview poolReview = requestDto.toEntity(pool, user);
     poolReviewRepository.save(poolReview);
 
     return CreatePoolReviewResponseDto.from(poolReview);
