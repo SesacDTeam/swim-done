@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import staticImagePath from '../../utils/staticImagePath';
+import { mypage, markPool, mypageColor, markPoolColor, home, logo } from '../../utils/staticImagePath';
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
 
@@ -9,13 +9,13 @@ export default function SideBar() {
 
   const sideBarItems = [
     {
-      image: staticImagePath.mypage,
-      selectedImage: staticImagePath.mypageColor,
+      image: mypage,
+      selectedImage: mypageColor,
       title: '마이페이지',
     },
     {
-      image: staticImagePath.markPool,
-      selectedImage: staticImagePath.markPoolColor,
+      image: markPool,
+      selectedImage: markPoolColor,
       title: '내가 찜한 수영장',
     },
   ];
@@ -38,7 +38,7 @@ export default function SideBar() {
     <>
       <div className="border-gray03 border-[0.5px] w-30 flex flex-col items-center h-full">
         <img
-          src={staticImagePath.logo}
+          src={logo}
           alt=""
           className="w-2/3 mt-5 cursor-pointer select-none"
           draggable={false}
@@ -60,7 +60,7 @@ export default function SideBar() {
         })}
 
         <img
-          src={staticImagePath.home}
+          src={home}
           alt=""
           className="h-12 aspect-square absolute bottom-10 cursor-pointer select-none"
           draggable={false}

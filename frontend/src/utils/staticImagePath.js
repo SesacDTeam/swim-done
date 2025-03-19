@@ -1,44 +1,20 @@
-import logo from '../assets/logo.svg';
-import home from '../assets/home.svg';
-import contactUs from '../assets/contactUs.svg';
-import contactUsColor from '../assets/contactUs.svg'
-import kewordReview from '../assets/keywordReview.svg';
-import kewordReviewColor from '../assets/keywordReviewColor.svg';
-import markPool from '../assets/markPool.svg';
-import markPoolColor from '../assets/markPoolColor.svg';
-import mark from '../assets/mark.svg';
-import markColor from '../assets/markColor.svg';
-import more from '../assets/more.svg';
-import myReview from '../assets/myReview.svg';
-import myReviewColor from '../assets/myReviewColor.svg';
-import mypage from '../assets/mypage.svg';
-import mypageColor from '../assets/mypageColor.svg';
-import noContent from '../assets/noContent.svg';
-import pictureColor from '../assets/pictureColor.svg';
-import profile from '../assets/profile.svg';
-import swimming from '../assets/swimming.svg';
-import wave from '../assets/wave.svg';
-
-
-export default {
-  logo,
-  home,
-  contactUs,
-  contactUsColor,
-  kewordReview,
-  kewordReviewColor,
-  markPool,
-  markPoolColor,
-  mark,
-  markColor,
-  more,
-  myReview,
-  myReviewColor,
-  mypage,
-  mypageColor,
-  noContent,
-  pictureColor,
-  profile,
-  swimming,
-  wave,
-};
+export { default as logo } from '../assets/logo.svg';
+export { default as home } from '../assets/home.svg';
+export { default as contactUs } from '../assets/contactUs.svg';
+export { default as contactUsColor } from '../assets/contactUsColor.svg';
+export { default as kewordReview } from '../assets/keywordReview.svg';
+export { default as kewordReviewColor } from '../assets/keywordReviewColor.svg';
+export { default as markPool } from '../assets/markPool.svg';
+export { default as markPoolColor } from '../assets/markPoolColor.svg';
+export { default as mark } from '../assets/mark.svg';
+export { default as markColor } from '../assets/markColor.svg';
+export { default as more } from '../assets/more.svg';
+export { default as myReview } from '../assets/myReview.svg';
+export { default as myReviewColor } from '../assets/myReviewColor.svg';
+export { default as mypage } from '../assets/mypage.svg';
+export { default as mypageColor } from '../assets/mypageColor.svg';
+export { default as noContent } from '../assets/noContent.svg';
+export { default as pictureColor } from '../assets/pictureColor.svg';
+export { default as profile } from '../assets/profile.svg';
+export { default as swimming } from '../assets/swimming.svg';
+export { default as wave } from '../assets/wave.svg';
