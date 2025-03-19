@@ -4,11 +4,14 @@ import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.pool.repository.PoolRepository;
 import com.done.swim.domain.poolreview.dto.requestdto.CreatePoolReviewRequestDto;
 import com.done.swim.domain.poolreview.dto.responsedto.CreatePoolReviewResponseDto;
+import com.done.swim.domain.poolreview.dto.responsedto.MyReviewResponseDto;
 import com.done.swim.domain.poolreview.entity.PoolReview;
 import com.done.swim.domain.poolreview.repository.PoolReviewRepository;
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,4 +42,14 @@ public class PoolReviewService {
     return CreatePoolReviewResponseDto.from(poolReview);
 
   }
+
+  public Page<MyReviewResponseDto> myReviews(Long userId, Pageable pageable) {
+    //TODO: 토큰 구현이 안되어있어서 더미 데이터로 테스트
+    Page<PoolReview> poolReviews = poolReviewRepository.findAllByUserId(userId,
+        pageable);
+
+    return poolReviews.map(MyReviewResponseDto::from);
+
+  }
 }
+
