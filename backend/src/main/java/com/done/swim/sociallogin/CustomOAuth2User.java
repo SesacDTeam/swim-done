@@ -13,6 +13,7 @@ import java.util.Map;
 public class CustomOAuth2User implements OAuth2User {
 
     // 실제 사용자 정보
+    @Getter
     private final User user;
     // 소셜 로그인에서 받은 사용자 정보
     private final Map<String, Object> attributes;
@@ -35,6 +36,7 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        return "";
+        return user.getNickname();
     }
+
 }
