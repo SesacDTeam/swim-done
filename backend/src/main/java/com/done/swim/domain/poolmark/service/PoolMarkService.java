@@ -43,6 +43,7 @@ public class PoolMarkService {
   }
 
   public PoolMarkListResponseDto getMyPoolMark(Pageable pageable) {
+    // TODO: user 변경할 예정
     Page<PoolMark> poolMarkPage = poolMarkRepository.findByUserId(2L, pageable);
 
     return PoolMarkListResponseDto.from(poolMarkPage);
