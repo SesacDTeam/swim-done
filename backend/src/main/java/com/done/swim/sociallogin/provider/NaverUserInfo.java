@@ -7,19 +7,11 @@ import java.util.Map;
 public class NaverUserInfo implements OAuth2UserInfo {
 
     // response 키 안에 사용자 정보 있음 (네이버)
-    private Map<String, Object> attributes;
+    private final Map<String, Object> attributes;
 
     public NaverUserInfo(Map<String, Object> attributes) {
         this.attributes = (Map<String, Object>) attributes.get("response");
     }
-
-//    private Map<String, Object> attributes;
-//    private Map<String, Object> response;
-//
-//    public NaverUserInfo(Map<String, Object> attributes) {
-//        this.attributes = attributes;
-//        this.response = (Map<String, Object>) attributes.get("response");
-//    }
 
     @Override
     public String getProvider() {
@@ -28,21 +20,22 @@ public class NaverUserInfo implements OAuth2UserInfo {
 
     @Override
     public String getProviderId() {
-        return (String) attributes.get("id");
+        return attributes.get("id").toString();
     }
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("email");
+        return attributes.get("email").toString();
     }
 
     @Override
     public String getNickname() {
-        return (String) attributes.get("nickname");
+        return attributes.get("nickname").toString();
     }
 
     @Override
     public String getUserImageUrl() {
-        return (String) attributes.get("profile_image");
+        return attributes.get("profile_image") != null ? attributes.get("profile_image").toString()
+            : "";
     }
 }

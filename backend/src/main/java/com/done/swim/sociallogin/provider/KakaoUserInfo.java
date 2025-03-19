@@ -6,20 +6,11 @@ import java.util.Map;
 //  OAuth2UserInfo 인터페이스 -> 카카오 로그인 시 필요한 사용자 정보 추출
 public class KakaoUserInfo implements OAuth2UserInfo {
 
-    // response 키 안에 사용자 정보 있음 (카카오)
     private final Map<String, Object> attributes;
 
     public KakaoUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
-
-//    private Map<String, Object> attributes;
-//    private Map<String, Object> response;
-//
-//    public NaverUserInfo(Map<String, Object> attributes) {
-//        this.attributes = attributes;
-//        this.response = (Map<String, Object>) attributes.get("response");
-//    }
 
     @Override
     public String getProvider() {
@@ -28,21 +19,25 @@ public class KakaoUserInfo implements OAuth2UserInfo {
 
     @Override
     public String getProviderId() {
-        return (String) attributes.get("id");
+        return attributes.get("id").toString();
     }
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("email");
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        return kakaoAccount.get("email") != null ? kakaoAccount.get("email").toString() : null;
     }
 
     @Override
     public String getNickname() {
-        return (String) attributes.get("nickname");
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+        return properties.get("nickname").toString();
     }
 
     @Override
     public String getUserImageUrl() {
-        return (String) attributes.get("profile_image");
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+        return properties.get("profile_image_url") != null ? properties.get("profile_image_url")
+            .toString() : "";
     }
 }
