@@ -20,7 +20,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "pool_reviews")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PoolReview extends BaseTimeEntity {
@@ -37,6 +36,7 @@ public class PoolReview extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
+  @Setter
   @Column(nullable = false, length = 100)
   private String content;
 
