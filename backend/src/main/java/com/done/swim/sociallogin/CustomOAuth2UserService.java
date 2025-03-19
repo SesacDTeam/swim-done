@@ -33,7 +33,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Provider provider = naverUserInfo.getProvider();
 
-        // TODO : 기존 회원 확인 및 없으면 회원가입 (근데 애초에 소셜로그인만 있으면 이게 무슨 상관일까? -> 그냥 바로 userepository에 저장?)
         User user = userRepository.findByEmail(naverUserInfo.getEmail())
                 .orElseGet(() -> {
                     User naverUser = User.builder()

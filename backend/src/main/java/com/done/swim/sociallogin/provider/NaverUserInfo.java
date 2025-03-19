@@ -13,11 +13,6 @@ public class NaverUserInfo implements OAuth2UserInfo {
         this.response = (Map<String, Object>) attributes.get("response");
     }
 
-//    @Override
-//    public String getProvider() {
-//        return "NAVER";
-//    }
-
     // enum으로 변경함
     @Override
     public Provider getProvider() {
