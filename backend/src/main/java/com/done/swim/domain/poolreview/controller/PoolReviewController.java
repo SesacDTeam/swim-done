@@ -1,6 +1,8 @@
 package com.done.swim.domain.poolreview.controller;
 
 import com.done.swim.common.ApiResponse;
+import com.done.swim.domain.poolreview.dto.requestdto.CreatePoolReviewRequestDto;
+import com.done.swim.domain.poolreview.dto.responsedto.CreatePoolReviewResponseDto;
 import com.done.swim.domain.poolreview.service.PoolReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,12 @@ public class PoolReviewController {
   private final PoolReviewService poolReviewService;
 
   @PostMapping("/pools/{poolId}/reviews")
-  public ResponseEntity<ApiResponse<Void>> CreateReview(@PathVariable Long poolId,
-      @RequestBody String content) {
-    poolReviewService.CreateReview(poolId, content);
+  public ResponseEntity<ApiResponse<CreatePoolReviewResponseDto>> CreateReview(
+      @PathVariable Long poolId,
+      @RequestBody CreatePoolReviewRequestDto requestDto) {
+
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(ApiResponse.ok("리뷰 생성 성공!!", "SUCCESS", null));
+        .body(ApiResponse.ok("리뷰 생성 성공!!", "SUCCESS",
+            poolReviewService.createReview(poolId, requestDto)));
   }
 }
