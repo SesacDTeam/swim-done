@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router';
 import SideBar from '../components/sidebar/SideBar';
 import KakaoMapContainer from '../components/kakaomap/KaKaoMapContainer';
+import { useSelector } from 'react-redux';
 
 export default function Home() {
   return (
