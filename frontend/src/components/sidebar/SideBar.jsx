@@ -4,22 +4,22 @@ import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
 import { initCenterHandler, map } from '../kakaomap/KakaoMapService';
 
+const sideBarItems = [
+  {
+    image: mypage,
+    selectedImage: mypageColor,
+    title: '마이페이지',
+  },
+  {
+    image: markPool,
+    selectedImage: markPoolColor,
+    title: '내가 찜한 수영장',
+  },
+];
+
 export default function SideBar() {
   const [selectedIndex, setSelectedIndex] = useState();
   const navigate = useNavigate();
-
-  const sideBarItems = [
-    {
-      image: mypage,
-      selectedImage: mypageColor,
-      title: '마이페이지',
-    },
-    {
-      image: markPool,
-      selectedImage: markPoolColor,
-      title: '내가 찜한 수영장',
-    },
-  ];
 
   const handleClickItem = (index) => {
     setSelectedIndex(index);
@@ -54,7 +54,7 @@ export default function SideBar() {
               key={index}
               image={item.image}
               selectedImage={item.selectedImage}
-              title="마이페이지"
+              title={item.title}
               isSelected={selectedIndex === index}
               onClick={() => handleClickItem(index)}
             ></SideBarItem>
