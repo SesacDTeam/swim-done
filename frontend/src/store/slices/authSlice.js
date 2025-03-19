@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   token: localStorage.getItem('token'),
@@ -13,9 +13,9 @@ const authSlice = createSlice({
       state.token = action.payload;
       state.isLoggedIn = true;
       localStorage.setItem('token', action.payload);
-    }
-  }
-})
+    },
+  },
+});
 
 export const { naverLogin } = authSlice.actions;
 export default authSlice.reducer;

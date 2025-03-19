@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { mypage, markPool, mypageColor, markPoolColor, home, logo } from '../../utils/staticImagePath';
+import {
+  mypage,
+  markPool,
+  mypageColor,
+  markPoolColor,
+  home,
+  logo,
+} from '../../utils/staticImagePath';
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
 import { initCenterHandler, map } from '../kakaomap/KakaoMapService';
+import { useDispatch } from 'react-redux';
+import { hideSideBar, showSideBar } from '../../store/slices/sideBarSlice';
 
 const sideBarItems = [
   {
@@ -20,13 +29,16 @@ const sideBarItems = [
 export default function SideBar() {
   const [selectedIndex, setSelectedIndex] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
     setSelectedIndex(index);
     if (index === 0) {
       navigate('/mypage');
+      dispatch(showSideBar());
     } else {
       navigate('/mark-pools');
+      dispatch(showSideBar());
     }
   };
 
@@ -34,6 +46,7 @@ export default function SideBar() {
     navigate('/');
     setSelectedIndex(null);
     initCenterHandler(map);
+    dispatch(hideSideBar());
   };
 
   return (

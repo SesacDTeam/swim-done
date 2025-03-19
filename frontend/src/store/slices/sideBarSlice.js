@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  isHidden: true
+  isHidden: true,
 };
 
 const sideBarSlice = createSlice({
@@ -9,14 +9,14 @@ const sideBarSlice = createSlice({
   initialState,
   reducers: {
     showSideBar: (state, action) => {
-      state.isHidden = false
+      state.isHidden = false;
     },
 
     hideSideBar: (state, action) => {
-      state.isHidden = true
-    }
-  }
-})
+      state.isHidden = true;
+    },
+  },
+});
 
 export const { showSideBar, hideSideBar } = sideBarSlice.actions;
 export default sideBarSlice.reducer;
