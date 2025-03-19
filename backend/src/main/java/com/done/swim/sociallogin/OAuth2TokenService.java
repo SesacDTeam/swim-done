@@ -67,7 +67,6 @@ public class OAuth2TokenService {
         // 새로운 액세스 토큰
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication, user);
 
-        // 3️⃣ 새 Access Token 반환 (헤더에 포함)
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + newAccessToken)
                 .body("New access token issued");

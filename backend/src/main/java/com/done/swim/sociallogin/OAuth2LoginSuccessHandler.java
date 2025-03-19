@@ -38,7 +38,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication, user);
 
         // 리프레시 토큰을 redis에 저장
-        oAuth2TokenService.saveRefreshToken(user.getId().toString(), refreshToken);
+        oAuth2TokenService.saveRefreshToken(user.getId(), refreshToken);
 
         // 리프레시 토큰을 HttpOnly 쿠키에 저장
         // TODO : 배포 환경에서 수정 필요 =>  .domain("실제도메인") / .secure(true)
