@@ -12,7 +12,6 @@ public class CreatePoolReviewRequestDto {
   @NotBlank
   private String content;
 
-  //추후 수정 예정
   private Long userId;
 
   public PoolReview toEntity(Pool pool, User userDate) {
