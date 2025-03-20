@@ -6,11 +6,10 @@ import java.util.Map;
 //  OAuth2UserInfo 인터페이스 -> 네이버 로그인 시 필요한 사용자 정보 추출
 public class NaverUserInfo implements OAuth2UserInfo {
 
-    // response 키 안에 사용자 정보 있음 (네이버)
-    private Map<String, Object> response;
+    private Map<String, Object> attributes;
 
     public NaverUserInfo(Map<String, Object> attributes) {
-        this.response = (Map<String, Object>) attributes.get("response");
+        this.attributes = attributes;
     }
 
     // enum으로 변경함
@@ -21,21 +20,21 @@ public class NaverUserInfo implements OAuth2UserInfo {
 
     @Override
     public String getProviderId() {
-        return (String) response.get("id");
+        return (String) attributes.get("id");
     }
 
     @Override
     public String getEmail() {
-        return (String) response.get("email");
+        return (String) attributes.get("email");
     }
 
     @Override
     public String getNickname() {
-        return (String) response.get("nickname");
+        return (String) attributes.get("nickname");
     }
 
     @Override
     public String getUserImageUrl() {
-        return (String) response.get("profile_image");
+        return (String) attributes.get("profile_image");
     }
 }

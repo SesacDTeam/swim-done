@@ -55,6 +55,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         // 엑세스 토큰을 프론트엔드에 전달
         response.addHeader("Authorization", "Bearer " + accessToken);
-        getRedirectStrategy().sendRedirect(request, response, origin + "/oauth2/login-success?token=" + accessToken);
+        getRedirectStrategy().sendRedirect(request, response, origin + "/login-success?token=" + accessToken);
     }
 }
