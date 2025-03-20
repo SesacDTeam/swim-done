@@ -11,5 +11,16 @@ services:
     volumes:
       - mysql-volume:/var/lib/mysql
       - ./pools_data.csv:/var/lib/mysql-files/pools_data.csv
+  redis:
+    image: redis:alpine
+    container_name: redis_local
+    env_file:
+      - .env
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis-volume:/data
+
 volumes:
   mysql-volume:
+  redis-volume:
