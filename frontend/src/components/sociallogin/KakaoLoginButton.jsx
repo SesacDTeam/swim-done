@@ -2,10 +2,8 @@ import React from 'react';
 
 export default function KakaoLoginButton() {
   const handleLogin = () => {
-    alert('카카오 로그인 버튼 클릭됨!'); // 버튼 클릭 시 알림창이 떠야 함
-    console.log('카카오 로그인 버튼 클릭됐습니다!'); // 버튼 클릭 이벤트 확인용
-    console.log('Redirect URL:', 'http://localhost:8080/oauth2/authorization/kakao'); // URL 확인
-    window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+    const DOMAIN = import.meta.env.VITE_DOMAIN;
+    window.location.href = `${DOMAIN}/oauth2/authorization/kakao`;
   };
 
   return (

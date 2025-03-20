@@ -48,7 +48,7 @@ public class JwtTokenProvider {
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
-    
+
     // 액세스 토큰 생성
     public String createAccessToken(Authentication authentication, User user) {
         return createToken(authentication, user, accessTokenValidityInMilliseconds);

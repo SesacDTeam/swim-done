@@ -7,15 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Collection;
+import java.util.Collections;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 
 @Entity
@@ -36,7 +35,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     // OAuth2
     private String provider;
     private String providerId;
-    
+
     private String imageUrl;
 
 //    @Enumerated(EnumType.STRING)
@@ -52,18 +51,39 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.imageUrl = imageUrl;
     }
 
+    // UserDetails 인터페이스 구현
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return Collections.emptyList();
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return null;  // OAuth 로그인에서는 비밀번호 사용 안 함
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
