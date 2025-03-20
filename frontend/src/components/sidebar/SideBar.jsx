@@ -51,7 +51,7 @@ export default function SideBar() {
 
   return (
     <>
-      <div className="border-gray03 border-[0.5px] w-30 flex flex-col items-center h-full">
+      <nav className="border-gray03 border-[0.5px] w-30 flex flex-col items-center h-full">
         <img
           src={logo}
           alt=""
@@ -81,7 +81,7 @@ export default function SideBar() {
           draggable={false}
           onClick={handleToMain}
         />
-      </div>
+      </nav>
     </>
   );
 }
