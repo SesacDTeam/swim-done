@@ -1,9 +1,11 @@
 package com.done.swim.config;
 
+
 import com.done.swim.global.jwt.JwtAuthenticationFilter;
 import com.done.swim.global.security.handler.CustomAccessDeniedHandler;
 import com.done.swim.global.security.handler.JwtAuthenticationEntryPoint;
 import com.done.swim.oauth2.CustomOAuth2UserService;
+import com.done.swim.oauth2.handler.OAuth2LoginFailureHandler;
 import com.done.swim.oauth2.handler.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
     @Value("${origin}")
     private String origin;
@@ -58,7 +62,7 @@ public class SecurityConfig {
                 )
                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                 .successHandler(oAuth2LoginSuccessHandler)
-                .failureUrl("/loginFailure")
+                .failureHandler(oAuth2LoginFailureHandler)
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(exception -> exception
@@ -81,5 +85,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
 }
