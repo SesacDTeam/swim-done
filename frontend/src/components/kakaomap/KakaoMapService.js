@@ -1,8 +1,19 @@
-import { points } from './points';
 import { kickPan } from '../../utils/staticImagePath';
+import { kakaoMapApi } from '../../api/kakaoMapApi';
 
+const response = await kakaoMapApi.getSections();
+const points = response.data;
+console.log(points);
 
 export let map = null;
+
+/** @description 인포윈도우 */
+const infowindow = new kakao.maps.InfoWindow({
+  map,
+  position: null,
+  content: null,
+});
+
 /**
  * @description 서울 시민청 좌표 (기본 중심점)
  */
@@ -47,14 +58,14 @@ export function createMap(mapContainer) {
 }
 
 /**
- * @function createLatLng
+ * @function createPoint
  * @description 마커 좌표 객체 생성
- * @param {number} lat - 위도
- * @param {number} lng - 경도
+ * @param {number} latitude - 위도
+ * @param {number} longitude - 경도
  * @returns {Object} LatLng 객체
  */
-function createLatLng(lat, lng) {
-  return new kakao.maps.LatLng(lat, lng);
+function createPoint(latitude, longitude) {
+  return new kakao.maps.LatLng(latitude, longitude);
 }
 
 /**
@@ -70,6 +81,22 @@ function createMarker(position, image, map = null) {
     position,
     image,
     map,
+  });
+}
+
+/**
+ * @function createMarkerVer2
+ * @description 지도 위에 마커를 생성 클러스터 전영, Marker에 대한 map을 지정안함
+ * @param {Object} position - 마커 위치 (LatLng 객체)
+ * @param {Object} image - 마커 이미지 객체
+ * @returns {Object} 생성된 마커 객체
+ */
+function createMarkerVer2(position, image) {
+  const isClickable = true;
+  return new kakao.maps.Marker({
+    position,
+    image,
+    clickable: isClickable,
   });
 }
 
@@ -91,13 +118,28 @@ function createMarkerImage(image, imageSize) {
  * @description 마커에 연결할 정보창(InfoWindow) 생성
  * @param {Object} map - 지도 객체
  * @param {Object} marker - 마커 객체
- * @param {Object} point - 마커의 데이터 (title, lat, lng 등)
+ * @param {Object} point - 마커의 데이터 (name, latitude, longitude 등)
  */
 function createInfoWindow(map, marker, point) {
   const infoWindow = new kakao.maps.InfoWindow({
     content: `
       <div style='height:100px;'>
-        <div>${point.title}</div>
+        <div>${point.name}</div>
+        <hr/>
+        <div>주차가능</div>
+      </div>
+    `,
+  });
+
+  kakao.maps.event.addListener(marker, 'mouseover', () => infoWindow.open(map, marker));
+  kakao.maps.event.addListener(marker, 'mouseout', () => infoWindow.close());
+}
+
+function createInfoWindowVer2(map, marker, point) {
+  const infoWindow = new kakao.maps.InfoWindow({
+    content: `
+      <div style='height:100px;'>
+        <div>${point.name}</div>
         <hr/>
         <div>주차가능</div>
       </div>
@@ -117,7 +159,7 @@ function createInfoWindow(map, marker, point) {
  */
 function addMarkers(points, map) {
   points.forEach((point) => {
-    const position = createLatLng(point.lat, point.lng);
+    const position = createPoint(point.latitude, point.longitude);
     const markerImage = createMarkerImage(kickPan, markerImageSize);
     const marker = createMarker(position, markerImage, map);
     createInfoWindow(map, marker, point);
@@ -147,14 +189,30 @@ function clustererHandler(points, map) {
     minClusterSize: 2,
   });
 
+  // Object.keys(filteredPoints).forEach((key) => {
+  //   const image = createMarkerImage(kickPan, markerImageSize);
+  //   const markers = filteredPoints[key].map((p) => {
+  //     const marker = createMarker(createPoint(p.latitude, p.longitude), image);
+  //     createInfoWindow(map, marker, p);
+  //     return marker;
+  //   });
+  //   clusterer.addMarkers(markers);
+  // });
+
   Object.keys(filteredPoints).forEach((key) => {
     const image = createMarkerImage(kickPan, markerImageSize);
     const markers = filteredPoints[key].map((p) => {
-      const marker = createMarker(createLatLng(p.lat, p.lng), image);
-      createInfoWindow(map, marker, p);
+      const marker = createMarkerVer2(createPoint(p.latitude, p.longitude), image);
+      createInfoWindowVer2(map, marker, p);
       return marker;
     });
     clusterer.addMarkers(markers);
+  });
+}
+function updateInfoWindow() {
+  kakao.maps.event.addListener(marker, 'click', () => {
+    infowindow.setContent(content);
+    infowindow.setPosition(createPoint(latitude, longitude));
   });
 }
 
