@@ -27,6 +27,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Value("${origin}")
     private String origin;
 
+    @Value("${cookie.secure}")
+    private boolean secure;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         // authentication에서 principal을 가져옴
@@ -42,23 +45,25 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // 리프레시 토큰을 redis에 저장
         oAuth2TokenService.saveRefreshToken(user.getId(), refreshToken);
 
-        // 리프레시 토큰을 HttpOnly 쿠키에 저장
-        // TODO : 배포 환경에서 수정 필요 =>  .domain("실제도메인") / .secure(true)
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-                .domain("localhost")
-                .path("/")
-                .httpOnly(true)
-                .secure(false) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
-                .maxAge(30 * 24 * 60 * 60)
-                .sameSite("None")
-                .build();
-        // 응답 헤더에 추가
-        response.addHeader("Set-Cookie", cookie.toString());
-
         // 엑세스 토큰을 프론트엔드에 전달
         // 토큰을 응답 헤더에 추가함
         response.addHeader("Authorization", "Bearer " + accessToken);
         getRedirectStrategy().sendRedirect(request, response, "http://localhost:5173" + "/login-success?token=" + accessToken);
     }
-    
+
+    // 리프레시 토큰을 HttpOnly 쿠키에 저장 (함수로 따로 뺌)
+    private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        // TODO : 배포 환경에서 수정 필요 =>  .domain("실제도메인") / .secure(true)
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+                .domain("localhost")
+                .path("/")
+                .httpOnly(true)
+                .secure(secure) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
+                .maxAge(30 * 24 * 60 * 60)
+                .sameSite("None")
+                .build();
+        // 응답 헤더에 추가
+        response.addHeader("Set-Cookie", cookie.toString());
+    }
+
 }
