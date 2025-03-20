@@ -1,4 +1,4 @@
-package com.done.swim.global.security.handler;
+package com.done.swim.oauth2.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ public class OAuth2LoginFailureHandler extends SimpleUrlAuthenticationFailureHan
 
         // 응답 상태 코드 설정 및 리디렉션
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        
+
         // 로그인 실패 시 리디렉트할 URL 설정
         getRedirectStrategy().sendRedirect(request, response, "/loginFailure");
 //        //  로그인 실패 시 리디렉트할 URL 설정

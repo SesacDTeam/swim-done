@@ -1,4 +1,4 @@
-package com.done.swim.sociallogin.provider;
+package com.done.swim.oauth2.provider;
 
 import java.util.Map;
 
@@ -7,35 +7,35 @@ import java.util.Map;
 public class NaverUserInfo implements OAuth2UserInfo {
 
     // response 키 안에 사용자 정보 있음 (네이버)
-    private final Map<String, Object> attributes;
+    private final Map<String, Object> response;
 
     public NaverUserInfo(Map<String, Object> attributes) {
-        this.attributes = (Map<String, Object>) attributes.get("response");
+        this.response = (Map<String, Object>) attributes.get("response");
     }
 
+    // enum으로 변경함
     @Override
-    public String getProvider() {
-        return "NAVER";
+    public Provider getProvider() {
+        return Provider.NAVER;
     }
 
     @Override
     public String getProviderId() {
-        return attributes.get("id").toString();
+        return (String) response.get("id");
     }
 
     @Override
     public String getEmail() {
-        return attributes.get("email").toString();
+        return (String) response.get("email");
     }
 
     @Override
     public String getNickname() {
-        return attributes.get("nickname").toString();
+        return (String) response.get("nickname");
     }
 
     @Override
     public String getUserImageUrl() {
-        return attributes.get("profile_image") != null ? attributes.get("profile_image").toString()
-            : "";
+        return (String) response.get("profile_image");
     }
 }
