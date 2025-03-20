@@ -19,6 +19,16 @@
   --color-ngreen: #03c75a;
 
   --font-pretendard: Pretendard;
+
+  --animate-scale-in-out: scale-in-out 0.3s ease-out;
+  @keyframes scale-in-out {
+    0% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 }
 
 @layer base {
