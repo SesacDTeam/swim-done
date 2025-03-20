@@ -1,10 +1,10 @@
-package com.done.swim.sociallogin;
+package com.done.swim.oauth2;
 
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
-import com.done.swim.sociallogin.provider.KakaoUserInfo;
-import com.done.swim.sociallogin.provider.NaverUserInfo;
-import com.done.swim.sociallogin.provider.OAuth2UserInfo;
+import com.done.swim.oauth2.provider.KakaoUserInfo;
+import com.done.swim.oauth2.provider.NaverUserInfo;
+import com.done.swim.oauth2.provider.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

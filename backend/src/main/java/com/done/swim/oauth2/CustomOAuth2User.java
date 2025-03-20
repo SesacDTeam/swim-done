@@ -1,4 +1,4 @@
-package com.done.swim.sociallogin;
+package com.done.swim.oauth2;
 
 import com.done.swim.domain.user.entity.User;
 import lombok.Getter;

@@ -1,7 +1,9 @@
-package com.done.swim.sociallogin;
+package com.done.swim.oauth2.handler;
 
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.global.jwt.JwtTokenProvider;
+import com.done.swim.oauth2.CustomOAuth2User;
+import com.done.swim.oauth2.OAuth2TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +56,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         response.addHeader("Set-Cookie", cookie.toString());
 
         // 엑세스 토큰을 프론트엔드에 전달
+        // 토큰을 응답 헤더에 추가함
         response.addHeader("Authorization", "Bearer " + accessToken);
-        getRedirectStrategy().sendRedirect(request, response, origin + "/login-success?token=" + accessToken);
+        getRedirectStrategy().sendRedirect(request, response, "http://localhost:5173" + "/login-success?token=" + accessToken);
     }
+    
 }

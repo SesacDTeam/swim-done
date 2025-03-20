@@ -1,4 +1,4 @@
-package com.done.swim.sociallogin;
+package com.done.swim.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
