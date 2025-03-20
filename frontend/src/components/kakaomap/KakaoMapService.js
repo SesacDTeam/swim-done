@@ -140,6 +140,7 @@ function clustererHandler(points, map) {
   });
 
   const image = createMarkerImage(kickPan, markerImageSize);
+
   Object.keys(filteredPoints).forEach((key) => {
     const markers = filteredPoints[key].map((p) => {
       const marker = createMarker(createPoint(p.latitude, p.longitude), image, p.name);
@@ -148,6 +149,13 @@ function clustererHandler(points, map) {
     });
     clusterer.addMarkers(markers);
   });
+
+  // const markers = points.map((point) => {
+  //   const marker = createMarker(createPoint(point.latitude, point.longitude), image, point.name);
+  //   markerHandler(marker);
+  //   return marker;
+  // });
+  // clusterer.addMarkers(markers);
 }
 
 /**
