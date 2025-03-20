@@ -15,7 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -55,15 +56,24 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
     @Override
     public String getPassword() {
+
         return null;  // OAuth 로그인에서는 비밀번호 사용 안 함
+
+        return "";
+
     }
 
     @Override
     public String getUsername() {
+
         return email;
     }
 
@@ -85,5 +95,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+
+        return "";
+
     }
 }

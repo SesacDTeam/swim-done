@@ -4,6 +4,7 @@ import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
 import com.done.swim.sociallogin.provider.KakaoUserInfo;
 import com.done.swim.sociallogin.provider.NaverUserInfo;
+import com.done.swim.sociallogin.provider.Provider;
 import com.done.swim.sociallogin.provider.OAuth2UserInfo;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -50,7 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .email(oAuth2UserInfo.getEmail())
                 .nickname(oAuth2UserInfo.getNickname())
                 .imageUrl(oAuth2UserInfo.getUserImageUrl())
-                .provider(oAuth2UserInfo.getProvider())
+                .provider(oAuth2UserInfo.getProvider().name())
                 .providerId(oAuth2UserInfo.getProviderId())
                 .build()));
 
