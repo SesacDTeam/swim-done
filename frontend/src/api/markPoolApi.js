@@ -12,11 +12,15 @@ export const markPoolApi = {
   },
 
   createMarkedPools: async (token, poolId) => {
-    const response = await instance.post(`/marks/pools/${poolId}`, {}, {
-      headers: {
-        Authorization: 'Bearer ' + token,
+    const response = await instance.post(
+      `/marks/pools/${poolId}`,
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
       },
-    });
+    );
 
     return response.data;
   },

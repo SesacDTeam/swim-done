@@ -14,7 +14,7 @@ export default function Home() {
         <div className="grow relative">
           <KakaoMapContainer></KakaoMapContainer>
           {!isHidden && (
-            <section className="absolute left-0 top-0 bottom-0 w-100 z-3000 bg-white">
+            <section className="absolute left-0 top-0 bottom-0 w-100 z-3000 bg-white overflow-y-scroll">
               <Outlet></Outlet>
             </section>
           )}

@@ -58,7 +58,6 @@ public class PoolMarkService {
       throw new IllegalStateException("권한이 없습니다.");
     }
 
-    log.info("id {}", alreadyMarkedPool.getId());
     poolMarkRepository.deleteById(alreadyMarkedPool.getId());
   }
 
