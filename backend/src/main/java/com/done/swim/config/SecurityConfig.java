@@ -26,17 +26,18 @@ public class SecurityConfig {
 
         http
 
-            .csrf(csrf -> csrf.disable()) //  REST API 방식이므로 CSRF 비활성화
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login/**").permitAll() //  인증 없이 접근 가능
-                .anyRequest().authenticated() //  그 외 요청은 인증 필요
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                    .userService(customOAuth2UserService)) //  사용자 정보 처리
-                .successHandler(successHandler) //  로그인 성공 핸들러 적용
-                .failureHandler(failureHandler) //  로그인 실패 핸들러 적용
-            );
+                .csrf(csrf -> csrf.disable()) //  REST API 방식이므로 CSRF 비활성화
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/sections").permitAll()
+                        .requestMatchers("/", "/login/**").permitAll() //  인증 없이 접근 가능
+                        .anyRequest().authenticated() //  그 외 요청은 인증 필요
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)) //  사용자 정보 처리
+                        .successHandler(successHandler) //  로그인 성공 핸들러 적용
+                        .failureHandler(failureHandler) //  로그인 실패 핸들러 적용
+                );
 
         return http.build();
     }

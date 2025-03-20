@@ -27,8 +27,8 @@ public class PoolService {
 
     public List<PoolResponseDto> getPoolsWithUserMark(Long userId) {
         List<Pool> pools = poolRepository.findAllWithUserMark(userId);
-        pools.stream().map()
-        return pools;
+        return pools.stream().map(p -> PoolResponseDto.from(p, userId)).toList();
+
     }
 
 }

@@ -22,7 +22,7 @@ public interface PoolRepository extends JpaRepository<Pool, Long> {
             LEFT JOIN FETCH p.poolMarks pm
             LEFT JOIN FETCH p.swimmingTimes st
             """)
-    List<Pool> findAllWithUserMark(@Param("userId") Long userId);
+    List<Pool> findAllWithUserMark(Long userId);
 
 
 }

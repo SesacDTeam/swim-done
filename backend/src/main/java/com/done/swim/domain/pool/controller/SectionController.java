@@ -33,7 +33,6 @@ public class SectionController {
     public ResponseEntity<ApiResponse<List<PoolResponseDto>>> getPools(
             @AuthenticationPrincipal User user
     ) {
-
 //        List<PoolResponseDto> pools = poolService.getPoolsWithUserMark(user.getId());
         List<PoolResponseDto> pools = poolService.getPoolsWithUserMark(1L);
         return ResponseEntity.ok(

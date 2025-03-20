@@ -10,7 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "pools")
@@ -44,13 +46,13 @@ public class Pool {
     private String additionalInfo;
 
     @OneToMany(mappedBy = "pool", fetch = FetchType.LAZY)
-    private List<SwimmingTime> swimmingTimes = new ArrayList<>();
+    private Set<SwimmingTime> swimmingTimes = new HashSet<>();
 
     @OneToMany(mappedBy = "pool", fetch = FetchType.LAZY)
     private List<PoolReview> poolReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "pool", fetch = FetchType.LAZY)
-    private List<PoolMark> poolMarks = new ArrayList<>();
+    private Set<PoolMark> poolMarks = new HashSet<>();
 
     @Builder
     public Pool(String address, String section, String parking, String link, String name,
