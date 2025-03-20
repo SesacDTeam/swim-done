@@ -9,7 +9,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    naverLogin: (state, action) => {
+    Login: (state, action) => {
       state.token = action.payload;
       state.isLoggedIn = true;
       localStorage.setItem('token', action.payload);
