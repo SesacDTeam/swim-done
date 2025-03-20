@@ -3,8 +3,8 @@ package com.done.swim.config;
 import com.done.swim.global.jwt.JwtAuthenticationFilter;
 import com.done.swim.global.security.handler.CustomAccessDeniedHandler;
 import com.done.swim.global.security.handler.JwtAuthenticationEntryPoint;
-import com.done.swim.sociallogin.CustomOAuth2UserService;
-import com.done.swim.sociallogin.OAuth2LoginSuccessHandler;
+import com.done.swim.oauth2.CustomOAuth2UserService;
+import com.done.swim.oauth2.handler.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,12 +43,13 @@ public class SecurityConfig {
                         .requestMatchers("/auth/verify").authenticated()
                         .requestMatchers("/auth/**", "/error", "/images/**").permitAll()
                         .requestMatchers("/", "/login/**").permitAll()
-                        .requestMatchers("/oauth2/**", "/login/oauth2/code/**").permitAll() //OAuth2 요청 허용
-                        .requestMatchers("/login/oauth2/").permitAll() //OAuth2 요청 허용
+                        .requestMatchers("/oauth2/**", "/login/oauth2/code/**").permitAll()
+                        .requestMatchers("/login/oauth2/", "/oauth2/authorization/**").permitAll()
+                        .requestMatchers("/login-success").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")  // 추가
+                        .loginPage("/login-success")  // 추가
                         .authorizationEndpoint(endpoint ->
                                 endpoint.baseUri("/oauth2/authorization")
                         )
@@ -56,6 +57,8 @@ public class SecurityConfig {
                                 endpoint.baseUri("/login/oauth2/code/*")
                         )
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureUrl("/loginFailure")
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception

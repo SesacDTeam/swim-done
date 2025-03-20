@@ -72,7 +72,7 @@ const router = createBrowserRouter([
     element: <Login></Login>,
   },
   {
-    path: '/naver/login-success',
+    path: '/login-success',
     element: <NaverRedirect></NaverRedirect>
   }
 ]);
