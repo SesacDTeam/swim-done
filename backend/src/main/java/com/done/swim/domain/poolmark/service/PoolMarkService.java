@@ -38,9 +38,8 @@ public class PoolMarkService {
     poolMarkRepository.save(poolMark);
   }
 
-  public PoolMarkListResponseDto getMyPoolMark(Pageable pageable) {
-    // TODO: user 변경할 예정
-    Page<PoolMark> poolMarkPage = poolMarkRepository.findByUserId(2L, pageable);
+  public PoolMarkListResponseDto getMyPoolMark(Pageable pageable, Long userId) {
+    Page<PoolMark> poolMarkPage = poolMarkRepository.findByUserId(userId, pageable);
 
     return PoolMarkListResponseDto.from(poolMarkPage);
   }

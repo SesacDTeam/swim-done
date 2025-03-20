@@ -34,10 +34,13 @@ public class PoolMarkController {
   }
 
   @GetMapping("/my/marks")
-  public ResponseEntity<ApiResponse<PoolMarkListResponseDto>> getMyPoolMarks(Pageable pageable) {
+  public ResponseEntity<ApiResponse<PoolMarkListResponseDto>> getMyPoolMarks(
+    Pageable pageable,
+    @AuthenticationPrincipal User user
+  ) {
     return ResponseEntity.ok(
       ApiResponse.ok(
-        poolMarkService.getMyPoolMark(pageable)
+        poolMarkService.getMyPoolMark(pageable, user.getId())
       )
     );
   }
