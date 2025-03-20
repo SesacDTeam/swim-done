@@ -17,8 +17,8 @@ public class TokenController {
     // refreshtoken을 쿠키로 보낸다면 @cookievalue 필요
     @PostMapping("/reissue")
     public ResponseEntity<?> reissueAccessToken(
-        @CookieValue(name = "refreshToken", required = false)
-        String refreshToken) {
+            @CookieValue(name = "refreshToken", required = false)
+            String refreshToken) {
         return oAuth2TokenService.reissueAccessToken(refreshToken);
     }
 }

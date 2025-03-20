@@ -4,7 +4,6 @@ import com.done.swim.common.ApiResponse;
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
 import com.done.swim.global.jwt.JwtTokenProvider;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,9 +29,7 @@ public class OAuth2TokenService {
 
     // refresh token redis에 저장
     public void saveRefreshToken(Long userId, String refreshToken) {
-        redisTemplate.opsForValue()
-            .set("REFRESH_TOKEN:" + userId, refreshToken, refreshTokenValidityInMilliseconds,
-                TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set("REFRESH_TOKEN:" + userId, refreshToken, refreshTokenValidityInMilliseconds, TimeUnit.MILLISECONDS);
     }
 
     // 조회
@@ -54,10 +53,10 @@ public class OAuth2TokenService {
         // 기존에 저장된 리프레시 토큰이랑 비교
         if (!refreshToken.equals(storedRefreshToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error(
-                    "유효하지 않은 토큰입니다",
-                    "UNAUTHORIZED"
-                ));
+                    .body(ApiResponse.error(
+                            "유효하지 않은 토큰입니다",
+                            "UNAUTHORIZED"
+                    ));
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,7 +68,7 @@ public class OAuth2TokenService {
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication, user);
 
         return ResponseEntity.ok()
-            .header("Authorization", "Bearer " + newAccessToken)
-            .body("New access token issued");
+                .header("Authorization", "Bearer " + newAccessToken)
+                .body("New access token issued");
     }
 }

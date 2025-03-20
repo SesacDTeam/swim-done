@@ -1,6 +1,5 @@
 package com.done.swim.oauth2.provider;
 
-
 import java.util.Map;
 
 // 카카오 OAuth2 로그인을 통해 받은 사용자 정보
@@ -39,6 +38,6 @@ public class KakaoUserInfo implements OAuth2UserInfo {
     public String getUserImageUrl() {
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         return properties.get("profile_image_url") != null ? properties.get("profile_image_url")
-            .toString() : "";
+                .toString() : "";
     }
 }

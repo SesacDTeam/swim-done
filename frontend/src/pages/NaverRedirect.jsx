@@ -1,23 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { naverLogin } from '../store/slices/authSlice';
+import { login } from '../store/slices/authSlice';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux'
 
 export default function NaverRedirect() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // 현재 url에서 토큰 가져오기
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-
-    // TODO : 로그인 완료 시 어디로? (이전 페이지 / 메인 페이지 경우의 수)
+    setIsLoading(true)
     try {
-      dispatch(naverLogin(token));
+      // 현재 url에서 토큰 가져오기
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+
+      if (!token) {
+        setError(true);
+        navigate('/');
+        return;
+      }
+
+      dispatch(login(token));
       navigate('/mypage');
     } catch (error) {
-      navigate('/');
+      console.log("error 발생", error)
+      setError(true)
+      navigate('/'); // 토큰 없으면 home으로 이동
+    } finally {
+      setIsLoading(false);
     }
   }, [navigate, dispatch]);
 
