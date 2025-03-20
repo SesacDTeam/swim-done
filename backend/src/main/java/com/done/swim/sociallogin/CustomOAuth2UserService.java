@@ -7,6 +7,7 @@ import com.done.swim.sociallogin.provider.NaverUserInfo;
 import com.done.swim.sociallogin.provider.OAuth2UserInfo;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -15,7 +16,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
@@ -27,6 +28,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+
+        // 액세스 토큰 확인 로그 추가
+//        String accessToken = userRequest.getAccessToken().getTokenValue();
+//        System.out.println("카카오 액세스 토큰: " + accessToken);
 
         // 어떤 OAuth2 제공자인지 확인 (네이버 or 카카오)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -48,6 +53,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .provider(oAuth2UserInfo.getProvider())
                 .providerId(oAuth2UserInfo.getProviderId())
                 .build()));
+
+        // 이메일을 로그로 출력하여 확인
+        log.info("OAuth2User에서 추출한 이메일: {}", oAuth2UserInfo.getEmail());
 
         return new DefaultOAuth2User(
             Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
