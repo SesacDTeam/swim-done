@@ -1,15 +1,13 @@
 import { kickPan } from '../../utils/staticImagePath';
-import { kakaoMapApi } from '../../api/kakaoMapApi';
 
-const response = await kakaoMapApi.getSections();
-const points = response.data;
-console.log(points);
-
-export let map = null;
+/** @description 
+ * - 지도 객체 
+ * - 초기 위치 원복시 사용 됨
+ * */
+let map = null;
 
 /** @description 인포윈도우 */
 const infoWindow = new kakao.maps.InfoWindow({
-  map,
   position: null,
   content: null,
   removable: true,
@@ -46,17 +44,19 @@ const markerImageSize = { imageWidth: 20, imageHeight: 30 };
 
 /**
  * @function createMap
- * @description 지도 생성 함수
+ * @description 
+ * - 지도 생성 함수
+ * - strict mode는 지도가 2개 생성되어 확대, 축소 시 잔상남음
  * @param {HTMLElement} mapContainer - 지도 컨테이너 요소
  * @returns {kakao.maps.Map} 생성된 지도 객체
  */
-export function createMap(mapContainer) {
+export function createMap(mapContainer, newPoints) {
+  if (map) return; // 지도 중복생성 방지
   const newMap = new kakao.maps.Map(mapContainer, options);
   createZoomControl(newMap);
-  clustererHandler(points, newMap);
+  clustererHandler(newPoints, newMap);
   map = newMap;
-  kakao.maps.event.addListener(map, 'click', () => infoWindow.close());
-  return map;
+  kakao.maps.event.addListener(newMap, 'click', () => infoWindow.close());
 }
 
 /**
@@ -113,7 +113,7 @@ function markerHandler(marker) {
 function updateInfoWindow(marker) {
   console.log(marker.getTitle());
   infoWindow.setContent(marker.getTitle());
-  infoWindow.open(map, marker);
+  infoWindow.open(marker.getMap(), marker);
 }
 
 /**
@@ -135,8 +135,9 @@ function clustererHandler(points, map) {
 
   const clusterer = new kakao.maps.MarkerClusterer({
     map,
-    minLevel: 8,
-    minClusterSize: 2,
+    minLevel: 7,
+    gridSize: 85,
+    minClusterSize: 4,
   });
 
   const image = createMarkerImage(kickPan, markerImageSize);
@@ -149,21 +150,13 @@ function clustererHandler(points, map) {
     });
     clusterer.addMarkers(markers);
   });
-
-  // const markers = points.map((point) => {
-  //   const marker = createMarker(createPoint(point.latitude, point.longitude), image, point.name);
-  //   markerHandler(marker);
-  //   return marker;
-  // });
-  // clusterer.addMarkers(markers);
 }
 
 /**
  * @function initCenterHandler
  * @description 지도 중심을 기본 위치로 초기화
- * @param {Object} map - 지도 객체
  */
-export function initCenterHandler(map) {
+export function initCenterHandler() {
   map.setLevel(level);
   map.panTo(center);
 }
