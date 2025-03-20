@@ -8,10 +8,11 @@ console.log(points);
 export let map = null;
 
 /** @description 인포윈도우 */
-const infowindow = new kakao.maps.InfoWindow({
+const infoWindow = new kakao.maps.InfoWindow({
   map,
   position: null,
   content: null,
+  removable: true,
 });
 
 /**
@@ -23,7 +24,7 @@ const centerLng = 126.9781553;
 /**
  * @description 지도 기본 중심 좌표 객체 생성
  */
-const center = new kakao.maps.LatLng(centerLat, centerLng);
+const center = createPoint(centerLat, centerLng);
 
 /**
  * @description 지도 기본 확대 레벨
@@ -54,6 +55,7 @@ export function createMap(mapContainer) {
   createZoomControl(newMap);
   clustererHandler(points, newMap);
   map = newMap;
+  kakao.maps.event.addListener(map, 'click', () => infoWindow.close());
   return map;
 }
 
@@ -86,7 +88,7 @@ function createMarker(position, image, map = null) {
 
 /**
  * @function createMarkerVer2
- * @description 지도 위에 마커를 생성 클러스터 전영, Marker에 대한 map을 지정안함
+ * @description 지도 위에 마커를 생성 클러스터 전용, Marker에 대한 map을 지정안함
  * @param {Object} position - 마커 위치 (LatLng 객체)
  * @param {Object} image - 마커 이미지 객체
  * @returns {Object} 생성된 마커 객체
@@ -97,6 +99,24 @@ function createMarkerVer2(position, image) {
     position,
     image,
     clickable: isClickable,
+  });
+}
+
+/**
+ * @function createMarkerVer3
+ * @description 지도 위에 마커를 생성 클러스터 전용, title 추가
+ * @param {Object} position - 마커 위치 (LatLng 객체)
+ * @param {Object} image - 마커 이미지 객체
+ * @param {String} title - 마커 타이틀
+ * @returns {Object} 생성된 마커 객체
+ */
+function createMarkerVer3(position, image, title) {
+  const isClickable = true;
+  return new kakao.maps.Marker({
+    position,
+    image,
+    clickable: isClickable,
+    title,
   });
 }
 
@@ -135,6 +155,7 @@ function createInfoWindow(map, marker, point) {
   kakao.maps.event.addListener(marker, 'mouseout', () => infoWindow.close());
 }
 
+// 클러스터용 map 없이 사용해야 함
 function createInfoWindowVer2(map, marker, point) {
   const infoWindow = new kakao.maps.InfoWindow({
     content: `
@@ -150,6 +171,16 @@ function createInfoWindowVer2(map, marker, point) {
   kakao.maps.event.addListener(marker, 'mouseout', () => infoWindow.close());
 }
 
+function createInfoWindowVer3(marker) {
+  kakao.maps.event.addListener(marker, 'click', () => updateInfoWindow(marker));
+}
+function updateInfoWindow(marker) {
+  console.log(marker.getTitle());
+
+  infoWindow.setContent(marker.getTitle());
+  // infoWindow.setPosition(marker.getPosition());
+  infoWindow.open(map, marker);
+}
 /**
  * @deprecated 클러스터 활용으로 사용되지 않는 함수
  * @function addMarkers
@@ -199,21 +230,18 @@ function clustererHandler(points, map) {
   //   clusterer.addMarkers(markers);
   // });
 
+  const image = createMarkerImage(kickPan, markerImageSize);
   Object.keys(filteredPoints).forEach((key) => {
-    const image = createMarkerImage(kickPan, markerImageSize);
     const markers = filteredPoints[key].map((p) => {
-      const marker = createMarkerVer2(createPoint(p.latitude, p.longitude), image);
-      createInfoWindowVer2(map, marker, p);
+      const marker = createMarkerVer3(createPoint(p.latitude, p.longitude), image , p.name);
+      createInfoWindowVer3(marker);
       return marker;
     });
     clusterer.addMarkers(markers);
   });
-}
-function updateInfoWindow() {
-  kakao.maps.event.addListener(marker, 'click', () => {
-    infowindow.setContent(content);
-    infowindow.setPosition(createPoint(latitude, longitude));
-  });
+
+
+  
 }
 
 /**
