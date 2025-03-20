@@ -25,12 +25,8 @@ public class PoolMarkService {
   private final UserRepository userRepository;
 
   @Transactional
-  public void createPoolMark(Long poolId) {
+  public void createPoolMark(Long poolId, User user) {
     Pool pool = fetchPool(poolId);
-
-    // TODO: 토큰 구현이 안되어있어서 임시로(토큰 구현 후에는 User를 파라미터로 받을 예정)
-    User user = userRepository.findById(2L)
-      .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다."));
 
     PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
@@ -50,12 +46,8 @@ public class PoolMarkService {
   }
 
   @Transactional
-  public void deleteMyPoolMark(Long poolId) {
+  public void deleteMyPoolMark(Long poolId, User user) {
     Pool pool = fetchPool(poolId);
-
-    // TODO: 토큰 구현이 안되어있어서 임시로(토큰 구현 후에는 User를 파라미터로 받을 예정)
-    User user = userRepository.findById(2L)
-      .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다."));
 
     PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
