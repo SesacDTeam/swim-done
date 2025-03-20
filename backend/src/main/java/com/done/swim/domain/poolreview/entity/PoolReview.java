@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -35,6 +36,7 @@ public class PoolReview extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
+  @Setter
   @Column(nullable = false, length = 100)
   private String content;
 
