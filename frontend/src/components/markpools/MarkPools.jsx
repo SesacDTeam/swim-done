@@ -1,18 +1,23 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
 import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
+import { hideDetailView, showDetailView } from '../../store/slices/detailViewSlice';
+import { useUnmount } from '../../hooks/useUnmount';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
-
+  const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
 
@@ -38,6 +43,15 @@ export default function MarkPools() {
 
   const bottomRef = useInfiniteScroll(onIntersect);
 
+  const handlePoolListItemClick = (poolId) => {
+    dispatch(showDetailView())
+    navigate(`${poolId}`)
+  }
+
+  useUnmount(() => { 
+    dispatch(hideDetailView())
+  })
+
   return (
     <>
       {isLoading && (
@@ -58,6 +72,7 @@ export default function MarkPools() {
                 address={pool.address}
                 isMarked={pool.mark}
                 onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
+                onClick={() => handlePoolListItemClick(pool.id)}
               ></PoolListItem>
             );
           })
@@ -65,9 +80,11 @@ export default function MarkPools() {
       </section>
       {hasNext && <div ref={bottomRef}></div>}
 
-      <div className='fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-xl bg-white'>
-        <Outlet></Outlet>
-      </div>
+      {!isDetailViewHidden && (
+        <div className="fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-xl bg-white">
+          <Outlet></Outlet>
+        </div>
+      )}
     </>
   );
 }
