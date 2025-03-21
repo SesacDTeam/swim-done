@@ -25,4 +25,11 @@ public interface PoolRepository extends JpaRepository<Pool, Long> {
     List<Pool> findAllWithUserMark(Long userId);
 
 
+    @Query("""
+            SELECT p
+            from Pool p
+            JOIN p.swimmingTimes st
+            WHERE p.name = :poolName
+            """)
+    Optional<Pool> getPoolWithName(@Param("poolName") String poolName);
 }

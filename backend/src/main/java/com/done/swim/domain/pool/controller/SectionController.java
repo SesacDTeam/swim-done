@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +35,15 @@ public class SectionController {
             @AuthenticationPrincipal User user
     ) {
 //        List<PoolResponseDto> pools = poolService.getPoolsWithUserMark(user.getId());
+        List<PoolResponseDto> pools = poolService.getPoolsWithUserMark(1L);
+        return ResponseEntity.ok(
+                ApiResponse.ok(pools)
+        );
+
+    }
+
+    @GetMapping("/pools/{poolName}")
+    public ResponseEntity<ApiResponse<List<PoolResponseDto>>> getPool(@PathVariable String poolName) {
         List<PoolResponseDto> pools = poolService.getPoolsWithUserMark(1L);
         return ResponseEntity.ok(
                 ApiResponse.ok(pools)

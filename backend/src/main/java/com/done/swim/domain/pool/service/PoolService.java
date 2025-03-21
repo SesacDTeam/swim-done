@@ -2,6 +2,7 @@ package com.done.swim.domain.pool.service;
 
 import com.done.swim.domain.pool.dto.responsedto.PoolDetailResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolResponseDto;
+import com.done.swim.domain.pool.dto.responsedto.PoolWithSwimmingTimeResponseDto;
 import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.pool.repository.PoolRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,13 @@ public class PoolService {
         List<Pool> pools = poolRepository.findAllWithUserMark(userId);
         return pools.stream().map(p -> PoolResponseDto.from(p, userId)).toList();
 
+    }
+
+    public PoolWithSwimmingTimeResponseDto getPoolWithName(String poolName) {
+        return PoolWithSwimmingTimeResponseDto.from(
+                poolRepository.getPoolWithName(poolName)
+                        .orElseThrow(() -> new IllegalArgumentException("Bad Request"))
+        );
     }
 
 }
