@@ -8,6 +8,7 @@ export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
+  const { toggleMark } = useToggleMark(markedPools, setMarkedPools, token);
 
   useEffect(() => {
     setIsLoading(true);
@@ -22,34 +23,7 @@ export default function MarkPools() {
         setIsLoading(false);
       }
     })();
-
   }, []);
-
-  const handleOnToggleMark = async (index) => {
-    const isMarked = markedPools[index].mark;
-
-    setMarkedPools((prev) => {
-      const updatedPools = [...prev];
-      updatedPools[index] = {
-        ...updatedPools[index],
-        mark: !isMarked,
-      };
-
-      return updatedPools;
-    });
-
-    (async () => {
-      try {
-        if (isMarked) {
-          await markPoolApi.deleteMyMarkedPools(token, markedPools[index].id);
-        } else {
-          await markPoolApi.createMarkedPools(token, markedPools[index].id);
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    })();
-  };
 
   return (
     <>
@@ -67,7 +41,7 @@ export default function MarkPools() {
               title={pool.name}
               address={pool.address}
               isMarked={pool.mark}
-              onToggleMark={() => handleOnToggleMark(index)}
+              onToggleMark={() => toggleMark(index)}
             ></PoolListItem>
           );
         })}

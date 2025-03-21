@@ -143,8 +143,8 @@ function clustererHandler(points, map) {
 
   const clusterer = new kakao.maps.MarkerClusterer({
     map,
-    minLevel: 8,
-    minClusterSize: 2,
+    minLevel: 8.5,
+    minClusterSize: 1,
   });
 
   Object.keys(filteredPoints).forEach((key) => {
