@@ -5,6 +5,7 @@ import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
 import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
+import NoContent from '../common/NoContent';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
@@ -45,7 +46,7 @@ export default function MarkPools() {
       )}
       <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky">내가 찜한 수영장</h1>
       <section className="flex flex-col items-center gap-5 w-full mt-10">
-        {markedPools.map((pool, index) => {
+        {markedPools.length === 0 ? <NoContent></NoContent> : markedPools.map((pool, index) => {
           return (
             <PoolListItem
               key={index}
