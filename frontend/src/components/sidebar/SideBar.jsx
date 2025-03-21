@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { mypage, markPool, mypageColor, markPoolColor, home, logo } from '../../utils/staticImagePath';
+import {
+  mypage,
+  markPool,
+  mypageColor,
+  markPoolColor,
+  home,
+  logo,
+} from '../../utils/staticImagePath';
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
-import { initCenterHandler, map } from '../kakaomap/KakaoMapService';
+import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
 export default function SideBar() {
   const [selectedIndex, setSelectedIndex] = useState();
@@ -33,7 +40,7 @@ export default function SideBar() {
   const handleToMain = () => {
     navigate('/');
     setSelectedIndex(null);
-    initCenterHandler(map);
+    initCenterHandler();
   };
 
   return (
