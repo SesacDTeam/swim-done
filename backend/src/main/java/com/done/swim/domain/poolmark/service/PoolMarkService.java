@@ -25,12 +25,8 @@ public class PoolMarkService {
   private final UserRepository userRepository;
 
   @Transactional
-  public void createPoolMark(Long poolId) {
+  public void createPoolMark(Long poolId, User user) {
     Pool pool = fetchPool(poolId);
-
-    // TODO: 토큰 구현이 안되어있어서 임시로(토큰 구현 후에는 User를 파라미터로 받을 예정)
-    User user = userRepository.findById(2L)
-      .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다."));
 
     PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
@@ -42,20 +38,15 @@ public class PoolMarkService {
     poolMarkRepository.save(poolMark);
   }
 
-  public PoolMarkListResponseDto getMyPoolMark(Pageable pageable) {
-    // TODO: user 변경할 예정
-    Page<PoolMark> poolMarkPage = poolMarkRepository.findByUserId(2L, pageable);
+  public PoolMarkListResponseDto getMyPoolMark(Pageable pageable, Long userId) {
+    Page<PoolMark> poolMarkPage = poolMarkRepository.findByUserId(userId, pageable);
 
     return PoolMarkListResponseDto.from(poolMarkPage);
   }
 
   @Transactional
-  public void deleteMyPoolMark(Long poolId) {
+  public void deleteMyPoolMark(Long poolId, User user) {
     Pool pool = fetchPool(poolId);
-
-    // TODO: 토큰 구현이 안되어있어서 임시로(토큰 구현 후에는 User를 파라미터로 받을 예정)
-    User user = userRepository.findById(2L)
-      .orElseThrow(() -> new IllegalArgumentException("유저가 없습니다."));
 
     PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
@@ -67,7 +58,6 @@ public class PoolMarkService {
       throw new IllegalStateException("권한이 없습니다.");
     }
 
-    log.info("id {}", alreadyMarkedPool.getId());
     poolMarkRepository.deleteById(alreadyMarkedPool.getId());
   }
 
