@@ -1,17 +1,12 @@
 import { kickPan } from '../../utils/staticImagePath';
-
-/** @description 
- * - 지도 객체 
+import kakaoMapApi from '../../api/kakaoMapApi';
+/** @description
+ * - 지도 객체
  * - 초기 위치 원복시 사용 됨
  * */
 let map = null;
 
-/** @description 인포윈도우 */
-const infoWindow = new kakao.maps.InfoWindow({
-  position: null,
-  content: null,
-  removable: true,
-});
+
 
 /**
  * @description 서울 시민청 좌표 (기본 중심점)
@@ -44,7 +39,7 @@ const markerImageSize = { imageWidth: 20, imageHeight: 30 };
 
 /**
  * @function createMap
- * @description 
+ * @description
  * - 지도 생성 함수
  * - strict mode는 지도가 2개 생성되어 확대, 축소 시 잔상남음
  * @param {HTMLElement} mapContainer - 지도 컨테이너 요소
@@ -107,13 +102,46 @@ function createMarkerImage(image, imageSize) {
  * @param {kakao.maps.Marker} marker - 마커 객체
  */
 function markerHandler(marker) {
-  kakao.maps.event.addListener(marker, 'click', () => updateInfoWindow(marker));
+  kakao.maps.event.addListener(marker, 'click', async() => await updateInfoWindow(marker));
 }
 
-function updateInfoWindow(marker) {
-  console.log(marker.getTitle());
-  infoWindow.setContent(marker.getTitle());
+async function updateInfoWindow(marker) {
+  const newContent = await drawInfoWindowContent(marker.getTitle());
+  
+  infoWindow.setContent(newContent);
   infoWindow.open(marker.getMap(), marker);
+}
+
+async function drawInfoWindowContent(poolName) {
+  
+  const response = await kakaoMapApi.getPool(poolName);
+  
+  try {
+    const pool = response.data;
+    
+    const swimmingTimes = pool.swimmingTimes
+      .map(({ startTime, endTime }) => `<p>${startTime} ~ ${endTime}</p>`)
+      .join(',');
+    const content = swimmingTimes ? `
+        <p class="mb-2">${pool.dayOfWeek} 자유 수영 시간</p>
+        ${swimmingTimes}
+      ` : `<p class="mb-2">${pool.dayOfWeek} 자유 수영 시간이 없습니다.</p>`; 
+    return `
+    <div class="bg-white shadow-lg rounded-lg p-4 w-[337px] border border-gray-200">
+      <h2 class="text-xl font-bold text-black">${poolName}</h2>
+      <p class="text-gray-600 text-sm">${pool.address}</p>
+      <div class="mt-2 text-sm text-gray-800">
+        ${content}
+      </div>
+      <p class="mt-2 text-xs text-blue-500 cursor-pointer hover:underline">
+        * 다른 요일이 궁금하다면?<br />
+      클릭 후 더 자세히 확인할 수 있어요!
+      </p>
+    </div>
+  `;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 /**
@@ -170,3 +198,17 @@ function createZoomControl(map) {
   const zoomControl = new kakao.maps.ZoomControl();
   map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 }
+
+
+
+/** @description 인포윈도우
+ * - 카카오맵은 오브젝트가 생성된 순서대로 z-index가 결정됨
+ * - 인포윈도우가 가장 마지막에 **생성**되어야 **가장 위**에 올라감
+ * > - 생성: 코드 실행 순서
+ * > - 가장 위: z-index
+ */
+const infoWindow = new kakao.maps.InfoWindow({
+  position: null,
+  content: '',
+  removable: true,
+});

@@ -4,7 +4,6 @@ import com.done.swim.domain.pool.entity.Pool;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -24,7 +23,6 @@ public class PoolResponseDto {
     private Double latitude;
     private Double longitude;
     private Boolean mark;
-    private List<SwimmingTimeSubDtoOfPoolResponseDto> swimmingTimes;
 
     public static PoolResponseDto from(Pool entity, Long userId) {
         return PoolResponseDto.builder()
@@ -36,10 +34,6 @@ public class PoolResponseDto {
                 .longitude(entity.getLongitude())
                 .mark(entity.getPoolMarks().stream()
                         .anyMatch(pm -> Objects.equals(pm.getUser().getId(), userId))
-                )
-                .swimmingTimes(entity.getSwimmingTimes().stream()
-                        .map(SwimmingTimeSubDtoOfPoolResponseDto::from)
-                        .toList()
                 )
                 .build();
     }

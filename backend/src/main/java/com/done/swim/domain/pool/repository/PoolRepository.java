@@ -1,6 +1,7 @@
 package com.done.swim.domain.pool.repository;
 
 import com.done.swim.domain.pool.entity.Pool;
+import com.done.swim.domain.swimmingtime.entity.Week;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,16 +21,17 @@ public interface PoolRepository extends JpaRepository<Pool, Long> {
             SELECT DISTINCT p
             FROM Pool p
             LEFT JOIN FETCH p.poolMarks pm
-            LEFT JOIN FETCH p.swimmingTimes st
             """)
     List<Pool> findAllWithUserMark(Long userId);
 
 
     @Query("""
             SELECT p
-            from Pool p
-            JOIN p.swimmingTimes st
+            FROM Pool p
+            LEFT JOIN FETCH p.swimmingTimes st
             WHERE p.name = :poolName
+            AND (st.dayOfWeek = :nowDayOfWeek OR st IS NULL)
             """)
-    Optional<Pool> getPoolWithName(@Param("poolName") String poolName);
+//    수영 시간 정보가 없는 풀도 포함
+    Optional<Pool> getPoolWithName(@Param("poolName") String poolName, @Param("nowDayOfWeek") Week nowDayOfWeek);
 }

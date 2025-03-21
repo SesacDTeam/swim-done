@@ -5,12 +5,18 @@ import com.done.swim.domain.pool.dto.responsedto.PoolResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolWithSwimmingTimeResponseDto;
 import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.pool.repository.PoolRepository;
+import com.done.swim.domain.swimmingtime.entity.Week;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -33,9 +39,12 @@ public class PoolService {
     }
 
     public PoolWithSwimmingTimeResponseDto getPoolWithName(String poolName) {
+        // 오늘 요일, 예시) 월요일
+        String nowDayOfWeek = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
         return PoolWithSwimmingTimeResponseDto.from(
-                poolRepository.getPoolWithName(poolName)
-                        .orElseThrow(() -> new IllegalArgumentException("Bad Request"))
+                poolRepository.getPoolWithName(poolName, Week.from(nowDayOfWeek))
+                        .orElseThrow(() -> new IllegalArgumentException("Bad Request")),
+                nowDayOfWeek
         );
     }
 

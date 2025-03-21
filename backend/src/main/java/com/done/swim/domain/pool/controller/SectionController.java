@@ -2,6 +2,7 @@ package com.done.swim.domain.pool.controller;
 
 import com.done.swim.common.ApiResponse;
 import com.done.swim.domain.pool.dto.responsedto.PoolResponseDto;
+import com.done.swim.domain.pool.dto.responsedto.PoolWithSwimmingTimeResponseDto;
 import com.done.swim.domain.pool.service.PoolService;
 import com.done.swim.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +44,9 @@ public class SectionController {
     }
 
     @GetMapping("/pools/{poolName}")
-    public ResponseEntity<ApiResponse<List<PoolResponseDto>>> getPool(@PathVariable String poolName) {
-        List<PoolResponseDto> pools = poolService.getPoolsWithUserMark(1L);
-        return ResponseEntity.ok(
-                ApiResponse.ok(pools)
-        );
+    public ResponseEntity<ApiResponse<PoolWithSwimmingTimeResponseDto>> getPool(@PathVariable String poolName) {
+        PoolWithSwimmingTimeResponseDto pool = poolService.getPoolWithName(poolName);
+        return ResponseEntity.ok(ApiResponse.ok(pool));
 
     }
 
