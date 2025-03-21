@@ -1,29 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
 import { useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
 import { toggleMark } from '../../utils/toggleMark';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
 
-  useEffect(() => {
-    setIsLoading(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [hasNext, setHasNext] = useState(true);
 
-    (async () => {
-      try {
-        const data = await markPoolApi.getMyMarkedPools(token);
-        setMarkedPools(data.data.poolMarks);
-      } catch {
-        // TODO: 에러 핸들링 예정
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
+  const onIntersect = async (entry, observer) => {
+    if (isLoading || !hasNext) return;
+    await getMarkedPools();
+  };
+
+  const getMarkedPools = async () => {
+    setIsLoading(true);
+    try {
+      const data = await markPoolApi.getMyMarkedPools(token, currentPage);
+      setCurrentPage((prev) => prev + 1);
+      setMarkedPools((prev) => prev.concat(data.data.poolMarks));
+
+      setHasNext(data.data.hasNext);
+    } catch {
+      // TODO: 에러 핸들링 예정
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const bottomRef = useInfiniteScroll(onIntersect);
 
   return (
     <>
@@ -46,6 +57,7 @@ export default function MarkPools() {
           );
         })}
       </section>
+      {hasNext && <div ref={bottomRef}></div>}
     </>
   );
 }

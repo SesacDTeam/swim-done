@@ -1,10 +1,14 @@
 import instance from './axios';
 
 export const markPoolApi = {
-  getMyMarkedPools: async (token) => {
+  getMyMarkedPools: async (token, page, size = 10) => {
     const response = await instance.get('/my/marks', {
       headers: {
         Authorization: 'Bearer ' + token,
+      },
+      params: {
+        page: page,
+        size: size,
       },
     });
 
