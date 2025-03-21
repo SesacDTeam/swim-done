@@ -46,17 +46,21 @@ export default function MarkPools() {
       )}
       <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky">내가 찜한 수영장</h1>
       <section className="flex flex-col items-center gap-5 w-full mt-10">
-        {markedPools.length === 0 ? <NoContent></NoContent> : markedPools.map((pool, index) => {
-          return (
-            <PoolListItem
-              key={index}
-              title={pool.name}
-              address={pool.address}
-              isMarked={pool.mark}
-              onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
-            ></PoolListItem>
-          );
-        })}
+        {markedPools.length === 0 ? (
+          <NoContent title={'내가 찜한 수영장이 없습니다'}></NoContent>
+        ) : (
+          markedPools.map((pool, index) => {
+            return (
+              <PoolListItem
+                key={index}
+                title={pool.name}
+                address={pool.address}
+                isMarked={pool.mark}
+                onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
+              ></PoolListItem>
+            );
+          })
+        )}
       </section>
       {hasNext && <div ref={bottomRef}></div>}
     </>
