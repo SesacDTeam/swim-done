@@ -66,15 +66,15 @@ services:
       cache_from:
         - type=local,src=/tmp/.build-cache/client
       args:
-        DOMAIN: ${DOMAIN}
+        VITE_DOMAIN: ${VITE_DOMAIN}
     image: ${DOCKER_REGISTRY}/swimdone-client-image:latest
     env_file:
       - .env
     environment:
-      - DOMAIN=${DOMAIN}
+      - VITE_DOMAIN=${VITE_DOMAIN}
     volumes:
-      - /etc/letsencrypt/live/${DOMAIN}/privkey.pem:/etc/letsencrypt/live/${DOMAIN}/privkey.pem:ro
-      - /etc/letsencrypt/live/${DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${DOMAIN}/fullchain.pem:ro
+      - /etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:ro
+      - /etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:ro
     ports:
       - "80:80"
       - "443:443"
