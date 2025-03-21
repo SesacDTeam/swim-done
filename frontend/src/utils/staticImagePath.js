@@ -19,3 +19,5 @@ export { default as profile } from '../assets/profile.svg';
 export { default as swimming } from '../assets/swimming.svg';
 export { default as wave } from '../assets/wave.svg';
 export { default as kickPan} from '../assets/kickPan.svg';
+export { default as xmark} from '../assets/xmark.svg';
+export { default as back} from '../assets/back.svg';
