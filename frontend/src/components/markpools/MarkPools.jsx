@@ -6,6 +6,7 @@ import { logo } from '../../utils/staticImagePath';
 import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
+import { Outlet } from 'react-router';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
@@ -63,6 +64,10 @@ export default function MarkPools() {
         )}
       </section>
       {hasNext && <div ref={bottomRef}></div>}
+
+      <div className='fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-xl bg-white'>
+        <Outlet></Outlet>
+      </div>
     </>
   );
 }
