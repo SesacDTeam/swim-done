@@ -1,7 +1,6 @@
 import { markPoolApi } from "../api/markPoolApi";
 
-export const useToggleMark = (pools, setPools, token) => {
-  const toggleMark = async (index) => {
+export const toggleMark = async (index, pools, setPools, token) => {
     const isMarked = pools[index].mark;
 
     setPools((prev) => {
@@ -23,7 +22,4 @@ export const useToggleMark = (pools, setPools, token) => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  return { toggleMark };
 };

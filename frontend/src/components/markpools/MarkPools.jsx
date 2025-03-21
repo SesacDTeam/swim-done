@@ -3,12 +3,12 @@ import { markPoolApi } from '../../api/markPoolApi';
 import { useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
+import { toggleMark } from '../../utils/toggleMark';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
-  const { toggleMark } = useToggleMark(markedPools, setMarkedPools, token);
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,7 +41,7 @@ export default function MarkPools() {
               title={pool.name}
               address={pool.address}
               isMarked={pool.mark}
-              onToggleMark={() => toggleMark(index)}
+              onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
             ></PoolListItem>
           );
         })}
