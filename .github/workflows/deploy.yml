@@ -14,20 +14,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 액션 시작 알림 메시지
       - name: Start Message
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: "배포 시작"
 
-      # 캐시 저장 설정을 위한 action(라이브러리)
       - name: Cache Docker Image Layer
         uses: actions/cache@v4.2.0
         with:
-          path: /tmp/.buildx-cache # 캐시로 관리할 경로
-          key: docker-image-layer-cache-${{ github.sha }} # 저장 & 불러올 캐시 이름(식별자)
-          restore-keys: docker-image-layer-cache # 만약 캐시 key를 찾지 못하면 대체할 캐시 이름
+          path: /tmp/.buildx-cache
+          key: docker-image-layer-cache-${{ github.sha }}
+          restore-keys: docker-image-layer-cache
 
       - name: run ssh-agent
         uses: webfactory/ssh-agent@v0.9.0
