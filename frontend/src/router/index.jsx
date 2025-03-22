@@ -55,7 +55,7 @@ const router = createBrowserRouter([
             element: <PoolDetail></PoolDetail>,
           },
           {
-            path: '/mark-pools/:poolId/submitimage',
+            path: '/mark-pools/:poolId/submitted-images',
             element: <SubmitImage></SubmitImage>,
           },
           {

@@ -42,7 +42,7 @@ export default function PoolDetail() {
   return (
     <>
       <main className="flex flex-col items-center w-full">
-        <DetailViewHeader rightButtonImage={xmark}></DetailViewHeader>
+        <DetailViewHeader closeButtonImage={xmark}></DetailViewHeader>
         <section className="w-[80%] flex flex-col items-center mb-10">
           <h1 className="pretendard-bold text-3xl">{poolDetail?.name}</h1>
           <p className="text-body01 mb-10">{poolDetail?.address}</p>
@@ -64,7 +64,7 @@ export default function PoolDetail() {
             )
           </div>
 
-          <Link to="submitimage" className="self-end">
+          <Link to="submitted-images" className="self-end">
             <button className="bg-blue01 w-35 h-10 rounded-[10px] text-white pretendard-normal text-xs">
               수정 제안하기
             </button>

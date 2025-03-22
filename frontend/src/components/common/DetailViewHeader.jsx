@@ -3,16 +3,23 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { hideDetailView } from '../../store/slices/detailViewSlice';
 
-export default function DetailViewHeader({ leftButtonImage, rightButtonImage }) {
+export default function DetailViewHeader({ backButtonImage, closeButtonImage }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleCloseButtonClick = () => {
+    dispatch(hideDetailView());
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(/\/(mark-pools|pools)\/\d+.*$/, '/$1');
+    navigate(newPath);
+  };
 
   return (
     <>
       <header className="mt-8 w-[90%] flex justify-between">
-        {leftButtonImage ? (
+        {backButtonImage ? (
           <img
-            src={leftButtonImage}
+            src={backButtonImage}
             alt=""
             className="w-8 aspect-square cursor-pointer"
             onClick={() => {
@@ -23,10 +30,10 @@ export default function DetailViewHeader({ leftButtonImage, rightButtonImage }) 
           <div className="w-8 aspect-square"></div>
         )}
         <img
-          src={rightButtonImage}
+          src={closeButtonImage}
           alt=""
           className="w-7 aspect-square cursor-pointer"
-          onClick={() => dispatch(hideDetailView())}
+          onClick={handleCloseButtonClick}
         />
       </header>
     </>
