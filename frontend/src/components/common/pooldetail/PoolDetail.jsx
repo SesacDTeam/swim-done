@@ -44,6 +44,7 @@ export default function PoolDetail() {
         </section>
 
         <section className="relative border-1 w-[80%] rounded-2xl border-blue01 bg-blue02/20 text-body01 pretendard-normal flex flex-col justify-center gap-1 px-4 pt-10 pb-4">
+          {/* TODO: 시간 데이터 수정 */}
           <div>평일: 9:00 ~ 9:50, 10:00 ~ 10:50, 19:00 ~ 19:50</div>
           <div>주말: 9:00 ~ 9:50, 10:00 ~ 10:50, 21:00 ~ 21:50</div>
           <div>{poolDetail?.additionalInfo}</div>
