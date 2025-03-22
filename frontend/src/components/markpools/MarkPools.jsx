@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
 import { useDispatch, useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
@@ -15,16 +15,11 @@ export default function MarkPools() {
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
-
-  const onIntersect = async (entry, observer) => {
-    if (isLoading || !hasNext) return;
-    await getMarkedPools();
-  };
 
   const getMarkedPools = async () => {
     setIsLoading(true);
@@ -41,16 +36,21 @@ export default function MarkPools() {
     }
   };
 
+  const onIntersect = async (entry, observer) => {
+    if (isLoading || !hasNext) return;
+    await getMarkedPools();
+  };
+
   const bottomRef = useInfiniteScroll(onIntersect);
 
   const handlePoolListItemClick = (poolId) => {
-    dispatch(showDetailView())
-    navigate(`${poolId}`)
-  }
+    dispatch(showDetailView());
+    navigate(`${poolId}`);
+  };
 
-  useUnmount(() => { 
-    dispatch(hideDetailView())
-  })
+  useUnmount(() => {
+    dispatch(hideDetailView());
+  });
 
   return (
     <>
@@ -81,7 +81,7 @@ export default function MarkPools() {
       {hasNext && <div ref={bottomRef}></div>}
 
       {!isDetailViewHidden && (
-        <div className="fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-xl bg-white">
+        <div className="fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-3xl bg-white overflow-y-scroll">
           <Outlet></Outlet>
         </div>
       )}

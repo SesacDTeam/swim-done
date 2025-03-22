@@ -9,7 +9,7 @@ export default function DetailViewHeader({ leftButtonImage, rightButtonImage }) 
 
   return (
     <>
-      <header className="mx-8 mt-8 flex justify-between">
+      <header className="mt-8 w-[90%] flex justify-between">
         {leftButtonImage ? (
           <img
             src={leftButtonImage}
