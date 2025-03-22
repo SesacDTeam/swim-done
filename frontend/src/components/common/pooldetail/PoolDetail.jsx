@@ -24,6 +24,7 @@ export default function PoolDetail() {
 
   useEffect(() => {
     (async () => {
+      // TODO: 로딩 처리, 에러 핸들링
       const data = await poolApi.getPoolDetail(poolId);
       const poolDetailData = data.data;
       setPoolDetail(poolDetailData);
