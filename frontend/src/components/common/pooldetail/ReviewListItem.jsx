@@ -6,7 +6,7 @@ export default function ReviewListItem({ nickname, createdAt, content }) {
     <>
       <article className="w-full mb-5">
         <div className="flex justify-between items-baseline mb-5">
-          <div className="flex gap-3 bg-blue02/20 py-3 pl-3 pr-20 rounded-xl text-sm pretendard-normal">
+          <div className="flex gap-3 bg-blue02/20 py-3 pl-3 pr-10 rounded-xl text-sm pretendard-normal">
             <img src={wave} alt="" className="w-5 aspect-square" />
             <div>{nickname}</div>
           </div>
