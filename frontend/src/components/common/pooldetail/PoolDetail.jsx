@@ -25,10 +25,17 @@ export default function PoolDetail() {
   useEffect(() => {
     (async () => {
       const data = await poolApi.getPoolDetail(poolId);
-      setPoolDetail(data.data);
+      const poolDetailData = data.data;
+      setPoolDetail(poolDetailData);
 
-      const movePosition = new kakao.maps.LatLng(data.data.latitude, data.data.longitude);
+      // 지도 로직도 임시
+      const movePosition = new kakao.maps.LatLng(poolDetailData.latitude, poolDetailData.longitude);
       mapRef.current.setCenter(movePosition);
+
+      const marker = new kakao.maps.Marker({
+        position: movePosition,
+      });
+      marker.setMap(mapRef.current);
     })();
   }, [poolId]);
 
@@ -73,7 +80,7 @@ export default function PoolDetail() {
 
         <section className="flex flex-col items-center w-[80%] mb-10">
           <h2 className="self-start pretendard-semibold text-2xl">리뷰</h2>
-          <Link to='reviews' className="self-end">
+          <Link to="reviews" className="self-end">
             <button className="text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-xs">
               리뷰쓰러가기
             </button>
