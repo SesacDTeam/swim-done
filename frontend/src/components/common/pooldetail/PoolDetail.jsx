@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { wave, xmark } from '../../../utils/staticImagePath';
+import { xmark } from '../../../utils/staticImagePath';
 import DetailViewHeader from '../DetailViewHeader';
 import ReviewListItem from './ReviewListItem';
 
@@ -7,12 +7,18 @@ export default function PoolDetail() {
   const mapContainer = useRef();
 
   useEffect(() => {
-    const mapOption = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-      level: 3, // 지도의 확대 레벨
+    const markerPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+
+    const marker = {
+      position: markerPosition,
     };
 
-    const map = new kakao.maps.Map(mapContainer.current, mapOption);
+    const staticMapOption = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667), // 이미지 지도의 중심좌표
+      level: 3, // 이미지 지도의 확대 레벨
+      marker
+    };
+    const staticMap = new kakao.maps.StaticMap(mapContainer.current, staticMapOption);
   }, []);
 
   return (
