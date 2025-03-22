@@ -3,7 +3,7 @@ import { xmark } from '../../../utils/staticImagePath';
 import DetailViewHeader from '../DetailViewHeader';
 import ReviewListItem from './ReviewListItem';
 import { poolApi } from '../../../api/poolApi';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { extractDate } from '../../../utils/extractDate';
 
 export default function PoolDetail() {
@@ -13,6 +13,7 @@ export default function PoolDetail() {
   const mapRef = useRef();
 
   useEffect(() => {
+    // 임시로 지도 생성
     let mapOption = {
       center: new kakao.maps.LatLng(33.450701, 126.570667),
       level: 3,
@@ -55,10 +56,13 @@ export default function PoolDetail() {
             )
           </div>
 
-          <button className="self-end  bg-blue01 w-35 h-10 rounded-[10px] text-white pretendard-normal text-xs">
-            수정 제안하기
-          </button>
+          <Link to="submitimage" className="self-end">
+            <button className="bg-blue01 w-35 h-10 rounded-[10px] text-white pretendard-normal text-xs">
+              수정 제안하기
+            </button>
+          </Link>
         </section>
+
         <section className="text-right w-[80%] text-sm text-body01 mb-15">
           <div>위 정보의 출처는 '{poolDetail?.name}' 홈페이지입니다.</div>
           <div>
@@ -68,9 +72,12 @@ export default function PoolDetail() {
 
         <section className="flex flex-col items-center w-[80%] mb-10">
           <h2 className="self-start pretendard-semibold text-2xl">리뷰</h2>
-          <button className="self-end text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-xs">
-            리뷰쓰러가기
-          </button>
+          <Link to='reviews' className="self-end">
+            <button className="text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-xs">
+              리뷰쓰러가기
+            </button>
+          </Link>
+
           {poolDetail?.reviews.map((review) => {
             return (
               <ReviewListItem

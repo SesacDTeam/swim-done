@@ -6,6 +6,8 @@ import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 import NaverRedirect from '../pages/NaverRedirect';
 import PoolDetail from '../components/common/poolDetail/PoolDetail';
+import SubmitImage from '../components/common/submitImage/SubmitImage';
+import CreateReview from '../components/common/createreview/CreateReview';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +53,14 @@ const router = createBrowserRouter([
           {
             path: '/mark-pools/:poolId',
             element: <PoolDetail></PoolDetail>,
+          },
+          {
+            path: '/mark-pools/:poolId/submitimage',
+            element: <SubmitImage></SubmitImage>,
+          },
+          {
+            path: '/mark-pools/:poolId/reviews',
+            element: <CreateReview></CreateReview>,
           },
         ],
       },
