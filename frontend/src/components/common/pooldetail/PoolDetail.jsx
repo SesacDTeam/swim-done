@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { wave, xmark } from '../../../utils/staticImagePath';
 import DetailViewHeader from '../DetailViewHeader';
+import ReviewListItem from './ReviewListItem';
 
 export default function PoolDetail() {
   const mapContainer = useRef();
@@ -13,6 +14,7 @@ export default function PoolDetail() {
 
     const map = new kakao.maps.Map(mapContainer.current, mapOption);
   }, []);
+
   return (
     <>
       <main className="flex flex-col items-center w-full">
@@ -46,35 +48,11 @@ export default function PoolDetail() {
           <button className="self-end text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-xs">
             리뷰쓰러가기
           </button>
-          <article className='w-full mb-5'>
-            <div className='flex justify-between items-baseline mb-5'>
-              <div className="flex gap-3 bg-blue02/20 py-3 pl-3 pr-20 rounded-xl text-sm pretendard-normal">
-                <img src={wave} alt=""  className='w-5 aspect-square'/>
-                <div>수영조아1234</div>
-              </div>
-
-              <div className='pretendard-normal text-xs'>2025.03.14</div>
-            </div>
-            
-            <div className='border-b-1 pb-1 border-title'>
-              <p>여기 레일이 너무 좁아요ㅡㅡ 어린애들도  많아서 시끄러워요</p>
-            </div>  
-          </article>
-
-          <article className='w-full mb-5'>
-            <div className='flex justify-between items-baseline mb-5'>
-              <div className="flex gap-3 bg-blue02/20 py-3 pl-3 pr-20 rounded-xl text-sm pretendard-normal">
-                <img src={wave} alt=""  className='w-5 aspect-square'/>
-                <div>수영조아1234</div>
-              </div>
-
-              <div className='pretendard-normal text-xs'>2025.03.14</div>
-            </div>
-            
-            <div className='border-b-1 pb-1 border-title'>
-              <p>여기 레일이 너무 좁아요ㅡㅡ 어린애들도  많아서 시끄러워요</p>
-            </div>  
-          </article>
+          <ReviewListItem
+            nickname="수영조아1234"
+            createdAt="2025.03.14"
+            content="여기 레일이 너무 좁아요ㅡㅡ 어린애들도 많아서 시끄러워요"
+          ></ReviewListItem>
         </section>
       </main>
     </>
