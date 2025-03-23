@@ -73,34 +73,47 @@ public class OAuth2TokenService {
 
         // 리프레시 토큰 검증
         if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
+            System.out.println("검증로직확인");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse
                             .error("리프레시 토큰이 유효하지 않습니다.",
                                     "UNAUTHORIZED"));
         }
 
-        // 레디스에서 저장된 리프레시 토큰 확인
+        // 레디스에 저장된 리프레시 토큰 조회
         Long userId = jwtTokenProvider.getUserId(refreshToken);
+
+        // 기존에 레디스에서 저장된 리프레시 토큰 가져와서 비교
         String storedRefreshToken = getRefreshToken(userId);
 
-        // 기존에 저장된 리프레시 토큰이랑 비교
         if (!refreshToken.equals(storedRefreshToken)) {
+            System.out.println("토큰확인로직");
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse
                             .error("유효하지 않은 리프레시 토큰입니다.",
                                     "UNAUTHORIZED"));
         }
 
+        // 유저 정보 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        // 5. OAuth2 인증 정보를 가져오기 (SecurityContext에서 직접 가져오기)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        // User 객체 가져오기
-        User user = oAuth2User.getUser();
 
         // 새로운 액세스 토큰 발급
         String newAccessToken = jwtTokenProvider.createAccessToken(authentication, user);
+        System.out.println("새로운 액세스 토큰" + newAccessToken);
+
+        // json으로 반환
+
+
+//        return ResponseEntity.ok()
+//                .header("Authorization", "Bearer " + newAccessToken)
+//                .body("새로운 액세스 토큰이 발급되었습니다.");
 
         return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + newAccessToken)
-                .body("새로운 액세스 토큰이 발급되었습니다.");
+                .body(ApiResponse.ok("새로운 액세스 토큰이 발급되었습니다.", "SUCCESS", newAccessToken));
     }
 }

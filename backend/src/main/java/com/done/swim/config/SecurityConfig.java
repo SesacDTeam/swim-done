@@ -36,6 +36,9 @@ public class SecurityConfig {
     @Value("${origin}")
     private String origin;
 
+    @Value("${CORS_ALLOWED_ORIGIN}")
+    private String CORS_ALLOWED_ORIGIN;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -44,10 +47,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll() // 열어놔야됨..액세스 토큰이 이미 만료가 됐으니까
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/auth/verify").authenticated()
-                        .requestMatchers("/auth/**", "/error", "/images/**").permitAll()
-                        .requestMatchers("/", "/login/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/error", "/api/images/**").permitAll()
+                        .requestMatchers("/api", "/login/**").permitAll()
+                        //oauth2 로직은 api 안 붙임
                         .requestMatchers("/oauth2/**", "/login/oauth2/code/**").permitAll()
                         .requestMatchers("/login/oauth2/", "/oauth2/authorization/**").permitAll()
                         .requestMatchers("/login-success").permitAll()
@@ -78,6 +82,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(origin);
+        configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);

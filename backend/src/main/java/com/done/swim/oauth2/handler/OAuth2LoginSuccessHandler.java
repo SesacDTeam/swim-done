@@ -44,6 +44,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // 액세스 토큰 & 리프레시 토큰 발급
         String accessToken = jwtTokenProvider.createAccessToken(authentication, user);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication, user);
+        System.out.println(refreshToken);
 
         // 리프레시 토큰을 redis에 저장
         oAuth2TokenService.saveRefreshToken(user.getId(), refreshToken);
@@ -71,8 +72,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .sameSite(sameSite)
                 .build();
 
+        System.out.println(cookie);
         // 응답 헤더에 추가
-        response.setHeader("Set-Cookie", cookie.toString());
+        response.addHeader("Set-Cookie", cookie.toString());
 
     }
 

@@ -14,15 +14,14 @@ export default function NaverRedirect() {
     try {
       // 현재 url에서 토큰 가져오기
       const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get('token');
+      const accessToken = urlParams.get('token');
 
-      if (!token) {
+      if (!accessToken) {
         setError(true);
         navigate('/');
         return;
       }
-
-      dispatch(login(token));
+      dispatch(login(accessToken));
       navigate('/mypage');
     } catch (error) {
       console.log("error 발생", error)
