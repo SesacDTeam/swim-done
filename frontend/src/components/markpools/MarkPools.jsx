@@ -31,6 +31,8 @@ export default function MarkPools() {
       setHasNext(data.data.hasNext);
     } catch {
       // TODO: 에러 핸들링 예정
+      console.log('에러');
+      setHasNext(false);
     } finally {
       setIsLoading(false);
     }
@@ -41,7 +43,7 @@ export default function MarkPools() {
     await getMarkedPools();
   };
 
-  const bottomRef = useInfiniteScroll(onIntersect);
+  const bottomRef = useInfiniteScroll(onIntersect, hasNext);
 
   const handlePoolListItemClick = (poolId) => {
     dispatch(showDetailView());

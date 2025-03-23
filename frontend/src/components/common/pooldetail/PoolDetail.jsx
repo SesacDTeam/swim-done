@@ -90,6 +90,7 @@ export default function PoolDetail() {
           {poolDetail?.reviews.map((review) => {
             return (
               <ReviewListItem
+                key={review.id}
                 nickname={review.authorNickname}
                 createdAt={extractDate(review.createdAt)}
                 content={review.content}
