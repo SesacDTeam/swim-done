@@ -39,39 +39,41 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/verify").authenticated()
-                .requestMatchers("/auth/**", "/error", "/images/**").permitAll()
-                .requestMatchers("/", "/login/**").permitAll()
-                .requestMatchers("/oauth2/**", "/login/oauth2/code/**").permitAll()
-                .requestMatchers("/login/oauth2/", "/oauth2/authorization/**").permitAll()
-                .requestMatchers("/login-success").permitAll()
-                .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .loginPage("/login-success")  // 추가
-                .authorizationEndpoint(endpoint ->
-                    endpoint.baseUri("/oauth2/authorization")
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/verify").authenticated()
+                        .requestMatchers("/auth/**", "/error", "/images/**").permitAll()
+                        .requestMatchers("/", "/login/**").permitAll()
+                        .requestMatchers("/oauth2/**", "/login/oauth2/code/**").permitAll()
+                        .requestMatchers("/login/oauth2/", "/oauth2/authorization/**").permitAll()
+                        .requestMatchers("/api/sections").permitAll()
+                        .requestMatchers("/login-success").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .redirectionEndpoint(endpoint ->
-                    endpoint.baseUri("/login/oauth2/code/*")
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login-success")  // 추가
+                        .authorizationEndpoint(endpoint ->
+                                endpoint.baseUri("/oauth2/authorization")
+                        )
+                        .redirectionEndpoint(endpoint ->
+                                endpoint.baseUri("/login/oauth2/code/*")
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
                 )
-                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                .successHandler(oAuth2LoginSuccessHandler)
-                .failureHandler(oAuth2LoginFailureHandler)
-            )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(exception -> exception
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            );
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                );
 
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

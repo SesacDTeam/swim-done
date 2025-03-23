@@ -1,8 +1,18 @@
-import { points } from './points';
 import { kickPan } from '../../utils/staticImagePath';
 
+/** @description 
+ * - 지도 객체 
+ * - 초기 위치 원복시 사용 됨
+ * */
+let map = null;
 
-export let map = null;
+/** @description 인포윈도우 */
+const infoWindow = new kakao.maps.InfoWindow({
+  position: null,
+  content: null,
+  removable: true,
+});
+
 /**
  * @description 서울 시민청 좌표 (기본 중심점)
  */
@@ -12,7 +22,7 @@ const centerLng = 126.9781553;
 /**
  * @description 지도 기본 중심 좌표 객체 생성
  */
-const center = new kakao.maps.LatLng(centerLat, centerLng);
+const center = createPoint(centerLat, centerLng);
 
 /**
  * @description 지도 기본 확대 레벨
@@ -34,42 +44,47 @@ const markerImageSize = { imageWidth: 20, imageHeight: 30 };
 
 /**
  * @function createMap
- * @description 지도 생성 함수
+ * @description 
+ * - 지도 생성 함수
+ * - strict mode는 지도가 2개 생성되어 확대, 축소 시 잔상남음
  * @param {HTMLElement} mapContainer - 지도 컨테이너 요소
- * @returns {Object} 생성된 지도 객체
+ * @returns {kakao.maps.Map} 생성된 지도 객체
  */
-export function createMap(mapContainer) {
+export function createMap(mapContainer, newPoints) {
+  if (map) return; // 지도 중복생성 방지
   const newMap = new kakao.maps.Map(mapContainer, options);
   createZoomControl(newMap);
-  clustererHandler(points, newMap);
+  clustererHandler(newPoints, newMap);
   map = newMap;
-  return map;
+  kakao.maps.event.addListener(newMap, 'click', () => infoWindow.close());
 }
 
 /**
- * @function createLatLng
+ * @function createPoint
  * @description 마커 좌표 객체 생성
- * @param {number} lat - 위도
- * @param {number} lng - 경도
- * @returns {Object} LatLng 객체
+ * @param {number} latitude - 위도
+ * @param {number} longitude - 경도
+ * @returns {kakao.maps.LatLng} LatLng 객체
  */
-function createLatLng(lat, lng) {
-  return new kakao.maps.LatLng(lat, lng);
+function createPoint(latitude, longitude) {
+  return new kakao.maps.LatLng(latitude, longitude);
 }
 
 /**
  * @function createMarker
- * @description 지도 위에 마커를 생성
- * @param {Object} position - 마커 위치 (LatLng 객체)
- * @param {Object} image - 마커 이미지 객체
- * @param {Object} [map=null] - 마커를 추가할 지도 객체 (기본값: null)
- * @returns {Object} 생성된 마커 객체
+ * @description 지도 위에 마커를 생성 클러스터 전용, title 추가
+ * @param {kakao.maps.LatLng} position - 마커 위치 (LatLng 객체)
+ * @param {kakao.maps.MarkerImage} image - 마커 이미지 객체
+ * @param {string} title - 마커 타이틀
+ * @returns {kakao.maps.Marker} 생성된 마커 객체
  */
-function createMarker(position, image, map = null) {
+function createMarker(position, image, title) {
+  const isClickable = true;
   return new kakao.maps.Marker({
     position,
     image,
-    map,
+    clickable: isClickable,
+    title,
   });
 }
 
@@ -78,7 +93,7 @@ function createMarker(position, image, map = null) {
  * @description 마커 이미지 생성
  * @param {string} image - 마커 이미지 URL
  * @param {Object} imageSize - 이미지 크기 설정 객체 { imageWidth, imageHeight }
- * @returns {Object} 생성된 마커 이미지 객체
+ * @returns {kakao.maps.MarkerImage} 생성된 마커 이미지 객체
  */
 function createMarkerImage(image, imageSize) {
   const { imageWidth, imageHeight } = imageSize;
@@ -88,47 +103,24 @@ function createMarkerImage(image, imageSize) {
 
 /**
  * @function createInfoWindow
- * @description 마커에 연결할 정보창(InfoWindow) 생성
- * @param {Object} map - 지도 객체
- * @param {Object} marker - 마커 객체
- * @param {Object} point - 마커의 데이터 (title, lat, lng 등)
+ * @description 마커의 InfoWindow 업데이트
+ * @param {kakao.maps.Marker} marker - 마커 객체
  */
-function createInfoWindow(map, marker, point) {
-  const infoWindow = new kakao.maps.InfoWindow({
-    content: `
-      <div style='height:100px;'>
-        <div>${point.title}</div>
-        <hr/>
-        <div>주차가능</div>
-      </div>
-    `,
-  });
-
-  kakao.maps.event.addListener(marker, 'mouseover', () => infoWindow.open(map, marker));
-  kakao.maps.event.addListener(marker, 'mouseout', () => infoWindow.close());
+function markerHandler(marker) {
+  kakao.maps.event.addListener(marker, 'click', () => updateInfoWindow(marker));
 }
 
-/**
- * @deprecated 클러스터 활용으로 사용되지 않는 함수
- * @function addMarkers
- * @description 개별 마커를 지도에 추가하는 함수
- * @param {Array} points - 마커를 추가할 좌표 리스트
- * @param {Object} map - 지도 객체
- */
-function addMarkers(points, map) {
-  points.forEach((point) => {
-    const position = createLatLng(point.lat, point.lng);
-    const markerImage = createMarkerImage(kickPan, markerImageSize);
-    const marker = createMarker(position, markerImage, map);
-    createInfoWindow(map, marker, point);
-  });
+function updateInfoWindow(marker) {
+  console.log(marker.getTitle());
+  infoWindow.setContent(marker.getTitle());
+  infoWindow.open(marker.getMap(), marker);
 }
 
 /**
  * @function clustererHandler
  * @description 마커들을 클러스터링하는 함수
  * @param {Array} points - 마커를 추가할 좌표 리스트
- * @param {Object} map - 지도 객체
+ * @param {kakao.maps.Map} map - 지도 객체
  */
 function clustererHandler(points, map) {
   const filteredPoints = {};
@@ -143,15 +135,17 @@ function clustererHandler(points, map) {
 
   const clusterer = new kakao.maps.MarkerClusterer({
     map,
-    minLevel: 8,
-    minClusterSize: 2,
+    minLevel: 7,
+    gridSize: 85,
+    minClusterSize: 4,
   });
 
+  const image = createMarkerImage(kickPan, markerImageSize);
+
   Object.keys(filteredPoints).forEach((key) => {
-    const image = createMarkerImage(kickPan, markerImageSize);
     const markers = filteredPoints[key].map((p) => {
-      const marker = createMarker(createLatLng(p.lat, p.lng), image);
-      createInfoWindow(map, marker, p);
+      const marker = createMarker(createPoint(p.latitude, p.longitude), image, p.name);
+      markerHandler(marker);
       return marker;
     });
     clusterer.addMarkers(markers);
@@ -161,9 +155,8 @@ function clustererHandler(points, map) {
 /**
  * @function initCenterHandler
  * @description 지도 중심을 기본 위치로 초기화
- * @param {Object} map - 지도 객체
  */
-export function initCenterHandler(map) {
+export function initCenterHandler() {
   map.setLevel(level);
   map.panTo(center);
 }
