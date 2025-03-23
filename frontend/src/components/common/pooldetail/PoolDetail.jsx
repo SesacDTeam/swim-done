@@ -87,10 +87,10 @@ export default function PoolDetail() {
             </button>
           </Link>
 
-          {poolDetail?.reviews.map((review) => {
+          {poolDetail?.reviews.map((review, index) => {
             return (
               <ReviewListItem
-                key={review.id}
+                key={index}
                 nickname={review.authorNickname}
                 createdAt={extractDate(review.createdAt)}
                 content={review.content}
