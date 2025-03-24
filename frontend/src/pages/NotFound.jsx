@@ -7,12 +7,11 @@ export default function NotFound() {
 
   return (
     <div className="flex flex-col justify-center items-center h-full select-none">
-      <img src={logo} alt="" className="h-30" />
       <div className="flex flex-col items-center animate-pulse">
-        <h1 className="pretendard-bold text-6xl text-blue01 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] rotate-[-2deg]">
+        <h1 className="pretendard-bold text-8xl text-blue01 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] rotate-[-5deg]">
           Not Found
         </h1>
-        <h1 className="pretendard-bold text-6xl text-blue01 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+        <h1 className="pretendard-bold text-8xl text-blue01 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
           404
         </h1>
       </div>
