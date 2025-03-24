@@ -2,6 +2,7 @@ package com.done.swim.domain.pool.service;
 
 import com.done.swim.domain.pool.dto.responsedto.PoolDetailResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolResponseDto;
+import com.done.swim.domain.pool.dto.responsedto.PoolWithSectionResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolWithSwimmingTimeResponseDto;
 import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.pool.repository.PoolRepository;
@@ -48,4 +49,9 @@ public class PoolService {
         );
     }
 
+    public List<PoolWithSectionResponseDto> getPoolsWithSection(String section, long userId) {
+        List<Pool> pools = poolRepository.findBySectionWithUserId(section, userId);
+
+        return pools.stream().map(p -> PoolWithSectionResponseDto.from(p, userId)).toList();
+    }
 }

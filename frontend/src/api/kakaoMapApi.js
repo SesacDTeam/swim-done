@@ -19,12 +19,17 @@ const kakaoMapApi = {
   /**
    * 특정 지역구의 각 수영장 요약정보
    */
-  getSectionWithPools: async (sectionId) => {
+  getSectionWithPools: async (section) => {
     try {
-      if (!sectionId) {
+      if (!section) {
         throw new Error('sectionId is required');
       }
-      const response = await axios.get(`${KAKAOMAP_API}/${sectionId}/pools`);
+
+      if (section[section.length - 1] === '구') {
+        section = section.substring(0, section.length - 1);
+      }
+      
+      const response = await axios.get(`${KAKAOMAP_API}/${section}/pools`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -36,7 +41,7 @@ const kakaoMapApi = {
   getPool: async (poolName) => {
     try {
       if (!poolName) {
-        throw new Error('\'PoolName\' is required');
+        throw new Error("'PoolName' is required");
       }
       const response = await axios.get(`${KAKAOMAP_API}/pools/${poolName}`);
       return response.data;

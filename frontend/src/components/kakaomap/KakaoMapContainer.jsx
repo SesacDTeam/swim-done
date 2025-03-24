@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { createMap } from './KakaoMapService';
+import { createMap, drawPolygons } from './KakaoMapService';
 import kakaoMapApi from '../../api/kakaoMapApi';
+import seoulGu from '../../utils/seoul-gu.json';
 
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
@@ -12,18 +13,21 @@ export default function KakaoMapContainer() {
       const response = await kakaoMapApi.getSections();
       try {
         if (!response) {
-          throw new Error('response is null');
+          throw new Error('Response is null');
         }
         const points = response.data;
         if (kakao && kakao.maps) {
           createMap(mapContainer.current, points);
+          drawPolygons(seoulGu);
           setPoints(points);
         }
       } catch (error) {
         console.error(error);
       }
     }
-
+    // seoulGu.forEach(({coordinates, SIG_KOR_NM}) => {
+    //   displayArea(coordinates, SIG_KOR_NM);
+    // });
     fetchData();
   }, []);
 

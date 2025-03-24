@@ -1,12 +1,14 @@
-import { kickPan } from '../../utils/staticImagePath';
+import { kickPan, mark } from '../../utils/staticImagePath';
 import kakaoMapApi from '../../api/kakaoMapApi';
+import seoulGu from '../../utils/seoul-gu.json';
+
+console.log(seoulGu);
+
 /** @description
  * - 지도 객체
  * - 초기 위치 원복시 사용 됨
  * */
 let map = null;
-
-
 
 /**
  * @description 서울 시민청 좌표 (기본 중심점)
@@ -17,12 +19,12 @@ const centerLng = 126.9781553;
 /**
  * @description 지도 기본 중심 좌표 객체 생성
  */
-const center = createPoint(centerLat, centerLng);
+let center = createPoint(centerLat, centerLng);
 
 /**
  * @description 지도 기본 확대 레벨
  */
-const level = 9;
+let level = 9;
 
 /**
  * @description 지도 기본 옵션
@@ -49,9 +51,21 @@ export function createMap(mapContainer, newPoints) {
   if (map) return; // 지도 중복생성 방지
   const newMap = new kakao.maps.Map(mapContainer, options);
   createZoomControl(newMap);
-  clustererHandler(newPoints, newMap);
+  // clustererHandler(newPoints, newMap);
   map = newMap;
   kakao.maps.event.addListener(newMap, 'click', () => infoWindow.close());
+  kakao.maps.event.addListener(map, 'zoom_changed', function () {
+    level = map.getLevel();
+    if (level <= 8) {
+      // polygon 제거
+      removePolygon();
+    } else {
+      // polygon 다시 생성
+      if (!polygons[0].getMap()) {
+        displayPolygon();
+      }
+    }
+  });
 }
 
 /**
@@ -74,11 +88,10 @@ function createPoint(latitude, longitude) {
  * @returns {kakao.maps.Marker} 생성된 마커 객체
  */
 function createMarker(position, image, title) {
-  const isClickable = true;
   return new kakao.maps.Marker({
     position,
     image,
-    clickable: isClickable,
+    clickable: true,
     title,
   });
 }
@@ -102,30 +115,31 @@ function createMarkerImage(image, imageSize) {
  * @param {kakao.maps.Marker} marker - 마커 객체
  */
 function markerHandler(marker) {
-  kakao.maps.event.addListener(marker, 'click', async() => await updateInfoWindow(marker));
+  kakao.maps.event.addListener(marker, 'click', async () => await updateInfoWindow(marker));
 }
 
 async function updateInfoWindow(marker) {
   const newContent = await drawInfoWindowContent(marker.getTitle());
-  
+
   infoWindow.setContent(newContent);
   infoWindow.open(marker.getMap(), marker);
 }
 
 async function drawInfoWindowContent(poolName) {
-  
   const response = await kakaoMapApi.getPool(poolName);
-  
+
   try {
     const pool = response.data;
-    
+
     const swimmingTimes = pool.swimmingTimes
       .map(({ startTime, endTime }) => `<p>${startTime} ~ ${endTime}</p>`)
       .join(',');
-    const content = swimmingTimes ? `
+    const content = swimmingTimes
+      ? `
         <p class="mb-2">${pool.dayOfWeek} 자유 수영 시간</p>
         ${swimmingTimes}
-      ` : `<p class="mb-2">${pool.dayOfWeek} 자유 수영 시간이 없습니다.</p>`; 
+      `
+      : `<p class="mb-2">${pool.dayOfWeek} 자유 수영 시간이 없습니다.</p>`;
     return `
     <div class="bg-white shadow-lg rounded-lg p-4 w-[337px] border border-gray-200">
       <h2 class="text-xl font-bold text-black">${poolName}</h2>
@@ -199,8 +213,6 @@ function createZoomControl(map) {
   map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 }
 
-
-
 /** @description 인포윈도우
  * - 카카오맵은 오브젝트가 생성된 순서대로 z-index가 결정됨
  * - 인포윈도우가 가장 마지막에 **생성**되어야 **가장 위**에 올라감
@@ -208,7 +220,94 @@ function createZoomControl(map) {
  * > - 가장 위: z-index
  */
 const infoWindow = new kakao.maps.InfoWindow({
-  position: null,
-  content: '',
   removable: true,
 });
+/////////////////////////////
+/////////////////////////////
+/// Polygons
+const polygons = [];
+const markers = [];
+
+const customOverlay = new kakao.maps.CustomOverlay({});
+
+function removePolygon() {
+  polygons.forEach((polygon) => polygon.setMap(null));
+}
+
+function displayPolygon() {
+  polygons.forEach((polygon) => polygon.setMap(map));
+}
+
+const displayArea = (coordinates, name) => {
+  // 폴리곤 좌표 모음
+  const path = [];
+
+  coordinates.forEach((coordinate) => {
+    path.push(createPoint(coordinate[1], coordinate[0]));
+  });
+
+  const polygon = new kakao.maps.Polygon({
+    map,
+    path,
+    strokeWeight: 2,
+    strokeColor: '#004c80',
+    strokeOpacity: 0.8,
+    fillColor: '#ffffff',
+    fillOpacity: 0.7,
+  });
+  polygons.push(polygon);
+
+  // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
+  // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
+  kakao.maps.event.addListener(polygon, 'mouseover', function (mouseEvent) {
+    polygon.setOptions({ fillColor: '#09f' });
+
+    customOverlay.setContent(`
+        <div class="absolute bg-white border border-gray-500 rounded-sm text-xs top-[-5px] left-[15px] p-[2px]">
+          ${name}
+        </div>
+      `);
+
+    customOverlay.setPosition(mouseEvent.latLng);
+    customOverlay.setMap(map);
+  });
+
+  // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
+  kakao.maps.event.addListener(polygon, 'mousemove', function (mouseEvent) {
+    customOverlay.setPosition(mouseEvent.latLng);
+  });
+
+  // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
+  // 커스텀 오버레이를 지도에서 제거합니다
+  kakao.maps.event.addListener(polygon, 'mouseout', () => {
+    polygon.setOptions({ fillColor: '#fff' });
+    customOverlay.setMap(null);
+  });
+
+  // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다
+  kakao.maps.event.addListener(polygon, 'click', async (mouseEvent) => {
+    polygon.setOptions({ fillColor: '#fff' });
+    customOverlay.setMap(null);
+    markers.forEach((marker) => marker.setMap(null));
+    map.setLevel(7);
+    map.panTo(mouseEvent.latLng);
+    const response = await kakaoMapApi.getSectionWithPools(name);
+    const pools = response.data;
+    pools.forEach((pool) => {
+      const marker = createMarker(
+        createPoint(pool.latitude, pool.longitude),
+        createMarkerImage(kickPan, markerImageSize),
+        pool.name
+      );
+      marker.setMap(map);
+      markers.push(marker);
+      markerHandler(marker);
+    });
+  });
+};
+
+export function drawPolygons(data) {
+  data.forEach(({ coordinates, SIG_KOR_NM }) => {
+    displayArea(coordinates, SIG_KOR_NM);
+  });
+}

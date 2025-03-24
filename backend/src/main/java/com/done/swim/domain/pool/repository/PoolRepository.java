@@ -34,4 +34,13 @@ public interface PoolRepository extends JpaRepository<Pool, Long> {
             """)
 //    수영 시간 정보가 없는 풀도 포함
     Optional<Pool> getPoolWithName(@Param("poolName") String poolName, @Param("nowDayOfWeek") Week nowDayOfWeek);
+
+    @Query("""
+            SELECT p
+            FROM Pool p
+            LEFT JOIN FETCH p.poolMarks pm
+            WHERE p.section = :section
+            AND (pm.user.id = :userId OR pm.user IS NULL)
+            """)
+    List<Pool> findBySectionWithUserId(@Param("section") String section, @Param("userId") Long userId);
 }
