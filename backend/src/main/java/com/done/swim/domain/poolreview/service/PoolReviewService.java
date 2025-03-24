@@ -48,7 +48,7 @@ public class PoolReviewService {
 
   }
 
-  public Map<String, Object> myReviews(Long userId, Pageable pageable) {
+  public Map<String, Object> getMyReviews(Long userId, Pageable pageable) {
     Page<PoolReview> poolReviews = poolReviewRepository.findAllByUserId(userId, pageable);
 
     Page<MyReviewResponseDto> response = poolReviews.map(MyReviewResponseDto::from);
