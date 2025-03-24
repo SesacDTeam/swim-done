@@ -1,24 +1,25 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
 import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
+import { Outlet, useNavigate } from 'react-router';
+import { hideDetailView, showDetailView } from '../../store/slices/detailViewSlice';
+import { useUnmount } from '../../hooks/useUnmount';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
+  const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
-
-  const onIntersect = async (entry, observer) => {
-    if (isLoading || !hasNext) return;
-    await getMarkedPools();
-  };
 
   const getMarkedPools = async () => {
     setIsLoading(true);
@@ -30,12 +31,28 @@ export default function MarkPools() {
       setHasNext(data.data.hasNext);
     } catch {
       // TODO: 에러 핸들링 예정
+      console.log('에러');
+      setHasNext(false);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const bottomRef = useInfiniteScroll(onIntersect);
+  const onIntersect = async (entry, observer) => {
+    if (isLoading || !hasNext) return;
+    await getMarkedPools();
+  };
+
+  const bottomRef = useInfiniteScroll(onIntersect, hasNext);
+
+  const handlePoolListItemClick = (poolId) => {
+    dispatch(showDetailView());
+    navigate(`${poolId}`);
+  };
+
+  useUnmount(() => {
+    dispatch(hideDetailView());
+  });
 
   return (
     <>
@@ -57,12 +74,19 @@ export default function MarkPools() {
                 address={pool.address}
                 isMarked={pool.mark}
                 onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
+                onClick={() => handlePoolListItemClick(pool.id)}
               ></PoolListItem>
             );
           })
         )}
       </section>
       {hasNext && <div ref={bottomRef}></div>}
+
+      {!isDetailViewHidden && (
+        <div className="fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-3xl bg-white overflow-y-scroll">
+          <Outlet></Outlet>
+        </div>
+      )}
     </>
   );
 }
