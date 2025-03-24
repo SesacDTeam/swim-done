@@ -36,6 +36,8 @@ public class SecurityConfig {
 
   @Value("${origin}")
   private String origin;
+  @Value("${CORS_ALLOWED_ORIGIN}")
+  private String CORS_ALLOWED_ORIGIN;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,14 +47,10 @@ public class SecurityConfig {
       .sessionManagement(session -> session
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/auth/verify").authenticated()
-        .requestMatchers("/auth/**", "/error", "/images/**").permitAll()
-        .requestMatchers("/", "/login/**").permitAll()
-        .requestMatchers("/oauth2/**", "/login/oauth2/code/**").permitAll()
-        .requestMatchers("/login/oauth2/", "/oauth2/authorization/**").permitAll()
-        .requestMatchers("/api/sections").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/pools/**").permitAll()
-        .requestMatchers("/login-success").permitAll()
+        .requestMatchers("/api", "/api/auth/**", "/api/error", "/api/images/**").permitAll()
+        .requestMatchers("/login/**", "/oauth2/**", "/login/oauth2/code/**", "/login-success").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/pools/**", "/api/sections/**").permitAll()
+        .requestMatchers("/api/**").authenticated()
         .anyRequest().authenticated()
       )
       .oauth2Login(oauth2 -> oauth2
@@ -76,19 +74,18 @@ public class SecurityConfig {
     return http.build();
   }
 
-
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.addAllowedOrigin(origin);
+    configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
     configuration.addAllowedMethod("*");
     configuration.addAllowedHeader("*");
     configuration.setAllowCredentials(true);
+    configuration.addExposedHeader("Authorization");
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
-
-
 }

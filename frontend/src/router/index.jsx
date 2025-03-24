@@ -4,10 +4,11 @@ import Login from '../pages/Login';
 import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
-import NaverRedirect from '../pages/NaverRedirect';
+
 import PoolDetail from '../components/common/poolDetail/PoolDetail';
 import SubmitImage from '../components/common/submitImage/SubmitImage';
 import CreateReview from '../components/common/createreview/CreateReview';
+import LoginRedirect from '../pages/LoginRedirect';
 
 const router = createBrowserRouter([
   {
@@ -73,8 +74,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/login-success',
-    element: <NaverRedirect></NaverRedirect>,
-  },
+    element: <LoginRedirect></LoginRedirect>
+  }
 ]);
 
 export default router;
