@@ -19,7 +19,7 @@ public class CustomOAuth2User implements OAuth2User {
         this.user = user;
         this.oAuth2User = oAuth2User;
     }
-
+    
     // OAuth2User 인터페이스 구현: 인증된 사용자의 추가 속성들을 반환
     @Override
     public Map<String, Object> getAttributes() {

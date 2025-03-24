@@ -205,15 +205,17 @@ const displayArea = (coordinates, name) => {
     // 수영장 마커 생성
     const response = await kakaoMapApi.getSectionWithPools(name);
     const pools = response.data;
-    pools.forEach((pool) => {
+    pools.forEach(({ latitude, longitude, name }) => {
       const marker = createMarker(
-        createPoint(pool.latitude, pool.longitude),
+        createPoint(latitude, longitude),
         createMarkerImage(kickPan, markerImageSize),
-        pool.name,
+        name,
       );
       markers.push(marker);
       markerClickHandler(marker);
     });
+    // 리스트바 업데이트
+    updateListBar(pools);
   });
 };
 
@@ -230,10 +232,13 @@ export function drawPolygons(data) {
 
 /** @description 폴리곤 토글 */
 function togglePolygons(display) {
-  console.log(polygons);
   polygons.forEach((polygon) => polygon.setMap(display ? map : null));
 }
 
+function updateListBar(pools) {
+  console.log(pools);
+  
+}
 //#endregion Polygon
 
 //#region Util
