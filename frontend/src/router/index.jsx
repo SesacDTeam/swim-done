@@ -4,7 +4,8 @@ import Login from '../pages/Login';
 import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
-import NaverRedirect from '../pages/NaverRedirect';
+import LoginRedirect from '../pages/LoginRedirect';
+import Test from '../pages/Test';
 
 const router = createBrowserRouter([
   {
@@ -73,7 +74,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login-success',
-    element: <NaverRedirect></NaverRedirect>
+    element: <LoginRedirect></LoginRedirect>
   }
 ]);
 
