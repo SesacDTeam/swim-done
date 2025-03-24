@@ -11,7 +11,7 @@ import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { hideSideBar, showSideBar } from '../../store/slices/sideBarSlice';
-import { initCenterHandler } from '../kakaomap/KakaoMapService';
+// import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
 const sideBarItems = [
   {
@@ -46,7 +46,7 @@ export default function SideBar() {
     navigate('/');
     setSelectedIndex(null);
     dispatch(hideSideBar());
-    initCenterHandler();
+    // initCenterHandler();
   };
 
   return (

@@ -20,6 +20,8 @@ const kakaoMapApi = {
    * 특정 지역구의 각 수영장 요약정보
    */
   getSectionWithPools: async (section) => {
+    console.log(section);
+    
     try {
       if (!section) {
         throw new Error('sectionId is required');
