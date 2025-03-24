@@ -24,7 +24,6 @@ export default function LoginRedirect() {
       dispatch(login(accessToken));
       navigate('/mypage');
     } catch (error) {
-      console.log("error 발생", error)
       setError(true)
       navigate('/'); // 토큰 없으면 home으로 이동
     } finally {
