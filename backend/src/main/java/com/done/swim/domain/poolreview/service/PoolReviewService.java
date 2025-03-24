@@ -12,6 +12,8 @@ import com.done.swim.domain.poolreview.repository.PoolReviewRepository;
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,13 +48,18 @@ public class PoolReviewService {
 
   }
 
-  public Page<MyReviewResponseDto> myReviews(Long userId, Pageable pageable) {
-    //TODO: 토큰 구현이 안되어있어서 더미 데이터로 테스트
-    Page<PoolReview> poolReviews = poolReviewRepository.findAllByUserId(userId,
-        pageable);
+  public Map<String, Object> myReviews(Long userId, Pageable pageable) {
+    Page<PoolReview> poolReviews = poolReviewRepository.findAllByUserId(userId, pageable);
 
-    return poolReviews.map(MyReviewResponseDto::from);
+    Page<MyReviewResponseDto> response = poolReviews.map(MyReviewResponseDto::from);
 
+    long totalCount = poolReviews.getTotalElements();
+
+    Map<String, Object> responseBody = new HashMap<>();
+    responseBody.put("reviews", response.getContent());
+    responseBody.put("totalCount", totalCount);
+
+    return responseBody;
   }
 
   @Transactional
