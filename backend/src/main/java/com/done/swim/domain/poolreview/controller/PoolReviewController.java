@@ -40,7 +40,6 @@ public class PoolReviewController {
 
   @GetMapping("/my/reviews")
   public ResponseEntity<ApiResponse<Map<String, Object>>> getMyReviews(
-      //TODO: 토큰 구현이 안되어있어서 더미 데이터로 테스트
       @RequestParam Long userId,
       Pageable pageable
   ) {
