@@ -5,7 +5,7 @@ import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 
-import PoolDetail from '../components/common/poolDetail/PoolDetail';
+import PoolDetail from '../components/common/pooldetail/PoolDetail';
 import SubmitImage from '../components/common/submitImage/SubmitImage';
 import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
@@ -74,8 +74,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/login-success',
-    element: <LoginRedirect></LoginRedirect>
-  }
+    element: <LoginRedirect></LoginRedirect>,
+  },
 ]);
 
 export default router;
