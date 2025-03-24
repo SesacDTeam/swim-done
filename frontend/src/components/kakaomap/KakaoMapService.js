@@ -23,6 +23,34 @@ const markerImageSize = { imageWidth: 20, imageHeight: 30 };
 const customOverlay = new kakao.maps.CustomOverlay({});
 //#endregion 지도 기본 설정
 
+//#region Map
+/**
+ * @description
+ * - 지도 생성 함수
+ * - strict mode는 지도가 2개 생성되어 확대, 축소 시 잔상남음
+ * @param {HTMLElement} mapContainer - 지도 컨테이너 요소
+ * @returns {kakao.maps.Map} 생성된 지도 객체
+ */
+export function createMap(mapContainer) {
+  if (map) return; // 지도 중복생성 방지
+  const newMap = new kakao.maps.Map(mapContainer, options);
+  createZoomControl(newMap);
+  map = newMap;
+  kakao.maps.event.addListener(newMap, 'click', () => infoWindow.close());
+  kakao.maps.event.addListener(map, 'zoom_changed', () => togglePolygons(map.getLevel() > 8));
+}
+
+/**
+ * @function createZoomControl
+ * @description 줌 컨트롤 추가
+ * @param {Object} map - 지도 객체
+ */
+function createZoomControl(map) {
+  const zoomControl = new kakao.maps.ZoomControl();
+  map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+}
+//#endregion Map
+
 //#region Marker
 /**
  * @description 지도 위에 마커 생성
@@ -61,34 +89,6 @@ function markerClickHandler(marker) {
   kakao.maps.event.addListener(marker, 'click', async () => await updateInfoWindow(marker));
 }
 //#endregion Marker
-
-//#region Map
-/**
- * @description
- * - 지도 생성 함수
- * - strict mode는 지도가 2개 생성되어 확대, 축소 시 잔상남음
- * @param {HTMLElement} mapContainer - 지도 컨테이너 요소
- * @returns {kakao.maps.Map} 생성된 지도 객체
- */
-export function createMap(mapContainer) {
-  if (map) return; // 지도 중복생성 방지
-  const newMap = new kakao.maps.Map(mapContainer, options);
-  createZoomControl(newMap);
-  map = newMap;
-  kakao.maps.event.addListener(newMap, 'click', () => infoWindow.close());
-  kakao.maps.event.addListener(map, 'zoom_changed', () => togglePolygons(map.getLevel() > 8));
-}
-
-/**
- * @function createZoomControl
- * @description 줌 컨트롤 추가
- * @param {Object} map - 지도 객체
- */
-function createZoomControl(map) {
-  const zoomControl = new kakao.maps.ZoomControl();
-  map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-}
-//#endregion Map
 
 //#region InfoWindow
 /**
@@ -228,10 +228,9 @@ export function drawPolygons(data) {
   });
 }
 
-/** @description
- * - 폴리곤 토글
- */
+/** @description 폴리곤 토글 */
 function togglePolygons(display) {
+  console.log(polygons);
   polygons.forEach((polygon) => polygon.setMap(display ? map : null));
 }
 

@@ -1,7 +1,6 @@
 package com.done.swim.domain.pool.service;
 
 import com.done.swim.domain.pool.dto.responsedto.PoolDetailResponseDto;
-import com.done.swim.domain.pool.dto.responsedto.PoolResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolWithSectionResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolWithSwimmingTimeResponseDto;
 import com.done.swim.domain.pool.entity.Pool;
@@ -33,11 +32,13 @@ public class PoolService {
     }
 
 
-    public List<PoolResponseDto> getPoolsWithUserMark(Long userId) {
-        List<Pool> pools = poolRepository.findAllWithUserMark(userId);
-        return pools.stream().map(p -> PoolResponseDto.from(p, userId)).toList();
-
-    }
+    // TODO : 지역구 좌표정보 조회
+    // 새로운 서비스 클래스로 분리 예정
+    // Repository 도 만들어야 함
+//    public List<CoordinatesResponseDto> getCoordinates() {
+//        List<Coordinates> coordinates = poolRepository.findCoordinates();
+//        return coordinates.stream().map(CoordinatesResponseDto::from).toList();
+//    }
 
     public PoolWithSwimmingTimeResponseDto getPoolWithName(String poolName) {
         // 오늘 요일, 예시) 월요일
