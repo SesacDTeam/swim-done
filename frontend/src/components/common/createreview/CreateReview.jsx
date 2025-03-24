@@ -8,14 +8,29 @@ export default function CreateReview() {
 
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [reviewContent, setReviewContent ] = useState('')
+
   const { poolId } = useParams();
   const navigate = useNavigate();
 
   const location = useLocation();
   const poolName = location.state?.poolName || "수영장 없음"; 
+  
+
+  const handleChange = async (e) => {
+    setReviewContent(e.target.value); // 입력된 값을 reviewText 상태에 저장
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    // 리뷰 없을 때 (trim 써서 공백만 입력된 경우도 막음)
+    if (!reviewContent.trim()) {
+      alert("리뷰를 작성해 주세요.")
+      return;
+    }
 
     try {
       // const response = await reviewApi.createReview(poolId);
@@ -23,6 +38,8 @@ export default function CreateReview() {
       alert('리뷰작성 성공');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,8 +59,12 @@ export default function CreateReview() {
               id="createReview"
               name="createReview"
               placeholder="실제 이용하신 후기를 자유롭게 남겨 주세요."
+              value={reviewContent}
+              onChange={handleChange}
             ></textarea>
-            <button className="pretendard-medium text-xl bg-blue02/10 rounded-[10px] px-4 py-2 mt-4 float-right">
+            <button
+              className="pretendard-medium text-xl bg-blue02/10 rounded-[10px] px-4 py-2 mt-4 float-right"
+              type="submit">
               제출
             </button>
           </form>
