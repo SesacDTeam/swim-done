@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import HoverItem from './HoverItem';
+import React from 'react';
+import MyPageItem from './MyPageItem';
+import { useSelector } from 'react-redux';
 
 import {
   profile,
@@ -20,9 +21,8 @@ function removeUser() {
 }
 
 export default function MyPage() {
-  const [nickName, setNickName] = useState('');
-  const [emain, setEmain] = useState('');
-  const [userImg, setUserImg] = useState('');
+  const nickName = useSelector((state) => state.user.nickName);
+  const email = useSelector((state) => state.user.email);
 
   return (
     <div className="select-none">
@@ -33,19 +33,19 @@ export default function MyPage() {
             <div className="text-2xl pretendard-bold mb-1">{nickName} 님</div>
             <div className="text-2xl pretendard-bold text-blue01">오늘도 즐수하세요!</div>
           </div>
-          <div>{emain}</div>
+          <div>{email}</div>
         </div>
         <div className="w-20 h-18">
-          <img src={userImg === '' ? profile : userImg} alt="" className="h-full w-full" />
+          <img src={profile} alt="" className="h-full w-full" />
           <button className="w-full text-center cursor-pointer outline-none" onClick={logout}>
             로그아웃
           </button>
         </div>
       </div>
       <div className="relative top-30 h-80 w-85 mx-auto flex flex-col justify-between">
-        <HoverItem image={myReview} hoverImage={myReviewColor} text="내가 남긴 리뷰" />
-        <HoverItem image={keywordReview} hoverImage={keywordReviewColor} text="키워드리뷰" />
-        <HoverItem
+        <MyPageItem image={myReview} hoverImage={myReviewColor} text="내가 남긴 리뷰" />
+        <MyPageItem image={keywordReview} hoverImage={keywordReviewColor} text="키워드리뷰" />
+        <MyPageItem
           image={contactUs}
           hoverImage={contactUsColor}
           text="문의하기"

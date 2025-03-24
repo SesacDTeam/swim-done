@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function HoverItem({ image, hoverImage, text, onClick }) {
+export default function MyPageItem({ image, hoverImage, text, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
