@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createMap, drawPolygons } from './KakaoMapService';
-import kakaoMapApi from '../../api/kakaoMapApi';
 import seoulGu from '../../utils/seoul-gu.json';
 
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
 
   useEffect(() => {
-    /** @description 지도 및 수영장 데이터 호출 */
+    // 지도 및 지역구 폴리곤 생성
     try {
       if (kakao && kakao.maps) {
         createMap(mapContainer.current);
