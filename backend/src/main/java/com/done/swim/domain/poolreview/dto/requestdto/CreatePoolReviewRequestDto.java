@@ -14,8 +14,6 @@ public class CreatePoolReviewRequestDto {
   @Length(max = 100)
   private String content;
 
-  private Long userId;
-
   public PoolReview toEntity(Pool pool, User userDate) {
     return PoolReview.builder()
         .pool(pool)
