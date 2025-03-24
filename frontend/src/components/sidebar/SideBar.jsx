@@ -1,44 +1,57 @@
 import React, { useState } from 'react';
-import { mypage, markPool, mypageColor, markPoolColor, home, logo } from '../../utils/staticImagePath';
+import {
+  mypage,
+  markPool,
+  mypageColor,
+  markPoolColor,
+  home,
+  logo,
+} from '../../utils/staticImagePath';
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
-import { initCenterHandler, map } from '../kakaomap/KakaoMapService';
+import { useDispatch } from 'react-redux';
+import { hideSideBar, showSideBar } from '../../store/slices/sideBarSlice';
+import { initCenterHandler } from '../kakaomap/KakaoMapService';
+
+const sideBarItems = [
+  {
+    image: mypage,
+    selectedImage: mypageColor,
+    title: '마이페이지',
+  },
+  {
+    image: markPool,
+    selectedImage: markPoolColor,
+    title: '내가 찜한 수영장',
+  },
+];
 
 export default function SideBar() {
   const [selectedIndex, setSelectedIndex] = useState();
   const navigate = useNavigate();
-
-  const sideBarItems = [
-    {
-      image: mypage,
-      selectedImage: mypageColor,
-      title: '마이페이지',
-    },
-    {
-      image: markPool,
-      selectedImage: markPoolColor,
-      title: '내가 찜한 수영장',
-    },
-  ];
+  const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
     setSelectedIndex(index);
     if (index === 0) {
       navigate('/mypage');
+      dispatch(showSideBar());
     } else {
       navigate('/mark-pools');
+      dispatch(showSideBar());
     }
   };
 
   const handleToMain = () => {
     navigate('/');
     setSelectedIndex(null);
-    initCenterHandler(map);
+    dispatch(hideSideBar());
+    initCenterHandler();
   };
 
   return (
     <>
-      <div className="border-gray03 border-[0.5px] w-30 flex flex-col items-center h-full">
+      <nav className="border-gray03 border-[0.5px] w-30 flex flex-col items-center h-full">
         <img
           src={logo}
           alt=""
@@ -54,7 +67,7 @@ export default function SideBar() {
               key={index}
               image={item.image}
               selectedImage={item.selectedImage}
-              title="마이페이지"
+              title={item.title}
               isSelected={selectedIndex === index}
               onClick={() => handleClickItem(index)}
             ></SideBarItem>
@@ -68,7 +81,7 @@ export default function SideBar() {
           draggable={false}
           onClick={handleToMain}
         />
-      </div>
+      </nav>
     </>
   );
 }
