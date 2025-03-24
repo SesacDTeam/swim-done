@@ -3,10 +3,12 @@ package com.done.swim.domain.poolmark.controller;
 import com.done.swim.common.ApiResponse;
 import com.done.swim.domain.poolmark.dto.PoolMarkListResponseDto;
 import com.done.swim.domain.poolmark.service.PoolMarkService;
+import com.done.swim.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,11 @@ public class PoolMarkController {
   private final PoolMarkService poolMarkService;
 
   @PostMapping("/marks/pools/{poolId}")
-  public ResponseEntity<ApiResponse<Void>> createPoolMark(@PathVariable Long poolId) {
-    poolMarkService.createPoolMark(poolId);
+  public ResponseEntity<ApiResponse<Void>> createPoolMark(
+    @PathVariable Long poolId,
+    @AuthenticationPrincipal User user
+  ) {
+    poolMarkService.createPoolMark(poolId, user);
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT)
       .body(ApiResponse
@@ -29,17 +34,23 @@ public class PoolMarkController {
   }
 
   @GetMapping("/my/marks")
-  public ResponseEntity<ApiResponse<PoolMarkListResponseDto>> getMyPoolMarks(Pageable pageable) {
+  public ResponseEntity<ApiResponse<PoolMarkListResponseDto>> getMyPoolMarks(
+    Pageable pageable,
+    @AuthenticationPrincipal User user
+  ) {
     return ResponseEntity.ok(
       ApiResponse.ok(
-        poolMarkService.getMyPoolMark(pageable)
+        poolMarkService.getMyPoolMark(pageable, user.getId())
       )
     );
   }
 
   @DeleteMapping("/marks/pools/{poolId}")
-  public ResponseEntity<ApiResponse<Void>> deleteMyPoolMark(@PathVariable Long poolId) {
-    poolMarkService.deleteMyPoolMark(poolId);
+  public ResponseEntity<ApiResponse<Void>> deleteMyPoolMark(
+    @PathVariable Long poolId,
+    @AuthenticationPrincipal User user
+  ) {
+    poolMarkService.deleteMyPoolMark(poolId, user);
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT)
       .body(ApiResponse
