@@ -15,7 +15,10 @@ export default function PoolListItem({ onClick, title, address, isMarked, onTogg
             src={isMarked ? markColor : mark}
             alt=""
             className={`aspect-square h-7 cursor-pointer hover:contrast-160 ${isMarked && 'animate-scale-in-out'}`}
-            onClick={onToggleMark}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleMark();
+            }}
           />
         </div>
       </article>
