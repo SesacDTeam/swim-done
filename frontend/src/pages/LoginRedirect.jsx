@@ -3,7 +3,7 @@ import { login } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux'
 
-export default function NaverRedirect() {
+export default function LoginRedirect() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -14,18 +14,16 @@ export default function NaverRedirect() {
     try {
       // 현재 url에서 토큰 가져오기
       const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get('token');
+      const accessToken = urlParams.get('token');
 
-      if (!token) {
+      if (!accessToken) {
         setError(true);
         navigate('/');
         return;
       }
-
-      dispatch(login(token));
+      dispatch(login(accessToken));
       navigate('/mypage');
     } catch (error) {
-      console.log("error 발생", error)
       setError(true)
       navigate('/'); // 토큰 없으면 home으로 이동
     } finally {
