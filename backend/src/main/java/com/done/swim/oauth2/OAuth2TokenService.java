@@ -75,7 +75,6 @@ public class OAuth2TokenService {
 
         // 리프레시 토큰 검증
         if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
-            System.out.println("검증로직확인");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse
                             .error("리프레시 토큰이 유효하지 않습니다.",
@@ -89,8 +88,6 @@ public class OAuth2TokenService {
         String storedRefreshToken = getRefreshToken(userId);
 
         if (!refreshToken.equals(storedRefreshToken)) {
-            System.out.println("토큰확인로직");
-
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse
                             .error("유효하지 않은 리프레시 토큰입니다.",
@@ -101,7 +98,7 @@ public class OAuth2TokenService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        // 5. OAuth2 인증 정보를 가져오기 (SecurityContext에서 직접 가져오기)
+        // OAuth2 인증 정보를 가져오기 (SecurityContext에서 직접 가져오기)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 새로운 액세스 토큰 발급

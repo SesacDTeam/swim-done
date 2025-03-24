@@ -75,11 +75,6 @@ const router = createBrowserRouter([
   {
     path: '/login-success',
     element: <LoginRedirect></LoginRedirect>
-  },
-  // 테스트 페이지임 (마이페이지 생성 전)
-  {
-    path: '/test',
-    element: <Test></Test>
   }
 ]);
 
