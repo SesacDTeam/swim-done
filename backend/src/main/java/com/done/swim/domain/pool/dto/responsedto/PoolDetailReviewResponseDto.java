@@ -14,16 +14,16 @@ public class PoolDetailReviewResponseDto {
   private final String authorNickname;
   private final String content;
   private final LocalDateTime createdAt;
-  private final LocalDateTime updatedA;
+  private final LocalDateTime updatedAt;
 
-  public static PoolDetailReviewResponseDto from(PoolReview dto) {
+  public static PoolDetailReviewResponseDto from(PoolReview entity) {
 
     return PoolDetailReviewResponseDto.builder()
-      .authorId(dto.getUser().getId())
-      .authorNickname(dto.getUser().getNickname())
-      .content(dto.getContent())
-      .createdAt(dto.getCreatedAt())
-      .updatedA(dto.getUpdatedAt())
+      .authorId(entity.getUser().getId())
+      .authorNickname(entity.getUser().getNickname())
+      .content(entity.getContent())
+      .createdAt(entity.getCreatedAt())
+      .updatedAt(entity.getUpdatedAt())
       .build();
   }
 }
