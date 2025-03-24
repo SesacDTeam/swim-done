@@ -25,9 +25,6 @@ export default function KakaoMapContainer() {
         console.error(error);
       }
     }
-    // seoulGu.forEach(({coordinates, SIG_KOR_NM}) => {
-    //   displayArea(coordinates, SIG_KOR_NM);
-    // });
     fetchData();
   }, []);
 
