@@ -5,7 +5,6 @@ import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 import NaverRedirect from '../pages/NaverRedirect';
-import PoolInfoWindow from '../components/kakaomap/PoolInfoWindow';
 
 const router = createBrowserRouter([
   {
@@ -75,10 +74,6 @@ const router = createBrowserRouter([
   {
     path: '/login-success',
     element: <NaverRedirect></NaverRedirect>,
-  },
-  {
-    path: '/test',
-    element: <PoolInfoWindow></PoolInfoWindow>,
   },
 ]);
 
