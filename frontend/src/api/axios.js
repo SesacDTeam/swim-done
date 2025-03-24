@@ -41,18 +41,16 @@ api.interceptors.response.use(
       flag = true;
       console.log("401 에러 감지, 토큰 재발급 시도");
 
-
       try {
         console.log("재발급 API 호출 시작");
         // const refreshToken = getCookie // 이거 아님
         const response = await authApi.reissue();
         console.log("재발급 API 응답:", response); // 응답 전체 확인
-        console.log("응답 본문:", response.data); // 응답 본문 확인
 
-        console.log(response.headers.Authorization)
-        const data = response.data; // 응답 본문이 { message, accessToken } 형태일 수 있음
-        console.log(data); // 응답 구조 확인
-        const newAccessToken = data.data; // accessToken 추출
+        const data = response.headers.authorization
+        // 여기서 Bearer 떼고 저장해야 됨
+        const newAccessToken = data.replace("Bearer ", "");
+
         console.log("새로운 액세스 토큰:", newAccessToken);
 
 
@@ -67,14 +65,10 @@ api.interceptors.response.use(
         console.error("에러 응답:", error.response?.data); // 서버 응답 본문
         console.error("에러 상태 코드:", error.response?.status);
         // await authApi.logout();
-        
         // store.dispatch(logout());
-        console.log("재발급 실패:", error);
         
         return Promise.reject(error);
-      } finally {
-        flag = false;
-      }
+      } 
     }
 
     return Promise.reject(error);

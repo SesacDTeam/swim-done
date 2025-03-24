@@ -4,7 +4,7 @@ import Login from '../pages/Login';
 import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
-import SocialRedirect from '../pages/LoginRedirect';
+import LoginRedirect from '../pages/LoginRedirect';
 import Test from '../pages/Test';
 
 const router = createBrowserRouter([
@@ -74,7 +74,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login-success',
-    element: <SocialRedirect></SocialRedirect>
+    element: <LoginRedirect></LoginRedirect>
   },
   // 테스트 페이지임 (마이페이지 생성 전)
   {

@@ -3,7 +3,7 @@ import { login } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux'
 
-export default function NaverRedirect() {
+export default function LoginRedirect() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
