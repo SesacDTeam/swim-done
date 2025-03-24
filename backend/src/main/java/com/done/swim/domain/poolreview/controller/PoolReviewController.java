@@ -4,12 +4,11 @@ import com.done.swim.common.ApiResponse;
 import com.done.swim.domain.poolreview.dto.requestdto.CreatePoolReviewRequestDto;
 import com.done.swim.domain.poolreview.dto.requestdto.UpdatePoolReviewRequestDto;
 import com.done.swim.domain.poolreview.dto.responsedto.CreatePoolReviewResponseDto;
-import com.done.swim.domain.poolreview.dto.responsedto.MyReviewResponseDto;
 import com.done.swim.domain.poolreview.dto.responsedto.UpdatePoolReviewResponseDto;
 import com.done.swim.domain.poolreview.service.PoolReviewService;
 import jakarta.validation.Valid;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,19 +39,19 @@ public class PoolReviewController {
   }
 
   @GetMapping("/my/reviews")
-  public ResponseEntity<ApiResponse<Page<MyReviewResponseDto>>> myReviews(
+  public ResponseEntity<ApiResponse<Map<String, Object>>> getMyReviews(
       //TODO: 토큰 구현이 안되어있어서 더미 데이터로 테스트
       @RequestParam Long userId,
       Pageable pageable
   ) {
 
-    Page<MyReviewResponseDto> response = poolReviewService.myReviews(userId, pageable);
+    Map<String, Object> responseBody = poolReviewService.getMyReviews(userId, pageable);
 
     return ResponseEntity.ok(
         ApiResponse.ok(
             "조회 성공",
             "SUCCESS",
-            response
+            responseBody
         )
     );
   }
