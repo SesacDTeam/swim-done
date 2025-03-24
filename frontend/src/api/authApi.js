@@ -1,4 +1,4 @@
-import api from './axios';
+import instance from './axios';
 
 const ENDPOINT = '/auth'
 const authApi = {
@@ -9,12 +9,12 @@ const authApi = {
   // },
   // 리프레시 토큰 검증 및 액세스 토큰 재발급 api
   reissue: async () => {
-    const response = await api.post(`${ENDPOINT}/reissue`, {}, {withCredentials: true});
+    const response = await instance.post(`${ENDPOINT}/reissue`, {}, {withCredentials: true});
     return response;
   },
   // 재발급 테스트 api
   test: async () => {
-    const response = await api.get(`/test`);
+    const response = await instance.get(`/test`);
     return response;
   }
 };
