@@ -5,22 +5,20 @@ import { xmark, back } from '../../../utils/staticImagePath';
 import reviewApi from '../../../api/reviewApi';
 
 export default function CreateReview() {
-
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const [reviewContent, setReviewContent ] = useState('')
+  const [reviewContent, setReviewContent] = useState('');
 
   const { poolId } = useParams();
   const navigate = useNavigate();
 
   const location = useLocation();
-  const poolName = location.state?.poolName || "수영장 없음"; 
-  
+  const poolName = location.state?.poolName || '수영장 없음';
 
   const handleChange = async (e) => {
     setReviewContent(e.target.value); // 입력된 값을 reviewText 상태에 저장
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,21 +26,20 @@ export default function CreateReview() {
 
     // 리뷰 없을 때 (trim 써서 공백만 입력된 경우도 막음)
     if (!reviewContent.trim()) {
-      alert("리뷰를 작성해 주세요.")
+      alert('리뷰를 작성해 주세요!');
       return;
     }
 
     try {
       // const response = await reviewApi.createReview(poolId);
       navigate(`/mark-pools/${poolId}`);
-      alert('리뷰작성 성공');
+      alert('리뷰 작성 성공!');
     } catch (err) {
       setError(err.message);
     } finally {
       setIsLoading(false);
     }
   };
-
 
   return (
     <>
@@ -63,8 +60,10 @@ export default function CreateReview() {
               onChange={handleChange}
             ></textarea>
             <button
-              className="pretendard-medium text-xl bg-blue02/10 rounded-[10px] px-4 py-2 mt-4 float-right"
-              type="submit">
+              // className={`pretendard-medium text-xl`}
+              className={` pretendard-medium text-xl rounded-[10px] px-4 py-2 mt-4 float-right ${reviewContent.trim() ? 'bg-blue02/10 cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
+              type="submit"
+            >
               제출
             </button>
           </form>
