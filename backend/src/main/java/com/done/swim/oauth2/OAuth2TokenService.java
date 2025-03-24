@@ -6,6 +6,7 @@ import com.done.swim.domain.user.repository.UserRepository;
 import com.done.swim.global.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -103,17 +105,12 @@ public class OAuth2TokenService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 새로운 액세스 토큰 발급
-        String newAccessToken = jwtTokenProvider.createAccessToken(authentication, user);
-        System.out.println("새로운 액세스 토큰" + newAccessToken);
-
-        // json으로 반환
-
-
-//        return ResponseEntity.ok()
-//                .header("Authorization", "Bearer " + newAccessToken)
-//                .body("새로운 액세스 토큰이 발급되었습니다.");
+        String newAccessToken = jwtTokenProvider.createAccessToken(user);
+        log.info("New AccessToken:: {}", newAccessToken);
 
         return ResponseEntity.ok()
-                .body(ApiResponse.ok("새로운 액세스 토큰이 발급되었습니다.", "SUCCESS", newAccessToken));
+                .header("Authorization", "Bearer " + newAccessToken)
+                .body("새로운 액세스 토큰이 발급되었습니다.");
+
     }
 }

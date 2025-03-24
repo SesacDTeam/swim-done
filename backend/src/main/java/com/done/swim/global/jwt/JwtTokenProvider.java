@@ -7,13 +7,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -30,9 +31,13 @@ public class JwtTokenProvider {
     }
 
     // jwt 생성 메서드
-    public String createToken(Authentication authentication, User user, long expirationTime) {
-        String username = authentication.getName();
+    public String createToken(User user, long expirationTime) {
+
         Long id = user.getId();
+        String username = user.getUsername();
+
+        log.info("user.getId(): {}", id);
+        log.info("user.getUsername(): {}", username);
 
         Claims claims = Jwts.claims();
         claims.put("id", id);
@@ -51,13 +56,13 @@ public class JwtTokenProvider {
     }
 
     // 액세스 토큰 생성
-    public String createAccessToken(Authentication authentication, User user) {
-        return createToken(authentication, user, accessTokenValidityInMilliseconds);
+    public String createAccessToken(User user) {
+        return createToken(user, accessTokenValidityInMilliseconds);
     }
 
     // 리프레시 토큰 생성
-    public String createRefreshToken(Authentication authentication, User user) {
-        return createToken(authentication, user, refreshTokenValidityInMilliseconds);
+    public String createRefreshToken(User user) {
+        return createToken(user, refreshTokenValidityInMilliseconds);
     }
 
     // jwt 유효성 검증

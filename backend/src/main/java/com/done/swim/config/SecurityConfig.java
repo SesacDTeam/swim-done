@@ -47,14 +47,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // 열어놔야됨..액세스 토큰이 이미 만료가 됐으니까
+                        .requestMatchers("/api", "/api/auth/**", "/api/error", "/api/images/**").permitAll()
+                        .requestMatchers("/login/**", "/oauth2/**", "/login/oauth2/code/**", "/login-success").permitAll()
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/api/auth/**", "/api/error", "/api/images/**").permitAll()
-                        .requestMatchers("/api", "/login/**").permitAll()
-                        //oauth2 로직은 api 안 붙임
-                        .requestMatchers("/oauth2/**", "/login/oauth2/code/**").permitAll()
-                        .requestMatchers("/login/oauth2/", "/oauth2/authorization/**").permitAll()
-                        .requestMatchers("/login-success").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -86,6 +81,7 @@ public class SecurityConfig {
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
