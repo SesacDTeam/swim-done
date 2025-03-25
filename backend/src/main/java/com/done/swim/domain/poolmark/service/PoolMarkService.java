@@ -6,7 +6,10 @@ import com.done.swim.domain.poolmark.dto.PoolMarkListResponseDto;
 import com.done.swim.domain.poolmark.entity.PoolMark;
 import com.done.swim.domain.poolmark.repository.PoolMarkRepository;
 import com.done.swim.domain.user.entity.User;
-import com.done.swim.domain.user.repository.UserRepository;
+import com.done.swim.global.exception.ErrorCode;
+import com.done.swim.global.exception.ForBiddenException;
+import com.done.swim.global.exception.GlobalException;
+import com.done.swim.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,7 +25,6 @@ public class PoolMarkService {
 
   private final PoolMarkRepository poolMarkRepository;
   private final PoolRepository poolRepository;
-  private final UserRepository userRepository;
 
   @Transactional
   public void createPoolMark(Long poolId, User user) {
@@ -31,7 +33,7 @@ public class PoolMarkService {
     PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
     if (alreadyMarkedPool != null) {
-      throw new IllegalStateException("이미 찜한 수영장입니다.");
+      throw new GlobalException(ErrorCode.ALREADY_MARK);
     }
 
     PoolMark poolMark = PoolMark.builder().user(user).pool(pool).build();
@@ -51,11 +53,11 @@ public class PoolMarkService {
     PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
     if (alreadyMarkedPool == null) {
-      throw new IllegalStateException("찜한 수영장이 없습니다.");
+      throw new GlobalException(ErrorCode.NOT_MARK);
     }
 
     if (alreadyMarkedPool.getUser().getId() != user.getId()) {
-      throw new IllegalStateException("권한이 없습니다.");
+      throw new ForBiddenException(ErrorCode.AUTHOR_ONLY);
     }
 
     poolMarkRepository.deleteById(alreadyMarkedPool.getId());
@@ -63,6 +65,6 @@ public class PoolMarkService {
 
   private Pool fetchPool(Long poolId) {
     return poolRepository.findById(poolId)
-      .orElseThrow(() -> new IllegalArgumentException("수영장이 없습니다."));
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
   }
 }

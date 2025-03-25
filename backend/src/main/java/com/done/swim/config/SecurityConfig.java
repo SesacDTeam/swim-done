@@ -81,6 +81,36 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 인증 오류 핸들러
             );
 
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/api/images").authenticated()
+                        .requestMatchers("/api", "/api/auth/**", "/api/error").permitAll()
+                        .requestMatchers("/login/**", "/oauth2/**", "/login/oauth2/code/**", "/login-success").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pools/**", "/api/sections/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login-success")  // 추가
+                        .authorizationEndpoint(endpoint ->
+                                endpoint.baseUri("/oauth2/authorization")
+                        )
+                        .redirectionEndpoint(endpoint ->
+                                endpoint.baseUri("/login/oauth2/code/*")
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                );
+
         return http.build();
     }
 
@@ -89,7 +119,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(origin);
         configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
+
         configuration.addAllowedOrigin("http://localhost:5173"); // ✅ 프론트엔드 로컬 개발 환경 추가
+
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
@@ -97,6 +129,7 @@ public class SecurityConfig {
 
         // ✅ 로그아웃 후 쿠키 삭제가 적용되도록 `Set-Cookie` 노출
         configuration.addExposedHeader("Set-Cookie");
+
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
