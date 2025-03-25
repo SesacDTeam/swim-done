@@ -5,15 +5,17 @@ import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 
-import PoolDetail from '../components/common/pooldetail/PoolDetail';
+import PoolDetail from '../components/common/poolDetail/PoolDetail';
 import SubmitImage from '../components/common/submitImage/SubmitImage';
 import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
+import NotFound from '../pages/NotFound';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home></Home>,
+    errorElement: <NotFound></NotFound>,
     children: [
       // 가장 바깥
       {
@@ -29,23 +31,20 @@ const router = createBrowserRouter([
       {
         path: '/pools',
         element: <PoolList></PoolList>,
-        // children: [
-        //   {
-        //     // 수영장 디테일
-        //     path: ':poolId',
-        //     element: <수영장디테일></수영장디테일>,
-        //   },
-        //   {
-        //     // 제보하기
-        //     path: 'submitted-images',
-        //     element: <제보하기></제보하기>,
-        //   },
-        //   {
-        //     // 리뷰작성
-        //     path: 'reviews',
-        //     element: <리뷰작성></리뷰작성>,
-        //   },
-        // ],
+        children: [
+          {
+            path: ':poolId',
+            element: <PoolDetail></PoolDetail>,
+          },
+          {
+            path: ':poolId/submitted-images',
+            element: <SubmitImage></SubmitImage>,
+          },
+          {
+            path: ':poolId/reviews',
+            element: <CreateReview></CreateReview>,
+          },
+        ],
       },
       {
         path: '/mark-pools',

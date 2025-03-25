@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PoolReviewRepository extends JpaRepository<PoolReview, Long> {
 
   Page<PoolReview> findAllByUserId(Long userId, Pageable pageable);
+
 }
