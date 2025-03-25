@@ -1,7 +1,7 @@
 import instance from './axios';
 
 export const myPage = {
-  getMyReview: async (token, page, size = 10) => {
+  getMyReview: async (token, page, size = 4) => {
     const response = await instance.get('/my/reviews', {
       headers: {
         Authorization: 'Bearer ' + token,
@@ -15,9 +15,9 @@ export const myPage = {
     return response.data;
   },
 
-  createMarkedPools: async (token, poolId) => {
+  createReview: async (token, poolId) => {
     const response = await instance.post(
-      `/marks/pools/${poolId}`,
+      `/pools/${poolId}/reviews`,
       {},
       {
         headers: {
@@ -25,16 +25,6 @@ export const myPage = {
         },
       },
     );
-
-    return response.data;
-  },
-
-  deleteMyMarkedPools: async (token, poolId) => {
-    const response = await instance.delete(`/marks/pools/${poolId}`, {
-      headers: {
-        Authorization: 'Bearer ' + token,
-      },
-    });
 
     return response.data;
   },

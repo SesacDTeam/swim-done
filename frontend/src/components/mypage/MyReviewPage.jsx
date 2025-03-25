@@ -11,42 +11,14 @@ export default function MyReviewPage() {
   const [reviews, setReviews] = useState([]); // 기본값을 빈 배열로 설정
   const [totalCount, setTotalCount] = useState(0);
 
-  const dummyReviews = [
-    {
-      poolName: '강북웰빙스포츠센터',
-      createdAt: '2025-03-20T12:00:00Z',
-      content: '이 제품 정말 좋아요! 강력 추천합니다.',
-    },
-    {
-      poolName: '강서빅토리스포츠센터',
-      createdAt: '2025-03-21T14:30:00Z',
-      content: '가격 대비 성능이 뛰어나네요.',
-    },
-    {
-      poolName: '사용자3',
-      createdAt: '2025-03-22T09:15:00Z',
-      content: '배송이 빨라서 좋았습니다.',
-    },
-    {
-      poolName: '사용자3',
-      createdAt: '2025-03-22T09:15:00Z',
-      content: '배송이 빨라서 좋았습니다.',
-    },
-  ];
-
-  // 더미 데이터 사용
-  const poolDetail = {
-    reviews: dummyReviews,
-  };
-
   useEffect(() => {
     if (!token) return; // token이 없으면 API 호출을 하지 않음
 
     const fetchReviews = async () => {
       try {
-        const data = await myPage.getMyReview(token, 0, 10); // 0 페이지, 10개씩 가져오기
-        setReviews(data.reviews || []); // data.reviews가 undefined일 경우 빈 배열로 설정
-        setTotalCount(data.totalCount); // 총 리뷰 수 설정
+        const data = await myPage.getMyReview(token, 0, 4); // 0 페이지, 10개씩 가져오기
+        setReviews(data.data.reviews || []); // data.reviews가 undefined일 경우 빈 배열로 설정
+        setTotalCount(data.data.totalCount); // 총 리뷰 수 설정
       } catch (error) {
         console.error('리뷰를 가져오는 데 실패했습니다', error);
       }
@@ -69,11 +41,11 @@ export default function MyReviewPage() {
         <h2 className="self-start pretendard-semibold text-2xl ml-10 mt-10">리뷰 ({totalCount})</h2>
       </div>
       <div className="bg-green-200 w-[95%] mx-auto">
-        {poolDetail.reviews.map((review, index) => (
+        {reviews.map((review, index) => (
           <MyReviewPageItem
             key={index}
             poolName={review.poolName}
-            createdAt={extractDate(review.createdAt)}
+            createdAt={extractDate(review.timestamp)}
             content={review.content}
           />
         ))}
