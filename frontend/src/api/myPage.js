@@ -1,7 +1,7 @@
 import instance from './axios';
 
 export const myPage = {
-  getMyReview: async (token, page, size = 4) => {
+  getMyReview: async (token, page, size = 5) => {
     const response = await instance.get('/my/reviews', {
       headers: {
         Authorization: 'Bearer ' + token,
