@@ -32,7 +32,7 @@ public class PoolReviewController {
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(ApiResponse.ok("리뷰 생성 성공!!", "SUCCESS",
-        poolReviewService.createReview(poolId, requesteDto, user.getId())));
+        poolReviewService.createReview(poolId, requesteDto, user)));
   }
 
   @GetMapping("/my/reviews")
