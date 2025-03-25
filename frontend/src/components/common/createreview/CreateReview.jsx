@@ -7,12 +7,10 @@ import reviewApi from '../../../api/reviewApi';
 export default function CreateReview() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const [reviewContent, setReviewContent] = useState('');
 
   const { poolId } = useParams();
   const navigate = useNavigate();
-
   const location = useLocation();
   const poolName = location.state?.poolName || '수영장 없음';
 
@@ -31,7 +29,8 @@ export default function CreateReview() {
     }
 
     try {
-      // const response = await reviewApi.createReview(poolId);
+      const response = await reviewApi.createReview(poolId, reviewContent);
+      console.log(response);
       navigate(`/mark-pools/${poolId}`);
       alert('리뷰 작성 성공!');
     } catch (err) {
