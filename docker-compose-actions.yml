@@ -71,6 +71,10 @@ services:
     image: ${DOCKER_REGISTRY}/swimdone-client-image:latest
     env_file:
       - .env
+    environment:
+      - VITE_DOMAIN=${VITE_DOMAIN}
+      - VITE_API_URL=http:://api-container:587
+
     volumes:
       - /etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:ro
       - /etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:ro
