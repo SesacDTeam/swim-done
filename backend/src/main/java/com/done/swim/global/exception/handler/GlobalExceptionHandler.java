@@ -1,8 +1,8 @@
-package com.done.swim.global.exception;
+package com.done.swim.global.exception.handler;
 
 //@RestControllerAdvice
 public class GlobalExceptionHandler {
-    // Security 의존성 필요한 예외처리
+  // Security 의존성 필요한 예외처리
 //    @ExceptionHandler(UsernameNotFoundException.class)
 //    public ResponseEntity<ApiResponse<Void>> handleUserDetailsException(Exception ex) {
 //
