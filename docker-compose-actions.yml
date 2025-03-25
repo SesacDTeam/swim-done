@@ -68,6 +68,7 @@ services:
       args:
         VITE_DOMAIN: ${VITE_DOMAIN}
         VITE_KAKAOMAP_API_KEY: ${VITE_KAKAOMAP_API_KEY}
+        VITE_API_URL: ${VITE_API_URL}
     image: ${DOCKER_REGISTRY}/swimdone-client-image:latest
     env_file:
       - .env
