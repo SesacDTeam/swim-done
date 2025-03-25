@@ -27,65 +27,66 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  private final CustomAccessDeniedHandler accessDeniedHandler;
-  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-  private final CustomOAuth2UserService customOAuth2UserService;
-  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-  private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
-  @Value("${origin}")
-  private String origin;
-  @Value("${CORS_ALLOWED_ORIGIN}")
-  private String CORS_ALLOWED_ORIGIN;
+    @Value("${origin}")
+    private String origin;
+    @Value("${CORS_ALLOWED_ORIGIN}")
+    private String CORS_ALLOWED_ORIGIN;
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-      .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-      .csrf(csrf -> csrf.disable())
-      .sessionManagement(session -> session
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-      .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api", "/api/auth/**", "/api/error", "/api/images/**").permitAll()
-        .requestMatchers("/login/**", "/oauth2/**", "/login/oauth2/code/**", "/login-success").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/pools/**", "/api/sections/**").permitAll()
-        .requestMatchers("/api/**").authenticated()
-        .anyRequest().authenticated()
-      )
-      .oauth2Login(oauth2 -> oauth2
-        .loginPage("/login-success")  // 추가
-        .authorizationEndpoint(endpoint ->
-          endpoint.baseUri("/oauth2/authorization")
-        )
-        .redirectionEndpoint(endpoint ->
-          endpoint.baseUri("/login/oauth2/code/*")
-        )
-        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-        .successHandler(oAuth2LoginSuccessHandler)
-        .failureHandler(oAuth2LoginFailureHandler)
-      )
-      .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-      .exceptionHandling(exception -> exception
-        .accessDeniedHandler(accessDeniedHandler)
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-      );
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/api/images").authenticated()
+                        .requestMatchers("/api", "/api/auth/**", "/api/error").permitAll()
+                        .requestMatchers("/login/**", "/oauth2/**", "/login/oauth2/code/**", "/login-success").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pools/**", "/api/sections/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login-success")  // 추가
+                        .authorizationEndpoint(endpoint ->
+                                endpoint.baseUri("/oauth2/authorization")
+                        )
+                        .redirectionEndpoint(endpoint ->
+                                endpoint.baseUri("/login/oauth2/code/*")
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                );
 
-    return http.build();
-  }
+        return http.build();
+    }
 
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.addAllowedOrigin(origin);
-    configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
-    configuration.addAllowedMethod("*");
-    configuration.addAllowedHeader("*");
-    configuration.setAllowCredentials(true);
-    configuration.addExposedHeader("Authorization");
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin(origin);
+        configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization");
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
