@@ -73,6 +73,7 @@ services:
     env_file:
       - .env
     environment:
+      - DOMAIN=${DOMAIN}
       - VITE_DOMAIN=${VITE_DOMAIN}
       - API_SERVER_URL=${API_SERVER_URL}
     volumes:
