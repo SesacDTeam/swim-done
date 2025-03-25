@@ -3,18 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
 import { toggleMark } from '../../utils/toggleMark';
-import { hideDetailView, showDetailView } from '../../store/slices/detailViewSlice';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
-import { useUnmount } from '../../hooks/useUnmount';
-import { markPoolApi } from '../../api/markPoolApi';
 import { logo } from '../../utils/staticImagePath';
+import NoContent from '../common/NoContent';
 
 export default function PoolList() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const [name, setName] = useState(location.state?.name ?? '알 수 없음');
+  const name = useSelector((state) => state.kakaoMap.name)
 
   const [isLoading, setIsLoading] = useState(false);
   const [pools, setPools] = useState(useSelector((state) => state.kakaoMap.pools));
@@ -46,19 +43,14 @@ export default function PoolList() {
   const bottomRef = useInfiniteScroll(onIntersect, hasNext);
 
   const handlePoolListItemClick = (poolId) => {
-    dispatch(showDetailView());
     navigate(`${poolId}`);
   };
 
   useEffect(() => {
-    if (location.state?.name) {
-      setName(location.state.name);
+    if (name === null) {
+      navigate("/")
     }
-  }, [location.state]);
-
-  useUnmount(() => {
-    dispatch(hideDetailView());
-  });
+  }, []);
 
   return (
     <>
@@ -72,10 +64,10 @@ export default function PoolList() {
           <span class="text-black">'{name}'</span> 수영할 곳 찾고 계셨죠?
         </h1>
         <section className="flex flex-col items-center gap-5 w-full mt-10">
-          {pools.length === 0 ? (
+          {pools?.length === 0 ? (
             <NoContent title={'수영장 정보가 없습니다.'}></NoContent>
           ) : (
-            pools.slice(0, currentIndex).map((pool, index) => {
+            pools?.slice(0, currentIndex).map((pool, index) => {
               return (
                 <PoolListItem
                   key={index}

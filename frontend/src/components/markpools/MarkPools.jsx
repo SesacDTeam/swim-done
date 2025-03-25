@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
 import { useDispatch, useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
@@ -15,7 +15,6 @@ export default function MarkPools() {
   const [isLoading, setIsLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -46,13 +45,8 @@ export default function MarkPools() {
   const bottomRef = useInfiniteScroll(onIntersect, hasNext);
 
   const handlePoolListItemClick = (poolId) => {
-    // dispatch(showDetailView());
     navigate(`${poolId}`);
   };
-
-  useUnmount(() => {
-    dispatch(hideDetailView());
-  });
 
   return (
     <>
