@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name ${VITE_DOMAIN};
+    server_name ${DOMAIN};
 
     location / {
         return 301 https://$host$request_uri;
