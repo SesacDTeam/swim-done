@@ -13,6 +13,7 @@ import NotFound from '../pages/NotFound';
 import AuthenticateRoute from '../components/common/AuthenticateRoute';
 import store from '../store/store';
 import { hideListBar, showListBar } from '../store/slices/listBarSlice';
+import { showDetailView } from '../store/slices/detailViewSlice';
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,9 @@ const router = createBrowserRouter([
           {
             path: '/mark-pools/:poolId',
             element: <PoolDetail></PoolDetail>,
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
           {
             path: '/mark-pools/:poolId/submitted-images',
@@ -85,7 +89,9 @@ const router = createBrowserRouter([
               <AuthenticateRoute>
                 <SubmitImage></SubmitImage>
               </AuthenticateRoute>
-            ),
+            ),loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
           {
             path: '/mark-pools/:poolId/reviews',
@@ -93,7 +99,9 @@ const router = createBrowserRouter([
               <AuthenticateRoute>
                 <CreateReview></CreateReview>
               </AuthenticateRoute>
-            ),
+            ),loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
         ],
       },

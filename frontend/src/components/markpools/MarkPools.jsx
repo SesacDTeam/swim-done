@@ -46,7 +46,7 @@ export default function MarkPools() {
   const bottomRef = useInfiniteScroll(onIntersect, hasNext);
 
   const handlePoolListItemClick = (poolId) => {
-    dispatch(showDetailView());
+    // dispatch(showDetailView());
     navigate(`${poolId}`);
   };
 
