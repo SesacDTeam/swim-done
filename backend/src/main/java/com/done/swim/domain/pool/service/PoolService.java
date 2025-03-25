@@ -5,6 +5,8 @@ import com.done.swim.domain.pool.dto.responsedto.PoolWithSectionResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolWithSwimmingTimeResponseDto;
 import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.pool.repository.PoolRepository;
+import com.done.swim.global.exception.ErrorCode;
+import com.done.swim.global.exception.ResourceNotFoundException;
 import com.done.swim.domain.swimmingtime.entity.Week;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +24,13 @@ import java.util.Locale;
 @Transactional(readOnly = true)
 public class PoolService {
 
-    private final PoolRepository poolRepository;
+  private final PoolRepository poolRepository;
 
-    public PoolDetailResponseDto fetchPoolDetail(Long poolId) {
-        Pool pool = poolRepository.findByIdWithCommentAndTimes(poolId)
-                //이 후 GlobalException 정의 후 수정 예정
-                .orElseThrow(() -> new IllegalArgumentException("해당 수영장이 존재하지 않습니다."));
-        return PoolDetailResponseDto.from(pool);
-    }
-
+  public PoolDetailResponseDto fetchPoolDetail(Long poolId) {
+    Pool pool = poolRepository.findByIdWithCommentAndTimes(poolId)
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
+    return PoolDetailResponseDto.from(pool);
+  }
 
     // TODO : 지역구 좌표정보 조회
     // 새로운 서비스 클래스로 분리 예정
