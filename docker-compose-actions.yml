@@ -39,9 +39,9 @@ services:
     build:
       context: ./backend
       cache_to:
-        - type=local,dest=/tmp/.build-cache/api,mode=max
+        - type=local,dest=/tmp/.buildx-cache/api,mode=max
       cache_from:
-        - type=local,src=/tmp/.build-cache/api
+        - type=local,src=/tmp/.buildx-cache/api
     image: ${DOCKER_REGISTRY}/swimdone-api-image:latest
     env_file:
       - .env
@@ -62,9 +62,9 @@ services:
     build:
       context: ./frontend
       cache_to:
-        - type=local,dest=/tmp/.build-cache/client,mode=max
+        - type=local,dest=/tmp/.buildx-cache/client,mode=max
       cache_from:
-        - type=local,src=/tmp/.build-cache/client
+        - type=local,src=/tmp/.buildx-cache/client
       args:
         VITE_DOMAIN: ${VITE_DOMAIN}
         VITE_KAKAOMAP_API_KEY: ${VITE_KAKAOMAP_API_KEY}
