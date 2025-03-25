@@ -10,7 +10,7 @@ import {
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
-import { hideSideBar, showSideBar } from '../../store/slices/sideBarSlice';
+import { hideListBar, showListBar } from '../../store/slices/listBarSlice';
 import { resetMap } from '../../store/slices/kakaoMapSlice';
 // import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
@@ -36,17 +36,16 @@ export default function SideBar() {
     setSelectedIndex(index);
     if (index === 0) {
       navigate('/mypage');
-      dispatch(showSideBar());
     } else {
       navigate('/mark-pools');
-      dispatch(showSideBar());
+      dispatch(showListBar());
     }
   };
 
   const handleToMain = () => {
     navigate('/');
     setSelectedIndex(null);
-    dispatch(hideSideBar());
+    dispatch(hideListBar());
     dispatch(resetMap());
   };
 

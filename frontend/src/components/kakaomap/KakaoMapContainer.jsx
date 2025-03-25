@@ -12,7 +12,7 @@ import {
   setPools,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
-import { showSideBar } from '../../store/slices/sideBarSlice.js';
+import { showListBar } from '../../store/slices/listBarSlice.js';
 
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
@@ -171,7 +171,7 @@ export default function KakaoMapContainer() {
         dispatch(updateMarkers({ markers }));
         // 지역별 수영장 정보
         dispatch(setPools({ pools }));
-        dispatch(showSideBar());
+        dispatch(showListBar());
         navigate('pools', { state: { name } });
       } catch (error) {
         console.error(error);
