@@ -66,13 +66,11 @@ services:
       cache_from:
         - type=local,src=/tmp/.build-cache/client
       args:
-        VITE_DOMAIN: ${VITE_DOMAIN}
+        - VITE_DOMAIN: ${VITE_DOMAIN}
+        - VITE_KAKAOMAP_API_KEY: ${VITE_KAKAOMAP_API_KEY}
     image: ${DOCKER_REGISTRY}/swimdone-client-image:latest
     env_file:
       - .env
-    environment:
-      - VITE_DOMAIN=${VITE_DOMAIN}
-      - VITE_KAKAOMAP_API_KEY=${VITE_KAKAOMAP_API_KEY}
     volumes:
       - /etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:ro
       - /etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:ro
