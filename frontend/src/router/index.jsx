@@ -11,6 +11,8 @@ import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
 import NotFound from '../pages/NotFound';
 
+import MyReviewPage from '../components/mypage/MyReviewPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -21,12 +23,12 @@ const router = createBrowserRouter([
       {
         path: '/mypage',
         element: <MyPage></MyPage>,
-        // children: [
-        //   {
-        //     path: 'reviews',
-        //     element: <내가작성한리뷰></내가작성한리뷰>,
-        //   },
-        // ],
+        children: [
+          {
+            path: 'reviews',
+            element: <MyReviewPage></MyReviewPage>,
+          },
+        ],
       },
       {
         path: '/pools',

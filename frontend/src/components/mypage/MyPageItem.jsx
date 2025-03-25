@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function MyPageItem({ image, hoverImage, text, onClick }) {
+export default function MyPageItem({ image, hoverImage, text, navigateTo }) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(navigateTo); // token을 state로 전달
+  };
 
   return (
     <div className="flex h-20 items-center">
@@ -11,13 +17,13 @@ export default function MyPageItem({ image, hoverImage, text, onClick }) {
         className="w-20 h-15 cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={onClick}
+        onClick={handleClick}
       />
       <div
         className="relative ml-8 cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={onClick}
+        onClick={handleClick}
       >
         <div className={`text-2xl w-full ${isHovered ? 'text-blue02' : ''}`}>{text}</div>
       </div>

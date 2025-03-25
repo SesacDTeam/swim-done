@@ -1,7 +1,8 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
 import MyPageItem from './MyPageItem';
-import { useSelector } from 'react-redux';
-
+import { Outlet } from 'react-router-dom';
 import {
   profile,
   myReview,
@@ -12,8 +13,18 @@ import {
   contactUsColor,
 } from '../../utils/staticImagePath';
 
-function logout() {
-  alert('로그아웃');
+console.log(localStorage.getItem('accessToken'));
+
+function logoutUser(dispatch) {
+  // 로그아웃을 위한 액션 디스패치
+  dispatch(logout());
+
+  // localStorage에서 토큰 삭제
+  localStorage.removeItem('accessToken');
+
+  // 토큰 삭제 후, 필요한 경우 새로 로그인 페이지로 이동할 수도 있음
+  alert('로그아웃 되었습니다.');
+  // 예: window.location.href = "/login";
 }
 
 function removeUser() {
@@ -21,8 +32,10 @@ function removeUser() {
 }
 
 export default function MyPage() {
+  const dispatch = useDispatch();
   const nickName = useSelector((state) => state.user.nickName);
   const email = useSelector((state) => state.user.email);
+  const token = useSelector((state) => state.user.token); // token을 redux에서 가져옴
 
   return (
     <div className="select-none">
@@ -37,13 +50,22 @@ export default function MyPage() {
         </div>
         <div className="w-20 h-18">
           <img src={profile} alt="" className="h-full w-full" />
-          <button className="w-full text-center cursor-pointer outline-none" onClick={logout}>
+          <button
+            className="w-full text-center cursor-pointer outline-none"
+            onClick={() => logoutUser(dispatch)}
+          >
             로그아웃
           </button>
         </div>
       </div>
       <div className="relative top-30 h-80 w-85 mx-auto flex flex-col justify-between">
-        <MyPageItem image={myReview} hoverImage={myReviewColor} text="내가 남긴 리뷰" />
+        <MyPageItem
+          image={myReview}
+          hoverImage={myReviewColor}
+          text="내가 남긴 리뷰"
+          navigateTo="/mypage/reviews"
+          token={token} // token을 MyPageItem에 전달
+        />
         <MyPageItem image={keywordReview} hoverImage={keywordReviewColor} text="키워드리뷰" />
         <MyPageItem
           image={contactUs}
@@ -58,9 +80,12 @@ export default function MyPage() {
         />
       </div>
       <div className="flex justify-center">
-        <button className="relative top-69 h-10 cursor-pointer outline-none" onClick={removeUser}>
+        <button className="relative top-90 h-10 cursor-pointer outline-none" onClick={removeUser}>
           회원 탈퇴하기
         </button>
+      </div>
+      <div className="fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-3xl bg-white">
+        <Outlet></Outlet>
       </div>
     </div>
   );
