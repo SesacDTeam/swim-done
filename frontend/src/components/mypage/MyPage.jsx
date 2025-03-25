@@ -1,6 +1,8 @@
 import React from 'react';
 import MyPageItem from './MyPageItem';
 import { useSelector } from 'react-redux';
+import instance from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 import {
   profile,
@@ -23,6 +25,26 @@ function removeUser() {
 export default function MyPage() {
   const nickName = useSelector((state) => state.user.nickName);
   const email = useSelector((state) => state.user.email);
+  const navigate = useNavigate(); // ✅ useNavigate 훅 사용
+
+  const handleLogout = async () => {
+    try {
+      await instance.post('/logout');
+
+      console.log('✅ 로그아웃 성공! 이제 액세스 토큰을 삭제합니다.');
+    } catch (error) {
+      console.error('❌ 로그아웃 실패:', error);
+    }
+
+    // ✅ 1. 액세스 토큰 삭제
+    localStorage.removeItem('accessToken');
+    console.log(
+      '🗑️ 액세스 토큰 삭제 완료! 현재 localStorage:',
+      localStorage.getItem('accessToken'),
+    );
+    // ✅ 2. 홈으로 이동
+    navigate('/');
+  };
 
   return (
     <div className="select-none">
@@ -37,7 +59,7 @@ export default function MyPage() {
         </div>
         <div className="w-20 h-18">
           <img src={profile} alt="" className="h-full w-full" />
-          <button className="w-full text-center cursor-pointer outline-none" onClick={logout}>
+          <button className="w-full text-center cursor-pointer outline-none" onClick={handleLogout}>
             로그아웃
           </button>
         </div>
