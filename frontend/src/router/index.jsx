@@ -31,23 +31,20 @@ const router = createBrowserRouter([
       {
         path: '/pools',
         element: <PoolList></PoolList>,
-        // children: [
-        //   {
-        //     // 수영장 디테일
-        //     path: ':poolId',
-        //     element: <수영장디테일></수영장디테일>,
-        //   },
-        //   {
-        //     // 제보하기
-        //     path: 'submitted-images',
-        //     element: <제보하기></제보하기>,
-        //   },
-        //   {
-        //     // 리뷰작성
-        //     path: 'reviews',
-        //     element: <리뷰작성></리뷰작성>,
-        //   },
-        // ],
+        children: [
+          {
+            path: ':poolId',
+            element: <PoolDetail></PoolDetail>,
+          },
+          {
+            path: ':poolId/submitted-images',
+            element: <SubmitImage></SubmitImage>,
+          },
+          {
+            path: ':poolId/reviews',
+            element: <CreateReview></CreateReview>,
+          },
+        ],
       },
       {
         path: '/mark-pools',
@@ -76,8 +73,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/login-success',
-    element: <LoginRedirect></LoginRedirect>
-  }
+    element: <LoginRedirect></LoginRedirect>,
+  },
 ]);
 
 export default router;
