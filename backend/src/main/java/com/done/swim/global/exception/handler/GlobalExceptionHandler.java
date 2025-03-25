@@ -4,8 +4,10 @@ import com.done.swim.common.ApiResponse;
 import com.done.swim.global.exception.ErrorCode;
 import com.done.swim.global.exception.GlobalException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -55,6 +57,23 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   public ResponseEntity<ApiResponse<Object>> methodArgumentTypeMismatchHandler(
     MethodArgumentTypeMismatchException exception) {
+    return ResponseEntity.status(ErrorCode.INVALID_REQUEST.getStatus())
+      .body(ApiResponse
+        .error(ErrorCode.INVALID_REQUEST.getMessage(),
+          ErrorCode.INVALID_REQUEST.getCode()));
+  }
+
+  @ExceptionHandler(AuthenticationException.class)
+  public ResponseEntity<ApiResponse<Object>> authenticationHandler(
+    AuthenticationException exception) {
+    return ResponseEntity.status(ErrorCode.INVALID_ACCESS_TOKEN.getStatus())
+      .body(ApiResponse
+        .error(ErrorCode.INVALID_ACCESS_TOKEN.getMessage(),
+          ErrorCode.INVALID_ACCESS_TOKEN.getCode()));
+  }
+
+  @ExceptionHandler(MissingRequestCookieException.class)
+  public ResponseEntity<ApiResponse<Object>> missingRequestCookieHandler() {
     return ResponseEntity.status(ErrorCode.INVALID_REQUEST.getStatus())
       .body(ApiResponse
         .error(ErrorCode.INVALID_REQUEST.getMessage(),
