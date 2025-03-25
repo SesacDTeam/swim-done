@@ -22,7 +22,10 @@ export default function LoginRedirect() {
         return;
       }
       dispatch(login(accessToken));
-      navigate('/mypage');
+      const path = localStorage.getItem("beforePath")
+      navigate(path || "/").then(() => {
+        localStorage.removeItem("beforePath")
+      });
     } catch (error) {
       setError(true)
       navigate('/'); // 토큰 없으면 home으로 이동

@@ -10,8 +10,8 @@ import {
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
-import { hideListBar, showListBar } from '../../store/slices/listBarSlice';
 import { resetMap } from '../../store/slices/kakaoMapSlice';
+import { hideListBar } from '../../store/slices/listBarSlice';
 // import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
 const sideBarItems = [
@@ -38,7 +38,6 @@ export default function SideBar() {
       navigate('/mypage');
     } else {
       navigate('/mark-pools');
-      dispatch(showListBar());
     }
   };
 

@@ -25,7 +25,6 @@ export default function PoolList() {
   const getPools = () => {
     setIsLoading(true);
     try {
-      console.log(123);
 
       //처음에 5개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
       setCurrentIndex((prev) => prev + 2); // 인덱스로 바꾸면 될듯

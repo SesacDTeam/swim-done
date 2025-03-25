@@ -10,6 +10,9 @@ import SubmitImage from '../components/common/submitImage/SubmitImage';
 import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
 import NotFound from '../pages/NotFound';
+import AuthenticateRoute from '../components/common/AuthenticateRoute';
+import store from '../store/store';
+import { hideListBar, showListBar } from '../store/slices/listBarSlice';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +23,18 @@ const router = createBrowserRouter([
       // 가장 바깥
       {
         path: '/mypage',
-        element: <MyPage></MyPage>,
+        element: (
+          <AuthenticateRoute
+            cancleAction={() => {
+              store.dispatch(hideListBar());
+            }}
+          >
+            <MyPage></MyPage>
+          </AuthenticateRoute>
+        ),
+        loader: () => {
+          store.dispatch(showListBar());
+        },
         // children: [
         //   {
         //     path: 'reviews',
@@ -48,7 +62,18 @@ const router = createBrowserRouter([
       },
       {
         path: '/mark-pools',
-        element: <MarkPools></MarkPools>,
+        element: (
+          <AuthenticateRoute
+            cancleAction={() => {
+              store.dispatch(hideListBar());
+            }}
+          >
+            <MarkPools></MarkPools>
+          </AuthenticateRoute>
+        ),
+        loader: () => {
+          store.dispatch(showListBar());
+        },
         children: [
           {
             path: '/mark-pools/:poolId',
@@ -56,11 +81,19 @@ const router = createBrowserRouter([
           },
           {
             path: '/mark-pools/:poolId/submitted-images',
-            element: <SubmitImage></SubmitImage>,
+            element: (
+              <AuthenticateRoute>
+                <SubmitImage></SubmitImage>
+              </AuthenticateRoute>
+            ),
           },
           {
             path: '/mark-pools/:poolId/reviews',
-            element: <CreateReview></CreateReview>,
+            element: (
+              <AuthenticateRoute>
+                <CreateReview></CreateReview>
+              </AuthenticateRoute>
+            ),
           },
         ],
       },

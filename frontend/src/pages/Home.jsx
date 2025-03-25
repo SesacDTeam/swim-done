@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router';
 import SideBar from '../components/sidebar/SideBar';
 import KakaoMapContainer from '../components/kakaomap/KakaoMapContainer';
 import { useSelector } from 'react-redux';
 
 export default function Home() {
-  const isHidden = useSelector((state) => state.sideBar.isHidden);
+  const isHidden = useSelector((state) => state.listBar.isHidden);
 
   return (
     <>
