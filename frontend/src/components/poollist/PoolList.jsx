@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation, Outlet } from 'react-router';
+import { useSelector } from 'react-redux';
+import { useNavigate, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
 import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
@@ -9,7 +9,6 @@ import NoContent from '../common/NoContent';
 
 export default function PoolList() {
   const navigate = useNavigate();
-  const location = useLocation();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const name = useSelector((state) => state.kakaoMap.name)
 
@@ -51,6 +50,10 @@ export default function PoolList() {
       navigate("/")
     }
   }, []);
+
+  useEffect(() => { 
+    console.log("poollist" + pools)
+  }, [pools])
 
   return (
     <>

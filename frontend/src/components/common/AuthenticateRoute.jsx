@@ -1,12 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 export default function AuthenticateRoute({ children, cancleAction }) {
   const isLoggedIn = useSelector((state) => {
     return state.auth.isLoggedIn;
   });
+
+  const name = useSelector((state) => state.kakaoMap.name);
+  const pools = useSelector((state) => state.kakaoMap.pools)
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleCancleButtonClick = () => {
     navigate(-1);
@@ -16,6 +21,19 @@ export default function AuthenticateRoute({ children, cancleAction }) {
   const handleOkButtonClick = () => {
     const currentPath = window.location.pathname;
     localStorage.setItem('beforePath', currentPath);
+
+    if (location.state.poolName !== null) {
+      localStorage.setItem('poolName', location.state.poolName);
+    }
+
+    if (name !== null) {
+      localStorage.setItem('sectionName', name);
+    }
+
+    if (pools !== null) {
+      localStorage.setItem('sectionPools', JSON.stringify(pools));
+    }
+
     navigate('/login');
   };
 

@@ -19,7 +19,6 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Home></Home>,
-    errorElement: <NotFound></NotFound>,
     loader: () => {
       store.dispatch(hideListBar());
     },
@@ -64,14 +63,22 @@ const router = createBrowserRouter([
           },
           {
             path: ':poolId/submitted-images',
-            element: <SubmitImage></SubmitImage>,
+            element: (
+              <AuthenticateRoute>
+                <SubmitImage></SubmitImage>
+              </AuthenticateRoute>
+            ),
             loader: () => {
               store.dispatch(showDetailView());
             },
           },
           {
             path: ':poolId/reviews',
-            element: <CreateReview></CreateReview>,
+            element: (
+              <AuthenticateRoute>
+                <CreateReview></CreateReview>
+              </AuthenticateRoute>
+            ),
             loader: () => {
               store.dispatch(showDetailView());
             },
@@ -136,6 +143,10 @@ const router = createBrowserRouter([
   {
     path: '/login-success',
     element: <LoginRedirect></LoginRedirect>,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 
