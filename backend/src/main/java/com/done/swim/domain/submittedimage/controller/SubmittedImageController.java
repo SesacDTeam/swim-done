@@ -6,11 +6,13 @@ import com.done.swim.domain.submittedimage.dto.responsedto.SubmittedImageRespons
 import com.done.swim.domain.submittedimage.service.SubmittedImageService;
 import com.done.swim.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/images")
 @RequiredArgsConstructor
@@ -18,11 +20,12 @@ public class SubmittedImageController {
 
     private final SubmittedImageService submittedImageService;
 
+    @PostMapping
     public SubmittedImageResponseDto createImage(
             @RequestPart("pool") Pool pool,
             @RequestPart("user") User user,
             @RequestPart("file") MultipartFile file) {
-
+        log.info("file : {}", file.getOriginalFilename());
         SubmittedImageRequestDto requestDto = SubmittedImageRequestDto.builder()
                 .pool(pool)
                 .user(user)
@@ -32,7 +35,7 @@ public class SubmittedImageController {
         return submittedImageService.createImage(requestDto);
     }
 
-    @GetMapping("/${id}")
+    @GetMapping("/{id}")
     public SubmittedImageResponseDto getImageById(@PathVariable Long id) {
         return submittedImageService.getImageById(id);
     }
@@ -43,8 +46,7 @@ public class SubmittedImageController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteImage(Long id) {
+    public void deleteImage(@PathVariable Long id) {
         submittedImageService.deleteImage(id);
     }
-
 }
