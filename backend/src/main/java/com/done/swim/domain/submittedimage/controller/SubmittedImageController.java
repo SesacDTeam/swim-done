@@ -7,6 +7,7 @@ import com.done.swim.domain.submittedimage.service.SubmittedImageService;
 import com.done.swim.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ public class SubmittedImageController {
     @PostMapping
     public SubmittedImageResponseDto createImage(
             @RequestPart("pool") Pool pool,
-            @RequestPart("user") User user,
+            @AuthenticationPrincipal User user,
             @RequestPart("file") MultipartFile file) {
         log.info("file : {}", file.getOriginalFilename());
         SubmittedImageRequestDto requestDto = SubmittedImageRequestDto.builder()
