@@ -2,7 +2,10 @@ package com.done.swim.domain.swimmingtime.entity;
 
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Getter
@@ -31,6 +34,10 @@ public enum Week {
             throw new IllegalArgumentException("Unknown day: " + dayOfWeek);
         }
         return week;
+    }
+
+    public static String getNowDayOfWeekInKorean() {
+        return LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
     }
 
 }

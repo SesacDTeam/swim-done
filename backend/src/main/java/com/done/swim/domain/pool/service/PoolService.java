@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 
 @Slf4j
 @Service
@@ -42,7 +39,7 @@ public class PoolService {
 
     public PoolWithSwimmingTimeResponseDto getPoolWithName(String poolName) {
         // 오늘 요일, 예시) 월요일
-        String nowDayOfWeek = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
+        String nowDayOfWeek = Week.getNowDayOfWeekInKorean();
         return PoolWithSwimmingTimeResponseDto.from(
                 poolRepository.getPoolWithName(poolName, Week.from(nowDayOfWeek))
                         .orElseThrow(() -> new IllegalArgumentException("Bad Request")),
