@@ -24,7 +24,7 @@ export default function MarkPools() {
   const getMarkedPools = async () => {
     setIsLoading(true);
     try {
-      const data = await markPoolApi.getMyMarkedPools(token, currentPage);
+      const data = await markPoolApi.getMyMarkedPools(currentPage);
       setCurrentPage((prev) => prev + 1);
       setMarkedPools((prev) => prev.concat(data.data.poolMarks));
 
@@ -70,7 +70,7 @@ export default function MarkPools() {
             return (
               <PoolListItem
                 key={index}
-                title={pool.name}
+                name={pool.name}
                 address={pool.address}
                 isMarked={pool.mark}
                 onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
