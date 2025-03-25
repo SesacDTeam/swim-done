@@ -22,17 +22,17 @@ import java.util.Map;
 @RequestMapping("/api")
 public class PoolReviewController {
 
-  private final PoolReviewService poolReviewService;
+    private final PoolReviewService poolReviewService;
 
   @PostMapping("/pools/{poolId}/reviews")
   public ResponseEntity<ApiResponse<CreatePoolReviewResponseDto>> createReview(
     @PathVariable Long poolId,
-    @Valid @RequestBody CreatePoolReviewRequestDto requesteDto,
+    @Valid @RequestBody CreatePoolReviewRequestDto requestDto,
     @AuthenticationPrincipal User user
   ) {
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(ApiResponse.ok("리뷰 생성 성공!!", "SUCCESS",
-        poolReviewService.createReview(poolId, requesteDto, user)));
+        poolReviewService.createReview(poolId, requestDto, user)));
   }
 
   @GetMapping("/my/reviews")
@@ -40,9 +40,7 @@ public class PoolReviewController {
     @AuthenticationPrincipal User user,
     Pageable pageable
   ) {
-
-    Map<String, Object> responseBody = poolReviewService.getMyReviews(user.getId(), pageable);
-
+        Map<String, Object> responseBody = poolReviewService.getMyReviews(user.getId(), pageable);
     return ResponseEntity.ok(
       ApiResponse.ok(
         "조회 성공",

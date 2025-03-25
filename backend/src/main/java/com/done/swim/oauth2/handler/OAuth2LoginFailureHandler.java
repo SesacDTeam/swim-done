@@ -37,7 +37,7 @@ public class OAuth2LoginFailureHandler extends SimpleUrlAuthenticationFailureHan
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         // 로그인 실패 시 리디렉트할 URL 설정
-        getRedirectStrategy().sendRedirect(request, response, "/loginFailure");
+        getRedirectStrategy().sendRedirect(request, response, "/login");
 //        //  로그인 실패 시 리디렉트할 URL 설정
 //        response.sendRedirect("/loginFailure");
 
