@@ -1,13 +1,13 @@
 import React from 'react';
 import { mark, markColor } from '../../utils/staticImagePath';
 
-export default function PoolListItem({ onClick, title, address, isMarked, onToggleMark }) {
+export default function PoolListItem({ onClick, name, address, isMarked, onToggleMark }) {
   return (
     <>
-      <article className="bg-blue02/10 w-[90%] h-27 rounded-xl cursor-pointer" onClick={onClick}>
+      <article className="bg-blue02/10 w-[100%] h-27 rounded-xl cursor-pointer" onClick={onClick}>
         <div className="flex items-center justify-between mx-4 h-[100%]">
           <div>
-            <h2 className="pretendard-semibold text-xl">{title}</h2>
+            <h2 className="pretendard-semibold text-xl">{name}</h2>
             <p className="pretendard-normal text-sm text-body01 mt-1">{address}</p>
           </div>
 
