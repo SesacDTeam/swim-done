@@ -8,6 +8,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ApiResponse<Object>> methodArgumentNotValidHandler(
+  public ResponseEntity<ApiResponse<Void>> methodArgumentNotValidHandler(
     MethodArgumentNotValidException exception) {
 
     List<String> errorMessages = exception.getBindingResult().getFieldErrors()
@@ -41,4 +43,21 @@ public class GlobalExceptionHandler {
         ErrorCode.INVALID_INPUT.getCode()));
   }
 
+  @ExceptionHandler(MaxUploadSizeExceededException.class)
+  public ResponseEntity<ApiResponse<Object>> maxUploadSizeExceededHandler(
+    MaxUploadSizeExceededException exception) {
+    return ResponseEntity.status(ErrorCode.PAYLOAD_TOO_LARGE.getStatus())
+      .body(ApiResponse
+        .error(ErrorCode.PAYLOAD_TOO_LARGE.getMessage(),
+          ErrorCode.PAYLOAD_TOO_LARGE.getCode()));
+  }
+
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<ApiResponse<Object>> methodArgumentTypeMismatchHandler(
+    MethodArgumentTypeMismatchException exception) {
+    return ResponseEntity.status(ErrorCode.INVALID_REQUEST.getStatus())
+      .body(ApiResponse
+        .error(ErrorCode.INVALID_REQUEST.getMessage(),
+          ErrorCode.INVALID_REQUEST.getCode()));
+  }
 }

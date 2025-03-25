@@ -20,6 +20,7 @@ public enum ErrorCode {
   AUTHOR_ONLY(HttpStatus.FORBIDDEN, "4002", "작성자만 접근할 수 있습니다."),
   INVALID_INPUT(HttpStatus.BAD_REQUEST, "4003", "입력값이 올바르지 않습니다."),
   DEFAULT_NOT_FOUND(HttpStatus.BAD_REQUEST, "4004", "해당 리소스가 존재하지 않습니다."),
+  INVALID_REQUEST(HttpStatus.BAD_REQUEST, "4005", "요청이 올바르지 않습니다."),
 
   // 수영장 오류 (4100번)
   POOL_NOT_FOUND(HttpStatus.BAD_REQUEST, "4100", "해당 수영장이 존재하지 않습니다."),
