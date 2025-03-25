@@ -1,8 +1,8 @@
 import React from 'react';
-
 export default function KakaoLoginButton() {
-  const handleKakaoLogin = () => {
+  const handleKakaoLogin = async () => {
     const DOMAIN = import.meta.env.VITE_DOMAIN;
+    // 카카오 로그인 페이지로 리디렉션
     window.location.href = `${DOMAIN}/oauth2/authorization/kakao`;
   };
 

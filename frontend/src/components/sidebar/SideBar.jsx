@@ -33,14 +33,38 @@ export default function SideBar() {
   const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
-    setSelectedIndex(index);
     if (index === 0) {
-      navigate('/mypage');
-      dispatch(showSideBar());
-    } else {
-      navigate('/mark-pools');
-      dispatch(showSideBar());
+      // ✅ 로그인 여부 확인
+      const isLoggedIn = localStorage.getItem('accessToken');
+
+      if (!isLoggedIn) {
+        // ✅ 이동 전 사용자에게 확인 메시지 표시
+        const confirmMove = window.confirm(
+          '로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?',
+        );
+
+        if (confirmMove) {
+          // 로그인 페이지로 이동 전에 현재 페이지를 저장
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          navigate('/login'); // 로그인 페이지로 이동
+        } else {
+          // ❌ "아니오" 선택 시 선택된 인덱스를 초기화하여 마이페이지가 안 뜨도록 처리
+          setSelectedIndex(null);
+        }
+        return; //❗️ 여기서 함수 종료 (이후 코드 실행 방지)
+      }
     }
+    // ✅ 로그인한 경우에만 선택한 인덱스를 업데이트
+    setSelectedIndex(index);
+
+    // navigate('/mypage');
+    if (index === 0) {
+      navigate('/mypage'); // 마이페이지로 이동
+    } else {
+      navigate('/mark-pools'); // 찜한 수영장 페이지로 이동
+    }
+
+    dispatch(showSideBar());
   };
 
   const handleToMain = () => {
