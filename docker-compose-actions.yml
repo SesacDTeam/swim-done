@@ -50,7 +50,7 @@ services:
       - cache-network
       - web-network
     ports:
-      - "587:8080"
+      - "8080:8080"
     depends_on:
       mysql:
         condition: service_healthy
@@ -73,7 +73,7 @@ services:
       - .env
     environment:
       - VITE_DOMAIN=${VITE_DOMAIN}
-      - VITE_API_URL=http://api-container:587
+      - API_SERVER_URL=${API_SERVER_URL}
     volumes:
       - /etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:ro
       - /etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:ro

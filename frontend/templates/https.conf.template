@@ -3,7 +3,7 @@ server {
     # https에서만 적용 가능
     http2 on;
     server_name ${VITE_DOMAIN};
-
+		
     # SSL 설정
     ssl_certificate /etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem;
@@ -22,7 +22,7 @@ server {
 
     # 프록시 설정
     location /api/ {
-        proxy_pass ${VITE_API_URL};
+        proxy_pass ${API_SERVER_URL};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
