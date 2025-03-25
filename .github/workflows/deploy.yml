@@ -19,15 +19,8 @@ jobs:
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: "배포 시작"
-
-      # 캐시 저장 설정을 위한 action(라이브러리)
-      - name: Cache Docker Image Layer
-        uses: actions/cache@v4.2.0
-        with:
-          path: /tmp/.buildx-cache # 캐시로 관리할 경로
-          key: docker-image-layer-cache-${{ github.sha }} # 저장 & 불러올 캐시 이름(식별자)
-          restore-keys: docker-image-layer-cache # 만약 캐시 key를 찾지 못하면 대체할 캐시 이름
+          title: "⭐Start Deploy⭐"
+          color: 0xF09B59
 
       - name: run ssh-agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -39,9 +32,14 @@ jobs:
 
       - name: Create .env file
         run: echo """${{ secrets.ENV_FILE }}""" >> .env
-        
-      - name: Check .env file
-        run: cat .env
+
+      # 캐시 저장 설정을 위한 action(라이브러리)
+      - name: Cache Docker Image Layer
+        uses: actions/cache@v4.2.0
+        with:
+          path: /tmp/.buildx-cache # 캐시로 관리할 경로
+          key: docker-image-layer-cache-${{ github.sha }} # 저장 & 불러올 캐시 이름(식별자)
+          restore-keys: docker-image-layer-cache- # 만약 캐시 key를 찾지 못하면 대체할 캐시 이름
 
       - name: Set up Docker BuildKit
         uses: docker/setup-buildx-action@v3
@@ -49,7 +47,6 @@ jobs:
       - name: Create BuildKit 빌더
         run: |
           docker buildx create --use --name buildkit
-          docker buildx use buildkit
 
       - name: Docker Image Build
         run: docker compose -f docker-compose-actions.yml build --build-arg BUILDKIT_INLINE_CACHE=1
@@ -58,7 +55,7 @@ jobs:
         run: echo '${{ secrets.DOCKER_PASSWORD }}' | docker login -u '${{ secrets.DOCKER_USERNAME }}' --password-stdin
 
       - name: Docker Image Push
-        run: docker compose push
+        run: docker compose -f docker-compose-actions.yml push
 
       - name: Copy .env / docker-compose-actions.yml
         uses: appleboy/scp-action@v0.1.7
@@ -82,18 +79,20 @@ jobs:
             docker compose -f docker-compose-actions.yml pull  
             docker compose -f docker-compose-actions.yml down  
             docker compose -f docker-compose-actions.yml up -d  
-            docker image prune -f
+            docker system prune -f
 
       - name: End Message - Success
         uses: sarisia/actions-status-discord@v1
         if: success()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: "배포 종료 - 성공"
+          title: "🌞 Success Deploy 🌞"
+          color: 0x75F94D
 
       - name: End Message - Fail
         uses: sarisia/actions-status-discord@v1
         if: failure()
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: "배포 종료 - 실패"
+          title: "😭 Failure Deploy 😭"
+          color: 0xEA3680
