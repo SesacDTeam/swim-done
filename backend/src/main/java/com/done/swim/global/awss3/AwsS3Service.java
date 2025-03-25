@@ -1,4 +1,4 @@
-package com.done.swim.global.s3;
+package com.done.swim.global.awss3;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class AwsS3Service {
 
     // AWS S3 서비스와 상호작용하기 위한 클라이언트
     private final S3Client s3Client;
@@ -64,7 +64,7 @@ public class S3Service {
                     .build();
 
             s3Client.putObject(putObjectRequest,
-                    RequestBody.fromInputStream(file.getInputStream(), file.getSize());
+                    RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
         } catch (IOException e) {
             throw new RuntimeException("파일 업로드 실패: " + e.getMessage());
         }

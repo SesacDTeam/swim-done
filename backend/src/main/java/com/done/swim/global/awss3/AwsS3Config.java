@@ -1,4 +1,4 @@
-package com.done.swim.global.s3;
+package com.done.swim.global.awss3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
