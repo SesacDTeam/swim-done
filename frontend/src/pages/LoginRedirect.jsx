@@ -28,6 +28,7 @@ export default function LoginRedirect() {
       const name = sessionStorage.getItem('sectionName');
       const mapPools = sessionStorage.getItem('sectionPools');
       const poolName = sessionStorage.getItem('poolName');
+
       if (name !== null) {
         dispatch(setName({ name }));
       }

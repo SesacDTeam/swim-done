@@ -4,6 +4,7 @@ import SideBar from '../components/sidebar/SideBar';
 import KakaoMapContainer from '../components/kakaomap/KakaoMapContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideListBar } from '../store/slices/listBarSlice';
+import { setSelectedIndex } from '../store/slices/sideBarSlice';
 
 export default function Home() {
   const isHidden = useSelector((state) => state.listBar.isHidden);
@@ -12,7 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     if (location.pathname === '/') {
-      sessionStorage.removeItem('selectedIndex');
+      dispatch(setSelectedIndex(null))
       dispatch(hideListBar());
     }
   }, [location, dispatch]);

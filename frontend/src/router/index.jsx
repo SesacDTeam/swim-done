@@ -15,6 +15,7 @@ import store from '../store/store';
 import { hideListBar, showListBar } from '../store/slices/listBarSlice';
 import { hideDetailView, showDetailView } from '../store/slices/detailViewSlice';
 import UnauthenticateRoute from '../components/common/UnauthenticateRoute';
+import { setSelectedIndex } from '../store/slices/sideBarSlice';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
           <AuthenticateRoute
             cancleAction={() => {
               store.dispatch(hideListBar());
-              sessionStorage.removeItem('selectedIndex');
+              store.dispatch(setSelectedIndex(null));
             }}
           >
             <MyPage></MyPage>
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
         loader: () => {
           store.dispatch(showListBar());
           store.dispatch(hideDetailView());
+          store.dispatch(setSelectedIndex(null));
         },
         children: [
           {
@@ -93,7 +95,7 @@ const router = createBrowserRouter([
           <AuthenticateRoute
             cancleAction={() => {
               store.dispatch(hideListBar());
-              sessionStorage.removeItem('selectedIndex');
+              store.dispatch(setSelectedIndex(null));
             }}
           >
             <MarkPools></MarkPools>

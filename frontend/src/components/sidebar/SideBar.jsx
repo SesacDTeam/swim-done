@@ -9,9 +9,10 @@ import {
 } from '../../utils/staticImagePath';
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { resetMap } from '../../store/slices/kakaoMapSlice';
 import { hideListBar } from '../../store/slices/listBarSlice';
+import { setSelectedIndex } from '../../store/slices/sideBarSlice';
 // import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
 const sideBarItems = [
@@ -28,13 +29,12 @@ const sideBarItems = [
 ];
 
 export default function SideBar() {
-  const [selectedIndex, setSelectedIndex] = useState(sessionStorage.getItem('selectedIndex'));
+  const selectedIndex = useSelector((state) => state.sideBar.selectedIndex);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
-    setSelectedIndex(index);
-    sessionStorage.setItem('selectedIndex', index);
+    dispatch(setSelectedIndex(index));
     if (index === 0) {
       navigate('/mypage');
     } else {
@@ -45,7 +45,7 @@ export default function SideBar() {
   const handleToMain = () => {
     navigate('/');
     setSelectedIndex(null);
-    sessionStorage.removeItem('selectedIndex');
+    dispatch(setSelectedIndex(null));
     dispatch(hideListBar());
     dispatch(resetMap());
   };
@@ -69,9 +69,7 @@ export default function SideBar() {
               image={item.image}
               selectedImage={item.selectedImage}
               title={item.title}
-              isSelected={
-                sessionStorage.getItem('selectedIndex') !== null && Number(selectedIndex) === index
-              }
+              isSelected={selectedIndex === index}
               onClick={() => handleClickItem(index)}
             ></SideBarItem>
           );

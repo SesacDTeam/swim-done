@@ -4,6 +4,8 @@ import listBarSlice from './slices/listBarSlice';
 import userSlice from './slices/userSlice';
 import detailViewSlice from './slices/detailViewSlice';
 import kakaoMapSlice from './slices/kakaoMapSlice';
+import sideBarSlice from './slices/sideBarSlice'
+
 
 const store = configureStore({
   reducer: {
@@ -12,6 +14,7 @@ const store = configureStore({
     detailView: detailViewSlice,
     kakaoMap: kakaoMapSlice,
     user: userSlice,
+    sideBar: sideBarSlice
   },
 });
 
