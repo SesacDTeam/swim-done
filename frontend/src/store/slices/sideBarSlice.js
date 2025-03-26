@@ -1,22 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  isHidden: true,
+  selectedIndex:
+    sessionStorage.getItem('selectedIndex') !== null
+      ? Number(sessionStorage.getItem('selectedIndex'))
+      : null,
 };
 
 const sideBarSlice = createSlice({
   name: 'sideBar',
   initialState,
   reducers: {
-    showSideBar: (state, action) => {
-      state.isHidden = false;
-    },
-
-    hideSideBar: (state, action) => {
-      state.isHidden = true;
+    setSelectedIndex: (state, action) => {
+      state.selectedIndex = action.payload;
+      sessionStorage.setItem('selectedIndex', action.payload);
     },
   },
 });
 
-export const { showSideBar, hideSideBar } = sideBarSlice.actions;
+export const { setSelectedIndex } = sideBarSlice.actions;
 export default sideBarSlice.reducer;
