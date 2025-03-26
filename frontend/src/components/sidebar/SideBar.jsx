@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   mypage,
   markPool,
@@ -9,9 +9,10 @@ import {
 } from '../../utils/staticImagePath';
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { hideSideBar, showSideBar } from '../../store/slices/sideBarSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { resetMap } from '../../store/slices/kakaoMapSlice';
+import { hideListBar } from '../../store/slices/listBarSlice';
+import { setSelectedIndex } from '../../store/slices/sideBarSlice';
 // import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
 const sideBarItems = [
@@ -28,49 +29,24 @@ const sideBarItems = [
 ];
 
 export default function SideBar() {
-  const [selectedIndex, setSelectedIndex] = useState();
+  const selectedIndex = useSelector((state) => state.sideBar.selectedIndex);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
+    dispatch(setSelectedIndex(index));
     if (index === 0) {
-      // ✅ 로그인 여부 확인
-      const isLoggedIn = localStorage.getItem('accessToken');
-
-      if (!isLoggedIn) {
-        // ✅ 이동 전 사용자에게 확인 메시지 표시
-        const confirmMove = window.confirm(
-          '로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?',
-        );
-
-        if (confirmMove) {
-          // 로그인 페이지로 이동 전에 현재 페이지를 저장
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          navigate('/login'); // 로그인 페이지로 이동
-        } else {
-          // ❌ "아니오" 선택 시 선택된 인덱스를 초기화하여 마이페이지가 안 뜨도록 처리
-          setSelectedIndex(null);
-        }
-        return; //❗️ 여기서 함수 종료 (이후 코드 실행 방지)
-      }
-    }
-    // ✅ 로그인한 경우에만 선택한 인덱스를 업데이트
-    setSelectedIndex(index);
-
-    // navigate('/mypage');
-    if (index === 0) {
-      navigate('/mypage'); // 마이페이지로 이동
+      navigate('/mypage');
     } else {
-      navigate('/mark-pools'); // 찜한 수영장 페이지로 이동
+      navigate('/mark-pools');
     }
-
-    dispatch(showSideBar());
   };
 
   const handleToMain = () => {
     navigate('/');
     setSelectedIndex(null);
-    dispatch(hideSideBar());
+    dispatch(setSelectedIndex(null));
+    dispatch(hideListBar());
     dispatch(resetMap());
   };
 
