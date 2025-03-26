@@ -10,7 +10,6 @@ const setupRequestInterceptors = (instance) => {
       return config;
     },
     (error) => {
-      console.log("request" + "에러")
       return Promise.reject(error);
     },
   );

@@ -7,6 +7,7 @@ import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
 import { Outlet, useNavigate } from 'react-router';
+import useError from '../../hooks/useError';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
@@ -17,6 +18,7 @@ export default function MarkPools() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
+  const [error, setError] = useError();
 
   const getMarkedPools = async () => {
     setIsLoading(true);
@@ -26,11 +28,8 @@ export default function MarkPools() {
       setMarkedPools((prev) => prev.concat(data.data.poolMarks));
 
       setHasNext(data.data.hasNext);
-      console.log(data.data.hasNext)
-      console.log(currentPage)
-    } catch {
-      // TODO: 에러 핸들링 예정
-      console.log('에러');
+    } catch (error) {
+      setError(error)
       setHasNext(false);
     } finally {
       setIsLoading(false);
@@ -39,7 +38,6 @@ export default function MarkPools() {
 
   const onIntersect = async (entry, observer) => {
     if (isLoading || !hasNext) return;
-    console.log("dsadsa")
     await getMarkedPools();
   };
 
@@ -56,7 +54,7 @@ export default function MarkPools() {
           <img src={logo} alt="" className="animate-spin w-30" />
         </div>
       )}
-      <div className='p-6'>
+      <div className="p-6">
         <h1 className="pretendard-bold text-2xl mb-4">내가 찜한 수영장</h1>
         <section className="flex flex-col items-center gap-5 mt-10">
           {markedPools.length === 0 ? (
