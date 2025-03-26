@@ -18,7 +18,11 @@ export default function LoginRedirect() {
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('token');
 
+      console.log('🔹 현재 URL:', window.location.href);
+      console.log('🔹 추출된 토큰:', accessToken);
+
       if (!accessToken) {
+        console.log('🚨 토큰이 없어서 홈으로 이동');
         setError(true);
         navigate('/');
         return;
