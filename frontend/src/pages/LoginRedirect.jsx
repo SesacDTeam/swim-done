@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { login } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
+import { setName, setPools } from '../store/slices/kakaoMapSlice';
 
 export default function LoginRedirect() {
   const navigate = useNavigate();
@@ -10,10 +11,6 @@ export default function LoginRedirect() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!window.location.search.includes('token=')) return;
-
-    console.log('🔹 LoginRedirect 실행됨!');
-
     setIsLoading(true);
     try {
       // 현재 url에서 토큰 가져오기
@@ -31,13 +28,27 @@ export default function LoginRedirect() {
         return;
       }
       dispatch(login(accessToken));
-      console.log('🔹 dispatch 실행됨! 액세스 토큰:', accessToken);
+      const path = sessionStorage.getItem('beforePath');
+      const name = sessionStorage.getItem('sectionName');
+      const mapPools = sessionStorage.getItem('sectionPools');
+      const poolName = sessionStorage.getItem('poolName');
 
-      console.log('✅ 로그인 성공! 마이페이지로 이동');
-      navigate('/mypage');
-      console.log('✅ navigate 실행됨!');
+      if (name !== null) {
+        dispatch(setName({ name }));
+      }
+
+      if (mapPools !== null) {
+        const pools = JSON.parse(mapPools);
+        dispatch(setPools({ pools }));
+      }
+
+      navigate(path || '/', { replace: true, state: { poolName } }).then(() => {
+        sessionStorage.removeItem('beforePath');
+        sessionStorage.removeItem('sectionName');
+        sessionStorage.removeItem('sectionPools');
+        sessionStorage.removeItem('poolName');
+      });
     } catch (error) {
-      console.error('🚨 로그인 리디렉트 오류:', error);
       setError(true);
       navigate('/'); // 토큰 없으면 home으로 이동
     } finally {
