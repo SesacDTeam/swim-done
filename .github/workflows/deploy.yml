@@ -1,0 +1,98 @@
+name: deploy service
+
+on:
+  push:
+    branches:
+      - main
+      - chore/*
+
+jobs:
+  ssh-agent:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 액션 시작 알림 메시지
+      - name: Start Message
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "⭐Start Deploy⭐"
+          color: 0xF09B59
+
+      - name: run ssh-agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add Remote Server Fingerprint to Known Hosts
+        run: ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts || true
+
+      - name: Create .env file
+        run: echo """${{ secrets.ENV_FILE }}""" >> .env
+
+      # 캐시 저장 설정을 위한 action(라이브러리)
+      - name: Cache Docker Image Layer
+        uses: actions/cache@v4.2.0
+        with:
+          path: /tmp/.buildx-cache # 캐시로 관리할 경로
+          key: docker-image-layer-cache-${{ github.sha }} # 저장 & 불러올 캐시 이름(식별자)
+          restore-keys: docker-image-layer-cache- # 만약 캐시 key를 찾지 못하면 대체할 캐시 이름
+
+      - name: Set up Docker BuildKit
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create BuildKit 빌더
+        run: |
+          docker buildx create --use --name buildkit
+
+      - name: Docker Image Build
+        run: docker compose -f docker-compose-actions.yml build --build-arg BUILDKIT_INLINE_CACHE=1
+
+      - name: Login DockerHub
+        run: echo '${{ secrets.DOCKER_PASSWORD }}' | docker login -u '${{ secrets.DOCKER_USERNAME }}' --password-stdin
+
+      - name: Docker Image Push
+        run: docker compose -f docker-compose-actions.yml push
+
+      - name: Copy .env / docker-compose-actions.yml
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "docker-compose-actions.yml,.env"
+          target: "~/work-directory"
+
+      - name: Pull Image & Up Container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/work-directory
+            docker compose -f docker-compose-actions.yml pull  
+            docker compose -f docker-compose-actions.yml down  
+            docker compose -f docker-compose-actions.yml up -d  
+            docker system prune -f
+
+      - name: End Message - Success
+        uses: sarisia/actions-status-discord@v1
+        if: success()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "🌞 Success Deploy 🌞"
+          color: 0x75F94D
+
+      - name: End Message - Fail
+        uses: sarisia/actions-status-discord@v1
+        if: failure()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "😭 Failure Deploy 😭"
+          color: 0xEA3680

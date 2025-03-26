@@ -38,18 +38,26 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     private String imageUrl;
 
+    private String kakaoAccessToken;
+
 //    @Enumerated(EnumType.STRING)
 //    private Role role;
 
     @Builder
     public User(String email, String nickname, String provider, String providerId,
-        String imageUrl) {
+        String imageUrl, String kakaoAccessToken) {
         this.email = email;
         this.nickname = nickname;
         this.provider = provider;
         this.providerId = providerId;
         this.imageUrl = imageUrl;
+        this.kakaoAccessToken = kakaoAccessToken;
     }
+
+    public void setKakaoAccessToken(String kakaoAccessToken) {
+        this.kakaoAccessToken = kakaoAccessToken;
+    }
+
 
     // UserDetails 인터페이스 구현
     @Override

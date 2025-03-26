@@ -5,7 +5,7 @@ export default function NaverLoginButton() {
   // 개발 환경에서는 백엔드 주소 기입
   const DOMAIN = import.meta.env.VITE_DOMAIN;
   // oAuth2 로그인 경로는 spring security 기본 경로 따라야 됨. api 안 붙이는 걸 권장함!
-  const NAVER_AUTH_URL = `${DOMAIN}/oauth2/authorization/naver`;
+  const NAVER_AUTH_URL = `oauth2/authorization/naver`;
 
   const handleNaverLogin = () => {
     window.location.href = NAVER_AUTH_URL;
@@ -18,12 +18,7 @@ export default function NaverLoginButton() {
         className="font-pretendard font-semibold flex items-center bg-ngreen text-white rounded-md px-4 py-2 gap-3 mb-2'
 "
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
-          fill="none"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none">
           <path
             d="M9.24387 7.44339L4.57223 0.700293H0.700195V13.3003H4.75652V6.55614L9.42816 13.3003H13.3002V0.700293H9.24387V7.44339Z"
             fill="white"
