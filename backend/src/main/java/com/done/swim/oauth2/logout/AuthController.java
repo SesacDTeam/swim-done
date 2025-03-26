@@ -22,8 +22,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal User user,
         HttpServletResponse response) {
-        log.info("dfdf");
 
-        return oAuth2TokenService.logout(String.valueOf(user), response);
+        return oAuth2TokenService.logout(user, response);
     }
 }
