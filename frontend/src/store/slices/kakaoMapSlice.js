@@ -23,7 +23,6 @@ const kakaoMapSlice = createSlice({
       state.infoWindow.close();
     },
     setMap: (state, action) => {
-      console.log(action.payload.map);
       state.map = action.payload.map;
     },
     setInfoWindow: (state, action) => {
@@ -37,9 +36,10 @@ const kakaoMapSlice = createSlice({
     },
     setName: (state, action) => {
       state.name = action.payload.name;
-    }
+    },
   },
 });
 
-export const { resetMap, setMap, setInfoWindow, updateMarkers, setPools, setName } = kakaoMapSlice.actions;
+export const { resetMap, setMap, setInfoWindow, updateMarkers, setPools, setName } =
+  kakaoMapSlice.actions;
 export default kakaoMapSlice.reducer;

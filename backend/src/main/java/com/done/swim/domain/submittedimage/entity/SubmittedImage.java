@@ -4,13 +4,17 @@ import com.done.swim.common.BaseTimeEntity;
 import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "submitted_images")
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@EntityListeners(AuditingEntityListener.class)
 public class SubmittedImage extends BaseTimeEntity {
 
     @Id

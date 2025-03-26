@@ -14,6 +14,7 @@ export default function LoginRedirect() {
     setIsLoading(true);
     try {
       // 현재 url에서 토큰 가져오기
+
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('token');
 

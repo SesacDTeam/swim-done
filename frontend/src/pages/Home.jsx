@@ -1,11 +1,21 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 import SideBar from '../components/sidebar/SideBar';
 import KakaoMapContainer from '../components/kakaomap/KakaoMapContainer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { hideListBar } from '../store/slices/listBarSlice';
 
 export default function Home() {
   const isHidden = useSelector((state) => state.listBar.isHidden);
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      sessionStorage.removeItem('selectedIndex');
+      dispatch(hideListBar());
+    }
+  }, [location, dispatch]);
 
   return (
     <>

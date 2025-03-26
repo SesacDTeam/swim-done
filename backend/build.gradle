@@ -44,7 +44,7 @@ dependencies {
     // Environment-Variable
     implementation "me.paulschwarz:spring-dotenv:4.0.0"
     // S3 client
-    // implementation 'software.amazon.awssdk:s3:2.20.12'
+    implementation 'software.amazon.awssdk:s3:2.20.12'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
