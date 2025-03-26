@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
 import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
 import { Outlet, useNavigate } from 'react-router';
-import { hideDetailView, showDetailView } from '../../store/slices/detailViewSlice';
-import { useUnmount } from '../../hooks/useUnmount';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
@@ -28,6 +26,8 @@ export default function MarkPools() {
       setMarkedPools((prev) => prev.concat(data.data.poolMarks));
 
       setHasNext(data.data.hasNext);
+      console.log(data.data.hasNext)
+      console.log(currentPage)
     } catch {
       // TODO: 에러 핸들링 예정
       console.log('에러');
@@ -39,6 +39,7 @@ export default function MarkPools() {
 
   const onIntersect = async (entry, observer) => {
     if (isLoading || !hasNext) return;
+    console.log("dsadsa")
     await getMarkedPools();
   };
 
