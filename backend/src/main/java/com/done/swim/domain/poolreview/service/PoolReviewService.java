@@ -10,15 +10,17 @@ import com.done.swim.domain.poolreview.dto.responsedto.UpdatePoolReviewResponseD
 import com.done.swim.domain.poolreview.entity.PoolReview;
 import com.done.swim.domain.poolreview.repository.PoolReviewRepository;
 import com.done.swim.domain.user.entity.User;
-import com.done.swim.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
+import com.done.swim.global.exception.ErrorCode;
+import com.done.swim.global.exception.ForBiddenException;
+import com.done.swim.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,21 +29,14 @@ public class PoolReviewService {
 
   private final PoolReviewRepository poolReviewRepository;
   private final PoolRepository poolRepository;
-  private final UserRepository userRepository;
 
   @Transactional
   public CreatePoolReviewResponseDto createReview(Long poolId,
-      CreatePoolReviewRequestDto requestDto,
-      Long userId
+                                                  CreatePoolReviewRequestDto requestDto,
+                                                  User user
   ) {
-
-    //TODO : GlobalException 확정 후 수정예정
     Pool pool = poolRepository.findById(poolId)
-        .orElseThrow(() -> new EntityNotFoundException("해당 수영장이 존재하지 않습니다."));
-
-    // TODO: 토큰 구현이 안되어있어서 더미 데이터로 테스트
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
 
     PoolReview poolReview = requestDto.toEntity(pool, user);
     poolReviewRepository.save(poolReview);
@@ -66,14 +61,13 @@ public class PoolReviewService {
 
   @Transactional
   public UpdatePoolReviewResponseDto updateReview(Long reviewId,
-      UpdatePoolReviewRequestDto requestDto,
-      User user) {
-    //TODO : GlobalException 확정 후 수정예정
+                                                  UpdatePoolReviewRequestDto requestDto,
+                                                  User user) {
     PoolReview poolReview = poolReviewRepository.findById(reviewId)
-        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 리뷰입니다."));
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
     if (poolReview.getUser().getId() != user.getId()) {
-      throw new IllegalStateException("권한이 없습니다.");
+      throw new ForBiddenException(ErrorCode.AUTHOR_ONLY);
     }
 
     poolReview.setContent(requestDto.getContent());
@@ -84,10 +78,10 @@ public class PoolReviewService {
   @Transactional
   public void deleteReview(Long reviewId, User user) {
     PoolReview poolReview = poolReviewRepository.findById(reviewId)
-        .orElseThrow(() -> new IllegalStateException("해당 리뷰가 존재하지 않습니다."));
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
     if (poolReview.getUser().getId() != user.getId()) {
-      throw new IllegalStateException("권한이 없습니다.");
+      throw new ForBiddenException(ErrorCode.AUTHOR_ONLY);
     }
 
     poolReviewRepository.deleteById(reviewId);

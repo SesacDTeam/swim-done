@@ -5,6 +5,9 @@ import MyPageItem from './MyPageItem';
 import { Outlet } from 'react-router-dom';
 import { authApiService } from '../../api/authApi';
 import DetailViewHeader from '../common/DetailViewHeader';
+import instance from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
+
 import {
   profile,
   myReview,
@@ -16,20 +19,10 @@ import {
   xmark,
 } from '../../utils/staticImagePath';
 
-function logoutUser(dispatch) {
-  dispatch(logout());
-  localStorage.removeItem('accessToken');
-  alert('로그아웃 되었습니다.');
-  window.location.href = '/login';
-}
-
 export default function MyPage() {
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState(null);
-  const [isOutletVisible, setIsOutletVisible] = useState(false); // 상태 추가
-  const token = useSelector((state) => state.auth.accessToken);
-
-  console.log(token);
+  const [isOutletVisible, setIsOutletVisible] = useState(false);
 
   const getUserInfo = async () => {
     try {
@@ -46,10 +39,8 @@ export default function MyPage() {
   };
 
   useEffect(() => {
-    if (token) {
-      getUserInfo();
-    }
-  }, [token]);
+     getUserInfo();
+  }, []);
 
   if (!userInfo) {
     return (
@@ -71,6 +62,25 @@ export default function MyPage() {
 
   const handleCloseButtonClick = () => {
     setIsOutletVisible(false); // close 버튼 클릭 시 Outlet을 숨김
+  const navigate = useNavigate(); // ✅ useNavigate 훅 사용
+
+  const handleLogout = async () => {
+    try {
+      await instance.post('/logout');
+
+      console.log('✅ 로그아웃 성공! 이제 액세스 토큰을 삭제합니다.');
+    } catch (error) {
+      console.error('❌ 로그아웃 실패:', error);
+    }
+
+    // ✅ 1. 액세스 토큰 삭제
+    localStorage.removeItem('accessToken');
+    console.log(
+      '🗑️ 액세스 토큰 삭제 완료! 현재 localStorage:',
+      localStorage.getItem('accessToken'),
+    );
+    // ✅ 2. 홈으로 이동
+    navigate('/');
   };
 
   return (
@@ -86,10 +96,7 @@ export default function MyPage() {
         </div>
         <div className="w-20 h-18">
           <img src={profile} alt="" className="h-full w-full" />
-          <button
-            className="w-full text-center cursor-pointer outline-none"
-            onClick={() => logoutUser(dispatch)}
-          >
+          <button className="w-full text-center cursor-pointer outline-none" onClick={handleLogout}>
             로그아웃
           </button>
         </div>

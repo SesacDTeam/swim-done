@@ -10,9 +10,10 @@ import {
   updateMarkers,
   setInfoWindow,
   setPools,
+  setName,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
-import { showSideBar } from '../../store/slices/sideBarSlice.js';
+import { showListBar } from '../../store/slices/listBarSlice.js';
 
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
@@ -164,6 +165,7 @@ export default function KakaoMapContainer() {
       polygon.setOptions({ fillColor: '#fff' });
       try {
         const { data: pools } = await kakaoMapApi.getSectionWithPools(name);
+
         const markers = pools.map(({ latitude, longitude, name }) =>
           createMarker(new kakao.maps.LatLng(latitude, longitude), name),
         );
@@ -171,8 +173,8 @@ export default function KakaoMapContainer() {
         dispatch(updateMarkers({ markers }));
         // 지역별 수영장 정보
         dispatch(setPools({ pools }));
-        dispatch(showSideBar());
-        navigate('pools', { state: { name } });
+        dispatch(setName({ name }))
+        navigate('pools');
       } catch (error) {
         console.error(error);
       }

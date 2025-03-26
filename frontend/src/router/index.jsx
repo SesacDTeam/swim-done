@@ -5,11 +5,17 @@ import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 
-import PoolDetail from '../components/common/poolDetail/PoolDetail';
+import PoolDetail from '../components/common/pooldetail/PoolDetail';
 import SubmitImage from '../components/common/submitImage/SubmitImage';
 import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
 import NotFound from '../pages/NotFound';
+import AuthenticateRoute from '../components/common/AuthenticateRoute';
+import store from '../store/store';
+import { hideListBar, showListBar } from '../store/slices/listBarSlice';
+import { hideDetailView, showDetailView } from '../store/slices/detailViewSlice';
+import UnauthenticateRoute from '../components/common/UnauthenticateRoute';
+import { setSelectedIndex } from '../store/slices/sideBarSlice';
 
 import MyReviewPage from '../components/mypage/MyReviewPage';
 
@@ -17,13 +23,28 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Home></Home>,
-    errorElement: <NotFound></NotFound>,
+    loader: () => {
+      store.dispatch(hideListBar());
+    },
     children: [
       // 가장 바깥
       {
         path: '/mypage',
-        element: <MyPage></MyPage>,
-        children: [
+        element: (
+          <AuthenticateRoute
+            cancleAction={() => {
+              store.dispatch(hideListBar());
+              store.dispatch(setSelectedIndex(null));
+            }}
+          >
+            <MyPage></MyPage>
+          </AuthenticateRoute>
+        ),
+        loader: () => {
+          store.dispatch(hideDetailView());
+          store.dispatch(showListBar());
+        },
+         children: [
           {
             path: 'reviews',
             element: <MyReviewPage></MyReviewPage>,
@@ -33,36 +54,89 @@ const router = createBrowserRouter([
       {
         path: '/pools',
         element: <PoolList></PoolList>,
+        loader: () => {
+          store.dispatch(showListBar());
+          store.dispatch(hideDetailView());
+          store.dispatch(setSelectedIndex(null));
+        },
         children: [
           {
-            path: ':poolId',
+            path: '/pools/:poolId',
             element: <PoolDetail></PoolDetail>,
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
           {
             path: ':poolId/submitted-images',
-            element: <SubmitImage></SubmitImage>,
+            element: (
+              <AuthenticateRoute>
+                <SubmitImage></SubmitImage>
+              </AuthenticateRoute>
+            ),
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
           {
             path: ':poolId/reviews',
-            element: <CreateReview></CreateReview>,
+            element: (
+              <AuthenticateRoute>
+                <CreateReview></CreateReview>
+              </AuthenticateRoute>
+            ),
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
         ],
       },
       {
         path: '/mark-pools',
-        element: <MarkPools></MarkPools>,
+        element: (
+          <AuthenticateRoute
+            cancleAction={() => {
+              store.dispatch(hideListBar());
+              store.dispatch(setSelectedIndex(null));
+            }}
+          >
+            <MarkPools></MarkPools>
+          </AuthenticateRoute>
+        ),
+        loader: () => {
+          store.dispatch(hideDetailView());
+          store.dispatch(showListBar());
+        },
         children: [
           {
-            path: '/mark-pools/:poolId',
+            path: ':poolId',
             element: <PoolDetail></PoolDetail>,
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
           {
-            path: '/mark-pools/:poolId/submitted-images',
-            element: <SubmitImage></SubmitImage>,
+            path: ':poolId/submitted-images',
+            element: (
+              <AuthenticateRoute>
+                <SubmitImage></SubmitImage>
+              </AuthenticateRoute>
+            ),
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
           {
-            path: '/mark-pools/:poolId/reviews',
-            element: <CreateReview></CreateReview>,
+            path: ':poolId/reviews',
+            element: (
+              <AuthenticateRoute>
+                <CreateReview></CreateReview>
+              </AuthenticateRoute>
+            ),
+            loader: () => {
+              store.dispatch(showDetailView());
+              return null;
+            },
           },
         ],
       },
@@ -71,11 +145,19 @@ const router = createBrowserRouter([
 
   {
     path: '/login',
-    element: <Login></Login>,
+    element: (
+      <UnauthenticateRoute>
+        <Login></Login>
+      </UnauthenticateRoute>
+    ),
   },
   {
     path: '/login-success',
     element: <LoginRedirect></LoginRedirect>,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 

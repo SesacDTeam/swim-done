@@ -17,6 +17,12 @@ export default function DetailViewHeader({ backButtonImage, closeButtonImage, on
     navigate(newPath);
   };
 
+  const handleBackButtonClick = () => {
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(/(\/(mark-pools|pools)\/\d+).*/, '$1');
+    navigate(newPath);
+  };
+
   return (
     <>
       <header className="mt-8 w-[90%] flex justify-between">
@@ -25,9 +31,7 @@ export default function DetailViewHeader({ backButtonImage, closeButtonImage, on
             src={backButtonImage}
             alt=""
             className="w-8 aspect-square cursor-pointer"
-            onClick={() => {
-              navigate(-1);
-            }}
+            onClick={handleBackButtonClick}
           />
         ) : (
           <div className="w-8 aspect-square"></div>

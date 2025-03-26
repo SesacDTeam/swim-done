@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   mypage,
   markPool,
@@ -9,9 +9,10 @@ import {
 } from '../../utils/staticImagePath';
 import SideBarItem from './SideBarItem';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { hideSideBar, showSideBar } from '../../store/slices/sideBarSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { resetMap } from '../../store/slices/kakaoMapSlice';
+import { hideListBar } from '../../store/slices/listBarSlice';
+import { setSelectedIndex } from '../../store/slices/sideBarSlice';
 // import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
 const sideBarItems = [
@@ -28,25 +29,24 @@ const sideBarItems = [
 ];
 
 export default function SideBar() {
-  const [selectedIndex, setSelectedIndex] = useState();
+  const selectedIndex = useSelector((state) => state.sideBar.selectedIndex);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
-    setSelectedIndex(index);
+    dispatch(setSelectedIndex(index));
     if (index === 0) {
       navigate('/mypage');
-      dispatch(showSideBar());
     } else {
       navigate('/mark-pools');
-      dispatch(showSideBar());
     }
   };
 
   const handleToMain = () => {
     navigate('/');
     setSelectedIndex(null);
-    dispatch(hideSideBar());
+    dispatch(setSelectedIndex(null));
+    dispatch(hideListBar());
     dispatch(resetMap());
   };
 

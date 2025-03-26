@@ -28,6 +28,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        // 카카오 액세스 토큰 추출
+        String kakaoAccessToken = userRequest.getAccessToken().getTokenValue();
+        log.info("✅카카오 액세스 토큰: {}", kakaoAccessToken);  // 액세스 토큰을 로그에 출력
+
         // 어떤 OAuth2 제공자인지 확인 (네이버 or 카카오)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo;
@@ -56,6 +60,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .provider(oAuth2UserInfo.getProvider().name())
                 .providerId(oAuth2UserInfo.getProviderId())
                 .build()));
+
+        // 카카오 로그인인 경우 카카오 액세스 토큰 저장
+        if ("kakao".equals(registrationId)) {
+            user.setKakaoAccessToken(kakaoAccessToken);
+            userRepository.save(user);
+            log.info("✅ 카카오 액세스 토큰 저장 완료: {}", kakaoAccessToken);
+        }
 
         // 이메일을 로그로 출력하여 확인
         log.info("OAuth2User에서 추출한 이메일: {}", oAuth2UserInfo.getEmail());

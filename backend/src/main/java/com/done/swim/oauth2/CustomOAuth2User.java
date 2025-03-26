@@ -1,12 +1,11 @@
 package com.done.swim.oauth2;
 
 import com.done.swim.domain.user.entity.User;
+import java.util.Collection;
+import java.util.Map;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-
-import java.util.Collection;
-import java.util.Map;
 
 @Getter
 public class CustomOAuth2User implements OAuth2User {
@@ -19,7 +18,11 @@ public class CustomOAuth2User implements OAuth2User {
         this.user = user;
         this.oAuth2User = oAuth2User;
     }
-    
+
+    public Long getId() {
+        return user.getId();  // User 엔티티의 ID 반환
+    }
+
     // OAuth2User 인터페이스 구현: 인증된 사용자의 추가 속성들을 반환
     @Override
     public Map<String, Object> getAttributes() {
