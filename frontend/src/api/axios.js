@@ -3,12 +3,12 @@ import authApi from './authApi';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
+
 const instance = axios.create({
   baseURL: baseURL, //api
   timeout: 5000,
   withCredentials: true, // 쿠키를 요청에 포함시키도록 설정함
 });
-
 
 // 요청 인터셉터 (api 요청할 때 가로채는 것임)
 instance.interceptors.request.use(
@@ -31,31 +31,34 @@ instance.interceptors.response.use(
     return response;
   },
   async (error) => {
-
     const originalRequest = error.config;
 
-    if (error.response?.status === 401) {
+    // 🚨 로그아웃 요청(`/logout`)에서 401이 발생하면 재발급 X
+    if (originalRequest.url.includes('/logout')) {
+      console.warn('로그아웃 요청 중 401 발생 → 재시도 안 함');
+      return Promise.reject(error);
+    }
 
+    if (error.response?.status === 401) {
       try {
         // const refreshToken = getCookie // 이거 아님
         const response = await authApi.reissue();
 
-        const data = response.headers.authorization
+        const data = response.headers.authorization;
         // 여기서 Bearer 떼고 저장해야 됨
-        const newAccessToken = data.replace("Bearer ", "");
+        const newAccessToken = data.replace('Bearer ', '');
 
-        localStorage.setItem('accessToken', newAccessToken)
+        localStorage.setItem('accessToken', newAccessToken);
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
         // 실패한 요청 재시도
         return instance(originalRequest);
-
       } catch (error) {
         await authApi.logout();
         store.dispatch(logout());
-        
+
         return Promise.reject(error);
-      } 
+      }
     }
     return Promise.reject(error);
   },

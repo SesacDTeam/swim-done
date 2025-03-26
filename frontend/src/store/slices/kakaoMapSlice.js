@@ -22,7 +22,6 @@ const kakaoMapSlice = createSlice({
       state.infoWindow.close();
     },
     setMap: (state, action) => {
-      console.log(action.payload.map)
       state.map = action.payload.map;
     },
     setInfoWindow: (state, action) => {

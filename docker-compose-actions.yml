@@ -1,0 +1,96 @@
+services:
+  mysql:
+    container_name: mysql-container
+    image: mysql:8.0
+    volumes:
+      - db-volume:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - db-network
+    ports:
+      - "${DATABASE_PORT}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  redis:
+    container_name: redis-container
+    image: redis:latest
+    volumes:
+      - redis-volume:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    env_file:
+      - .env
+    networks:
+      - cache-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  api:
+    container_name: api-container
+    build:
+      context: ./backend
+      cache_to:
+        - type=local,dest=/tmp/.buildx-cache/api,mode=max
+      cache_from:
+        - type=local,src=/tmp/.buildx-cache/api
+    image: ${DOCKER_REGISTRY}/swimdone-api-image:latest
+    env_file:
+      - .env
+    networks:
+      - db-network
+      - cache-network
+      - web-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  client:
+    container_name: client-container
+    build:
+      context: ./frontend
+      cache_to:
+        - type=local,dest=/tmp/.buildx-cache/client,mode=max
+      cache_from:
+        - type=local,src=/tmp/.buildx-cache/client
+      args:
+        VITE_DOMAIN: ${VITE_DOMAIN}
+        VITE_KAKAOMAP_API_KEY: ${VITE_KAKAOMAP_API_KEY}
+        VITE_API_URL: ${VITE_API_URL}
+    image: ${DOCKER_REGISTRY}/swimdone-client-image:latest
+    env_file:
+      - .env
+    environment:
+      - VITE_DOMAIN=${VITE_DOMAIN}
+      - API_SERVER_URL=${API_SERVER_URL}
+    volumes:
+      - /etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/privkey.pem:ro
+      - /etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${VITE_DOMAIN}/fullchain.pem:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - web-network
+    depends_on:
+      - api
+
+volumes:
+  db-volume:
+  redis-volume:
+
+networks:
+  db-network:
+  cache-network:
+  web-network:
