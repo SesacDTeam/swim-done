@@ -23,11 +23,13 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+    const isConfirmed = window.confirm('로그아웃 하시겠습니까?');
+    if (!isConfirmed) return;
     try {
       await instance.post('/logout');
 
       dispatch(logout());
-
+      alert('로그아웃이 완료되었습니다.');
       navigate('/');
     } catch (error) {
       console.error('로그아웃 실패:', error);
