@@ -1,5 +1,7 @@
 package com.done.swim.domain.swimmingtime.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -7,6 +9,7 @@ import java.time.format.TextStyle;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
 
 @Getter
 public enum Week {
@@ -22,12 +25,14 @@ public enum Week {
         }
     }
 
+    @JsonValue
     private final String koreanName;
 
     Week(String koreanName) {
         this.koreanName = koreanName;
     }
 
+    @JsonCreator
     public static Week from(String dayOfWeek) {
         Week week = lookup.get(dayOfWeek);
         if (week == null) {
@@ -36,6 +41,12 @@ public enum Week {
         return week;
     }
 
+    /**
+     * @return String 오늘 날짜
+     * <p>
+     * 응답 예시) 금요일
+     * </p>
+     */
     public static String getNowDayOfWeekInKorean() {
         return LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
     }

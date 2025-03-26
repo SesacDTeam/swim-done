@@ -5,9 +5,9 @@ import com.done.swim.domain.pool.dto.responsedto.PoolWithSectionResponseDto;
 import com.done.swim.domain.pool.dto.responsedto.PoolWithSwimmingTimeResponseDto;
 import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.pool.repository.PoolRepository;
+import com.done.swim.domain.swimmingtime.entity.Week;
 import com.done.swim.global.exception.ErrorCode;
 import com.done.swim.global.exception.ResourceNotFoundException;
-import com.done.swim.domain.swimmingtime.entity.Week;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PoolService {
 
-  private final PoolRepository poolRepository;
+    private final PoolRepository poolRepository;
 
-  public PoolDetailResponseDto fetchPoolDetail(Long poolId) {
-    Pool pool = poolRepository.findByIdWithCommentAndTimes(poolId)
-      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
-    return PoolDetailResponseDto.from(pool);
-  }
+    public PoolDetailResponseDto fetchPoolDetail(Long poolId) {
+        Pool pool = poolRepository.findByIdWithCommentAndTimes(poolId)
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
+        return PoolDetailResponseDto.from(pool);
+    }
 
     // TODO : 지역구 좌표정보 조회
     // 새로운 서비스 클래스로 분리 예정
@@ -42,7 +42,7 @@ public class PoolService {
         String nowDayOfWeek = Week.getNowDayOfWeekInKorean();
         return PoolWithSwimmingTimeResponseDto.from(
                 poolRepository.getPoolWithName(poolName, Week.from(nowDayOfWeek))
-                        .orElseThrow(() -> new IllegalArgumentException("Bad Request")),
+                        .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND)),
                 nowDayOfWeek
         );
     }

@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Builder
 public class PoolWithSwimmingTimeResponseDto {
+    private Long id;
     private String name;
     private String address;
     private String dayOfWeek;
@@ -19,6 +20,7 @@ public class PoolWithSwimmingTimeResponseDto {
     public static PoolWithSwimmingTimeResponseDto from(Pool entity, String nowDayOfWeek) {
 
         return PoolWithSwimmingTimeResponseDto.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .address(entity.getAddress())
                 .dayOfWeek(nowDayOfWeek)
