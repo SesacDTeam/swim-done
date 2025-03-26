@@ -41,6 +41,7 @@ export const authApiService = {
   getUserInfo: async () => {
     try {
       const token = localStorage.getItem('accessToken');
+      console.log(token);
 
       if (!token) {
         throw new Error('토큰이 없습니다. 로그인이 필요합니다.');

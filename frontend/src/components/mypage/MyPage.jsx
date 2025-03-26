@@ -27,6 +27,8 @@ export default function MyPage() {
   const getUserInfo = async () => {
     try {
       const response = await authApiService.getUserInfo();
+      console.log(response);
+
       if (response && response.data) {
         setUserInfo(response.data);
       } else {
@@ -41,20 +43,6 @@ export default function MyPage() {
   useEffect(() => {
     getUserInfo();
   }, []);
-
-  if (!userInfo) {
-    return (
-      <>
-        <div>로딩 중...</div>
-        <button
-          className="w-full text-center cursor-pointer outline-none"
-          onClick={() => logoutUser(dispatch)}
-        >
-          로그아웃
-        </button>
-      </>
-    );
-  }
 
   const handleItemClick = () => {
     setIsOutletVisible(true); // Outlet 보이도록 상태 변경
