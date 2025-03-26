@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   mypage,
   markPool,
@@ -28,12 +28,13 @@ const sideBarItems = [
 ];
 
 export default function SideBar() {
-  const [selectedIndex, setSelectedIndex] = useState();
+  const [selectedIndex, setSelectedIndex] = useState(sessionStorage.getItem('selectedIndex'));
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
     setSelectedIndex(index);
+    sessionStorage.setItem('selectedIndex', index);
     if (index === 0) {
       navigate('/mypage');
     } else {
@@ -44,6 +45,7 @@ export default function SideBar() {
   const handleToMain = () => {
     navigate('/');
     setSelectedIndex(null);
+    sessionStorage.removeItem('selectedIndex');
     dispatch(hideListBar());
     dispatch(resetMap());
   };
@@ -67,7 +69,9 @@ export default function SideBar() {
               image={item.image}
               selectedImage={item.selectedImage}
               title={item.title}
-              isSelected={selectedIndex === index}
+              isSelected={
+                sessionStorage.getItem('selectedIndex') !== null && Number(selectedIndex) === index
+              }
               onClick={() => handleClickItem(index)}
             ></SideBarItem>
           );

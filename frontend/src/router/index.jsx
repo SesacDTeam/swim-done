@@ -30,6 +30,7 @@ const router = createBrowserRouter([
           <AuthenticateRoute
             cancleAction={() => {
               store.dispatch(hideListBar());
+              sessionStorage.removeItem('selectedIndex');
             }}
           >
             <MyPage></MyPage>
@@ -91,6 +92,7 @@ const router = createBrowserRouter([
           <AuthenticateRoute
             cancleAction={() => {
               store.dispatch(hideListBar());
+              sessionStorage.removeItem('selectedIndex');
             }}
           >
             <MarkPools></MarkPools>

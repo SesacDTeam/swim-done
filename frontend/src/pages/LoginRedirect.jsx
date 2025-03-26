@@ -23,10 +23,10 @@ export default function LoginRedirect() {
         return;
       }
       dispatch(login(accessToken));
-      const path = localStorage.getItem('beforePath');
-      const name = localStorage.getItem('sectionName');
-      const mapPools = localStorage.getItem('sectionPools');
-      const poolName = localStorage.getItem('poolName');
+      const path = sessionStorage.getItem('beforePath');
+      const name = sessionStorage.getItem('sectionName');
+      const mapPools = sessionStorage.getItem('sectionPools');
+      const poolName = sessionStorage.getItem('poolName');
       if (name !== null) {
         dispatch(setName({ name }));
       }
@@ -37,10 +37,10 @@ export default function LoginRedirect() {
       }
 
       navigate(path || '/', { replace: true, state: { poolName } }).then(() => {
-        localStorage.removeItem('beforePath');
-        localStorage.removeItem('sectionName');
-        localStorage.removeItem('sectionPools');
-        localStorage.removeItem('poolName');
+        sessionStorage.removeItem('beforePath');
+        sessionStorage.removeItem('sectionName');
+        sessionStorage.removeItem('sectionPools');
+        sessionStorage.removeItem('poolName');
       });
     } catch (error) {
       setError(true);

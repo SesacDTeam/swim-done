@@ -20,18 +20,18 @@ export default function AuthenticateRoute({ children, cancleAction }) {
 
   const handleOkButtonClick = () => {
     const currentPath = window.location.pathname;
-    localStorage.setItem('beforePath', currentPath);
+    sessionStorage.setItem('beforePath', currentPath);
 
     if (location.state?.poolName !== null) {
-      localStorage.setItem('poolName', location.state?.poolName);
+      sessionStorage.setItem('poolName', location.state?.poolName);
     }
 
     if (name !== null) {
-      localStorage.setItem('sectionName', name);
+      sessionStorage.setItem('sectionName', name);
     }
 
     if (pools !== null) {
-      localStorage.setItem('sectionPools', JSON.stringify(pools));
+      sessionStorage.setItem('sectionPools', JSON.stringify(pools));
     }
 
     navigate('/login');
