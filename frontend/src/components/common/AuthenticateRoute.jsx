@@ -8,7 +8,7 @@ export default function AuthenticateRoute({ children, cancleAction }) {
   });
 
   const name = useSelector((state) => state.kakaoMap.name);
-  const pools = useSelector((state) => state.kakaoMap.pools)
+  const pools = useSelector((state) => state.kakaoMap.pools);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,8 +22,8 @@ export default function AuthenticateRoute({ children, cancleAction }) {
     const currentPath = window.location.pathname;
     localStorage.setItem('beforePath', currentPath);
 
-    if (location.state.poolName !== null) {
-      localStorage.setItem('poolName', location.state.poolName);
+    if (location.state?.poolName !== null) {
+      localStorage.setItem('poolName', location.state?.poolName);
     }
 
     if (name !== null) {
@@ -40,12 +40,18 @@ export default function AuthenticateRoute({ children, cancleAction }) {
   if (!isLoggedIn) {
     return (
       <div className="fixed top-0 left-0 right-0 bottom-0 bg-gray03/60 flex justify-center items-center z-10000">
-        <div className="bg-white w-150 h-100 rounded-2xl flex flex-col items-center justify-center">
-          <div>로그인이 필요한 서비스입니다.</div>
-          <div>로그인하시겠습니까?</div>
-          <div className="flex gap-20">
-            <button onClick={handleCancleButtonClick}>취소</button>
-            <button onClick={handleOkButtonClick}>확인</button>
+        <div className="bg-white w-100 h-50 rounded-2xl flex flex-col items-center justify-between pt-6 overflow-hidden">
+          <div className="mt-10 text-center pretendard-medium">
+            <div>로그인이 필요한 서비스입니다.</div>
+            <div>로그인하시겠습니까?</div>
+          </div>
+          <div className="flex w-full h-12">
+            <button className="flex-1 bg-gray03 text-white w-full" onClick={handleCancleButtonClick}>
+              취소
+            </button>
+            <button className="flex-1 bg-blue01 text-white" onClick={handleOkButtonClick}>
+              확인
+            </button>
           </div>
         </div>
       </div>
