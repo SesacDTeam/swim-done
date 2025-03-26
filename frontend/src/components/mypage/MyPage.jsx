@@ -34,6 +34,23 @@ export default function MyPage() {
     }
   };
 
+  // 회원 탈퇴 핸들러
+  const handleWithdraw = async () => {
+    const isConfirmed = window.confirm('정말 회원 탈퇴하시겠습니까?');
+    if (!isConfirmed) return;
+
+    try {
+      await instance.delete('/withdraw');
+      // await instance.post('/logout'); // 회원 탈퇴 후 로그아웃 요청 (안전한 토큰 삭제)
+      dispatch(logout()); // Redux 상태 초기화
+      alert('회원 탈퇴가 완료되었습니다.');
+      navigate('/'); // 메인 페이지로 이동
+    } catch (error) {
+      console.error('회원 탈퇴 실패:', error);
+      alert('회원 탈퇴 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <div className="select-none">
       <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky text-center">마이페이지</h1>
@@ -68,7 +85,12 @@ export default function MyPage() {
         />
       </div>
       <div className="flex justify-center">
-        <button className="relative top-69 h-10 cursor-pointer outline-none">회원 탈퇴하기</button>
+        <button
+          className="relative top-69 h-10 cursor-pointer outline-none"
+          onClick={handleWithdraw}
+        >
+          회원 탈퇴
+        </button>
       </div>
     </div>
   );

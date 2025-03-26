@@ -113,8 +113,10 @@ public class OAuth2TokenService {
         return ResponseEntity.ok()
             .header("Authorization", "Bearer " + newAccessToken)
             .body("새로운 액세스 토큰이 발급되었습니다.");
-
-
     }
 
+    // 리프레시 토큰 삭제
+    public void deleteRefreshToken(Long userId) {
+        redisTemplate.delete("REFRESH_TOKEN:" + userId);
+    }
 }
