@@ -29,8 +29,7 @@ export default function CreateReview() {
     }
 
     try {
-      const response = await reviewApi.createReview(poolId, reviewContent);
-      console.log(response);
+      await reviewApi.createReview(poolId, reviewContent);
       navigate(`/mark-pools/${poolId}`);
       alert('리뷰 작성 성공!');
     } catch (err) {
@@ -59,23 +58,12 @@ export default function CreateReview() {
               onChange={handleChange}
             ></textarea>
             <button
-              // className={`pretendard-medium text-xl`}
               className={` pretendard-medium text-xl rounded-[10px] px-4 py-2 mt-4 float-right ${reviewContent.trim() ? 'bg-blue02/10 cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
               type="submit"
             >
               제출
             </button>
           </form>
-          {/* TODO: input태그랑 textarea태그 중에 어울리는 것 결정 예정 */}
-          {/* <form>
-            <input
-              className="pretendard-medium text-xl w-full border-b border-gray-400 p-2 mb-2 focus:outline-none"
-              type="text"
-              id="createReview"
-              name="createReview"
-              placeholder="실제 이용하신 후기를 자유롭게 남겨 주세요."
-            />
-          </form> */}
         </section>
       </main>
     </>
