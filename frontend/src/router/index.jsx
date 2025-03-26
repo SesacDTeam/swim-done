@@ -14,6 +14,7 @@ import AuthenticateRoute from '../components/common/AuthenticateRoute';
 import store from '../store/store';
 import { hideListBar, showListBar } from '../store/slices/listBarSlice';
 import { hideDetailView, showDetailView } from '../store/slices/detailViewSlice';
+import UnauthenticateRoute from '../components/common/UnauthenticateRoute';
 
 const router = createBrowserRouter([
   {
@@ -140,7 +141,11 @@ const router = createBrowserRouter([
 
   {
     path: '/login',
-    element: <Login></Login>,
+    element: (
+      <UnauthenticateRoute>
+        <Login></Login>
+      </UnauthenticateRoute>
+    ),
   },
   {
     path: '/login-success',
