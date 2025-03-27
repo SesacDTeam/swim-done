@@ -74,10 +74,9 @@ export default function MyPage() {
   if (!userInfo) {
     return (
       <>
-        <div>로딩 중...</div>
-        <button className="w-full text-center cursor-pointer outline-none" onClick={handleLogout}>
-          로그아웃
-        </button>
+        <div className="flex items-center justify-center h-screen">
+          <div>로딩 중...</div>
+        </div>
       </>
     );
   }
@@ -100,7 +99,7 @@ export default function MyPage() {
           </button>
         </div>
       </div>
-      <div className="relative top-30 h-80 w-85 mx-auto flex flex-col justify-between">
+      <div className="relative top-40 h-55 w-85 mx-auto flex flex-col justify-between">
         <MyPageItem
           image={myReview}
           hoverImage={myReviewColor}
@@ -108,7 +107,7 @@ export default function MyPage() {
           navigateTo="/mypage/reviews"
           onClick={handleItemClick}
         />
-        <MyPageItem image={keywordReview} hoverImage={keywordReviewColor} text="키워드리뷰" />
+        {/* <MyPageItem image={keywordReview} hoverImage={keywordReviewColor} text="키워드리뷰" /> */}
         <MyPageItem
           image={contactUs}
           hoverImage={contactUsColor}
@@ -123,7 +122,7 @@ export default function MyPage() {
       </div>
       <div className="flex justify-center">
         <button
-          className="relative top-90 h-10 cursor-pointer outline-none"
+          className="relative top-115 h-10 cursor-pointer outline-none"
           onClick={() => alert('회원탈퇴')}
         >
           회원 탈퇴하기
