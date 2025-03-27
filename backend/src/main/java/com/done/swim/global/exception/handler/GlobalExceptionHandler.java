@@ -74,9 +74,9 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(MissingRequestCookieException.class)
   public ResponseEntity<ApiResponse<Object>> missingRequestCookieHandler() {
-    return ResponseEntity.status(ErrorCode.INVALID_REQUEST.getStatus())
+    return ResponseEntity.status(ErrorCode.INVALID_REFRESH_TOKEN.getStatus())
       .body(ApiResponse
-        .error(ErrorCode.INVALID_REQUEST.getMessage(),
-          ErrorCode.INVALID_REQUEST.getCode()));
+        .error(ErrorCode.INVALID_REFRESH_TOKEN.getMessage(),
+          ErrorCode.INVALID_REFRESH_TOKEN.getCode()));
   }
 }

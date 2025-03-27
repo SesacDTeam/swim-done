@@ -11,8 +11,8 @@ public enum ErrorCode {
   USER_NOT_FOUND(HttpStatus.NOT_FOUND, "2010", "사용자를 찾을 수 없습니다."),
 
   // 인증 관련 오류 (3000번)
-  INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "3001", "유효하지 않은 JWT TOKEN 입니다."),
-  INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "3002", "유효하지 않은 REFRESH TOKEN 입니다."),
+  INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "3001", "재인증이 필요합니다."),
+  INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "3002", "재인증이 필요합니다."),
 
   // 클라이언트 오류 (4000번)
   DEFAULT_FORBIDDEN(HttpStatus.FORBIDDEN, "4000", "권한이 없습니다."),
