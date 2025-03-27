@@ -1,6 +1,7 @@
 import React from 'react';
 import KakaoLoginButton from '../components/sociallogin/KakaoLoginButton';
 import NaverLoginButton from '../components/sociallogin/NaverLoginButton';
+import GithubLoginButton from '../components/sociallogin/GithubLoginButton';
 
 export default function Login() {
   return (
@@ -13,6 +14,7 @@ export default function Login() {
       </div>
       <NaverLoginButton></NaverLoginButton>
       <KakaoLoginButton></KakaoLoginButton>
+      <GithubLoginButton></GithubLoginButton>
     </>
   );
 }
