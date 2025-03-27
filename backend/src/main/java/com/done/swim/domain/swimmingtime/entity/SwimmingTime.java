@@ -1,21 +1,13 @@
 package com.done.swim.domain.swimmingtime.entity;
 
 import com.done.swim.domain.pool.entity.Pool;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalTime;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "swimming_times")
@@ -23,22 +15,30 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SwimmingTime {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "pool_id")
-  private Pool pool;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pool_id")
+    private Pool pool;
 
-  @Column(nullable = false)
-  private LocalTime startTime;
+    @Column(nullable = false)
+    private LocalTime startTime;
 
-  @Column(nullable = false)
-  private LocalTime endTime;
+    @Column(nullable = false)
+    private LocalTime endTime;
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Week dayOfWeek;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Week dayOfWeek;
+
+    @Builder
+    public SwimmingTime(Pool pool, LocalTime startTime, LocalTime endTime, Week dayOfWeek) {
+        this.pool = pool;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.dayOfWeek = dayOfWeek;
+    }
 
 }
