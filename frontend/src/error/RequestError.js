@@ -1,8 +1,11 @@
 class RequestError extends Error {
-  constructor(message, displayMode, config) {
+  constructor(message, code, errorDisplayMode, config) {
     super(message);
     this.name = 'RequestError';
-    this.displayMode = displayMode;
-    this.config = config
+    this.code = code;
+    this.errorDisplayMode = errorDisplayMode;
+    this.config = config;
   }
 }
+
+export default RequestError

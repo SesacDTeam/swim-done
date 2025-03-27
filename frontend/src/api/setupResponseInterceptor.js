@@ -1,3 +1,4 @@
+import ERROR_CODE from '../error/ERROR_CODE';
 import authApi from './authApi';
 
 const setupResponseInterceptor = (instance) => {
@@ -8,9 +9,7 @@ const setupResponseInterceptor = (instance) => {
     async (error) => {
       const originalRequest = error.config;
 
-      console.log(error.config)
-
-      if (error.response?.data.code === '3001') {
+      if (error.response?.data.code === ERROR_CODE.AUTHENTICATE_FAIL) {
         const response = await authApi.reissue();
 
         const data = response.headers.authorization;
@@ -26,4 +25,4 @@ const setupResponseInterceptor = (instance) => {
   );
 };
 
-export default setupResponseInterceptor
+export default setupResponseInterceptor;
