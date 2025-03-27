@@ -21,7 +21,7 @@ server {
     }
 
     # 프록시 설정
-    location ~ ^/(api|oauth2)/ {
+    location ~ ^/(api|oauth2|login)/ {
         proxy_pass ${API_SERVER_URL};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
