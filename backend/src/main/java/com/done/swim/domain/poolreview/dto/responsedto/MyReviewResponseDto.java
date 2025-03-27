@@ -9,12 +9,14 @@ import lombok.Getter;
 @Builder
 public class MyReviewResponseDto {
 
+  private final Long reviewId;
   private final String poolName;
   private final String content;
   private final LocalDateTime timestamp;
 
   public static MyReviewResponseDto from(PoolReview entity) {
     return MyReviewResponseDto.builder()
+        .reviewId(entity.getId())
         .poolName(entity.getPool().getName())
         .content(entity.getContent())
         .timestamp((entity.getUpdatedAt() != null) ? entity.getUpdatedAt() : entity.getCreatedAt())

@@ -3,11 +3,14 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { hideDetailView } from '../../store/slices/detailViewSlice';
 
-export default function DetailViewHeader({ backButtonImage, closeButtonImage }) {
+export default function DetailViewHeader({ backButtonImage, closeButtonImage, onClose }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleCloseButtonClick = () => {
+    if (onClose) {
+      onClose(); // onClose 호출하여 Outlet을 숨김
+    }
     dispatch(hideDetailView());
     const currentPath = window.location.pathname;
     const newPath = currentPath.replace(/\/(mark-pools|pools)\/\d+.*$/, '/$1');
