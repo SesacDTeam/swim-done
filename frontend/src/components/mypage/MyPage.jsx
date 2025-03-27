@@ -5,12 +5,8 @@ import { Outlet } from 'react-router-dom';
 import DetailViewHeader from '../common/DetailViewHeader';
 import instance from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import { logout } from '../../store/slices/authSlice';
-import { useDispatch } from 'react-redux';
-=======
 import userApi from '../../api/userApi';
->>>>>>> feat/SW-68-fe마이페이지-나의-리뷰-조회-디테일뷰-구현
 
 import {
   profile,
@@ -25,14 +21,10 @@ import {
 
 export default function MyPage() {
   const dispatch = useDispatch();
-<<<<<<< HEAD
   const nickName = useSelector((state) => state.user.nickName);
   const email = useSelector((state) => state.user.email);
-  const navigate = useNavigate();
-=======
   const [userInfo, setUserInfo] = useState(null);
   const [isOutletVisible, setIsOutletVisible] = useState(false);
-  const [isBackButtonVisible, setIsBackButtonVisible] = useState(false);
 
   const getUserInfo = async () => {
     try {
@@ -61,7 +53,6 @@ export default function MyPage() {
   };
 
   const navigate = useNavigate(); // ✅ useNavigate 훅 사용
->>>>>>> feat/SW-68-fe마이페이지-나의-리뷰-조회-디테일뷰-구현
 
   const handleLogout = async () => {
     const isConfirmed = window.confirm('로그아웃 하시겠습니까?');
@@ -145,17 +136,10 @@ export default function MyPage() {
       </div>
       <div className="flex justify-center">
         <button
-<<<<<<< HEAD
           className="relative top-69 h-10 cursor-pointer outline-none"
           onClick={handleWithdraw}
         >
           회원 탈퇴
-=======
-          className="relative top-115 h-10 cursor-pointer outline-none"
-          onClick={() => alert('회원탈퇴')}
-        >
-          회원 탈퇴하기
->>>>>>> feat/SW-68-fe마이페이지-나의-리뷰-조회-디테일뷰-구현
         </button>
       </div>
 
