@@ -9,45 +9,33 @@ const KAKAOMAP_API = '/sections';
  */
 const kakaoMapApi = {
   getSections: async () => {
-    try {
-      const response = await instance.get(KAKAOMAP_API);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await instance.get(KAKAOMAP_API);
+    return response.data;
   },
   /**
    * 특정 지역구의 각 수영장 요약정보
    */
   getSectionWithPools: async (section) => {
-    try {
-      if (!section) {
-        throw new Error('sectionId is required');
-      }
-
-      if (section[section.length - 1] === '구') {
-        section = section.substring(0, section.length - 1);
-      }
-      
-      const response = await instance.get(`${KAKAOMAP_API}/${section}/pools`);
-      return response.data;
-    } catch (error) {
-      console.error(error);
+    if (!section) {
+      throw new Error('sectionId is required');
     }
+
+    if (section[section.length - 1] === '구') {
+      section = section.substring(0, section.length - 1);
+    }
+
+    const response = await instance.get(`${KAKAOMAP_API}/${section}/pools`);
+    return response.data;
   },
   /**
    * 특정 수영장의 요약정보
    */
   getPool: async (poolName) => {
-    try {
       if (!poolName) {
         throw new Error("'PoolName' is required");
       }
       const response = await instance.get(`${KAKAOMAP_API}/pools/${poolName}`);
       return response.data;
-    } catch (error) {
-      console.error(error);
-    }
   },
 };
 

@@ -5,12 +5,14 @@ import ReviewListItem from './ReviewListItem';
 import { poolApi } from '../../../api/poolApi';
 import { Link, useParams } from 'react-router';
 import { extractDate } from '../../../utils/extractDate';
+import useErrorResolver from '../../../hooks/useErrorResolver';
 
 export default function PoolDetail() {
   const mapContainer = useRef();
   const { poolId } = useParams();
   const [poolDetail, setPoolDetail] = useState();
   const mapRef = useRef();
+  const { setError } = useErrorResolver();
 
   useEffect(() => {
     // 임시로 지도 생성
@@ -24,19 +26,25 @@ export default function PoolDetail() {
 
   useEffect(() => {
     (async () => {
-      // TODO: 로딩 처리, 에러 핸들링
-      const data = await poolApi.getPoolDetail(poolId);
-      const poolDetailData = data.data;
-      setPoolDetail(poolDetailData);
+      try {
+        const data = await poolApi.getPoolDetail(poolId);
+        const poolDetailData = data.data;
+        setPoolDetail(poolDetailData);
 
-      // 지도 로직도 임시
-      const movePosition = new kakao.maps.LatLng(poolDetailData.latitude, poolDetailData.longitude);
-      mapRef.current.setCenter(movePosition);
+        // 지도 로직도 임시
+        const movePosition = new kakao.maps.LatLng(
+          poolDetailData.latitude,
+          poolDetailData.longitude,
+        );
+        mapRef.current.setCenter(movePosition);
 
-      const marker = new kakao.maps.Marker({
-        position: movePosition,
-      });
-      marker.setMap(mapRef.current);
+        const marker = new kakao.maps.Marker({
+          position: movePosition,
+        });
+        marker.setMap(mapRef.current);
+      } catch (error) {
+        setError(error);
+      }
     })();
   }, [poolId]);
 

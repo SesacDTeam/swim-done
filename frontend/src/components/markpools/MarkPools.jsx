@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
-import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
 import { Outlet, useNavigate } from 'react-router';
-import { hideDetailView, showDetailView } from '../../store/slices/detailViewSlice';
-import { useUnmount } from '../../hooks/useUnmount';
+import useErrorResolver from '../../hooks/useErrorResolver';
+import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
+import { useToggleMark } from '../../hooks/useToggleMark';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const token = useSelector((state) => state.auth.token);
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
+  const { toggleMark } = useToggleMark();
 
   const getMarkedPools = async () => {
     setIsLoading(true);
@@ -28,9 +29,8 @@ export default function MarkPools() {
       setMarkedPools((prev) => prev.concat(data.data.poolMarks));
 
       setHasNext(data.data.hasNext);
-    } catch {
-      // TODO: 에러 핸들링 예정
-      console.log('에러');
+    } catch (error) {
+      setError(error);
       setHasNext(false);
     } finally {
       setIsLoading(false);
@@ -55,7 +55,7 @@ export default function MarkPools() {
           <img src={logo} alt="" className="animate-spin w-30" />
         </div>
       )}
-      <div className='p-6'>
+      <div className="p-6">
         <h1 className="pretendard-bold text-2xl mb-4">내가 찜한 수영장</h1>
         <section className="flex flex-col items-center gap-5 mt-10">
           {markedPools.length === 0 ? (
@@ -68,7 +68,7 @@ export default function MarkPools() {
                   name={pool.name}
                   address={pool.address}
                   isMarked={pool.mark}
-                  onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
+                  onToggleMark={() => toggleMark(index, markedPools, setMarkedPools)}
                   onClick={() => handlePoolListItemClick(pool.id)}
                 ></PoolListItem>
               );

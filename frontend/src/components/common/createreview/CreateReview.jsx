@@ -3,9 +3,11 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import DetailViewHeader from '../DetailViewHeader';
 import { xmark, back } from '../../../utils/staticImagePath';
 import reviewApi from '../../../api/reviewApi';
+import useErrorResolver from '../../../hooks/useErrorResolver';
+import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
 
 export default function CreateReview() {
-  const [error, setError] = useState('');
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const [isLoading, setIsLoading] = useState(false);
   const [reviewContent, setReviewContent] = useState('');
 
@@ -32,8 +34,8 @@ export default function CreateReview() {
       await reviewApi.createReview(poolId, reviewContent);
       navigate(`/mark-pools/${poolId}`);
       alert('리뷰 작성 성공!');
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError(error);
     } finally {
       setIsLoading(false);
     }

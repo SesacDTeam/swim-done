@@ -4,6 +4,8 @@ import { xmark, back } from '../../../utils/staticImagePath';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import submittedImageApi from '../../../api/submittedImageApi';
 import { defaultUploadImage } from '../../../utils/staticImagePath';
+import useErrorResolver from '../../../hooks/useErrorResolver';
+import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
 
 export default function SubmittedImage() {
   const { poolId } = useParams();
@@ -15,6 +17,7 @@ export default function SubmittedImage() {
   const [previewImage, setPreviewImage] = useState(null);
 
   const fileInputRef = useRef(null);
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
 
   // 파일 선택 버튼 클릭 시 input 클릭 이벤트 발생함 (input 숨겨놓음)
   const handleButtonClick = () => {
@@ -60,7 +63,7 @@ export default function SubmittedImage() {
       await submittedImageApi.createImage(formData);
       navigate(`/mark-pools/${poolId}`);
     } catch (error) {
-      console.log(error);
+      setError(error);
     }
   };
 

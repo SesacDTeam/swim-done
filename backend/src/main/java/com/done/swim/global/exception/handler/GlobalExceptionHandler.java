@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
                 .error(ErrorCode.INVALID_ACCESS_TOKEN.getMessage(),
                     ErrorCode.INVALID_ACCESS_TOKEN.getCode()));
     }
-
+  
     @ExceptionHandler(MissingRequestCookieException.class)
     public ResponseEntity<ApiResponse<Object>> missingRequestCookieHandler() {
         return ResponseEntity.status(ErrorCode.INVALID_REQUEST.getStatus())

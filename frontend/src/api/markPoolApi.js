@@ -2,7 +2,12 @@ import instance from './axios';
 
 export const markPoolApi = {
   getMyMarkedPools: async (page, size = 10) => {
-    const response = await instance.get('/my/marks');
+    const response = await instance.get('/my/marks', {
+      params: {
+        page: page,
+        size: size,
+      },
+    });
 
     return response.data;
   },
