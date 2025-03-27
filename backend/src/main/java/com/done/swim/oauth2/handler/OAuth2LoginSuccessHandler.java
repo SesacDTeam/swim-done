@@ -32,6 +32,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Value("${cookie.same-site}")
     private String sameSite;
 
+    @Value("${SUCCESS_LOGIN}")
+    private String successLogin;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException {
@@ -67,7 +70,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         // 리다이렉트
         getRedirectStrategy().sendRedirect(request, response,
-            "http://localhost:5173" + "/login-success?token=" + accessToken);
+            successLogin + "/login-success?token=" + accessToken);
     }
 
     // 리프레시 토큰을 HttpOnly 쿠키에 저장 (함수로 따로 뺌)

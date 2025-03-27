@@ -17,9 +17,11 @@ export default function LoginRedirect() {
 
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('token');
+      const kakaoAccessToken = urlParams.get('kakaoAccessToken'); // 카카오 액세스 토큰 (예시로 'kakao_token'이라고 가정)
 
-      console.log('🔹 현재 URL:', window.location.href);
-      console.log('🔹 추출된 토큰:', accessToken);
+      console.log('현재 URL:', window.location.href);
+      console.log('추출된 토큰:', accessToken);
+      console.log('추출된 카카오 토큰:', kakaoAccessToken);
 
       if (!accessToken) {
         console.log('🚨 토큰이 없어서 홈으로 이동');
@@ -27,7 +29,16 @@ export default function LoginRedirect() {
         navigate('/');
         return;
       }
+
+      if (kakaoAccessToken) {
+        // 카카오 액세스 토큰도 저장
+        localStorage.setItem('kakaoAccessToken', kakaoAccessToken); // 로컬 스토리지에 카카오 액세스 토큰 저장
+        console.log('카카오 액세스 토큰 저장됨:', kakaoAccessToken);
+      }
+
+      // JWT 토큰을 Redux에 저장
       dispatch(login(accessToken));
+
       const path = sessionStorage.getItem('beforePath');
       const name = sessionStorage.getItem('sectionName');
       const mapPools = sessionStorage.getItem('sectionPools');

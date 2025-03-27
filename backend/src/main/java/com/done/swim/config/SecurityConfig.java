@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() // API 관련 엔드포인트 허용
                         .requestMatchers(HttpMethod.GET, "/api/pools/**", "/api/sections/**", "/api/swimmingtimes/**").permitAll() // GET 요청 허용
                         .requestMatchers("/api/swimmingtimes/**").permitAll()
+                        .requestMatchers("/withdraw").authenticated() // 🔥 회원 탈퇴는 인증된 사용자만 가능
                         .anyRequest().authenticated() // 그 외의 모든 요청은 인증된 사용자만 접근
                 )
                 .oauth2Login(oauth2 -> oauth2
