@@ -2,6 +2,7 @@ package com.done.swim.domain.pool.dto.responsedto;
 
 import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.swimmingtime.entity.SwimmingTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -32,7 +33,9 @@ public class PoolWithSwimmingTimeResponseDto {
     @Getter
     @Builder
     private static class SwimmingTimeResponseDto {
+        @JsonFormat(pattern = "HH:mm")
         private LocalTime startTime;
+        @JsonFormat(pattern = "HH:mm")
         private LocalTime endTime;
 
         public static SwimmingTimeResponseDto from(SwimmingTime entity) {

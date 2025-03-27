@@ -22,8 +22,6 @@ export default function InfoWindowContent({ pool }) {
     <p className="mb-2">자유 수영 시간이 없습니다.</p>
   );
   const handlePoolListItemClick = (poolId) => {
-    console.log(`asdfsdf`);
-
     dispatch(showDetailView());
     navigate(`pools/${poolId}`);
   };
