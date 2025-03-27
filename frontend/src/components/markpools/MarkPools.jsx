@@ -3,22 +3,23 @@ import { markPoolApi } from '../../api/markPoolApi';
 import { useSelector } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
 import { logo } from '../../utils/staticImagePath';
-import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
 import { Outlet, useNavigate } from 'react-router';
-import useError from '../../hooks/useError';
+import useErrorResolver from '../../hooks/useErrorResolver';
+import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
+import { useToggleMark } from '../../hooks/useToggleMark';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const token = useSelector((state) => state.auth.token);
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
-  const [error, setError] = useError();
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
+  const { toggleMark } = useToggleMark();
 
   const getMarkedPools = async () => {
     setIsLoading(true);
@@ -29,7 +30,7 @@ export default function MarkPools() {
 
       setHasNext(data.data.hasNext);
     } catch (error) {
-      setError(error)
+      setError(error);
       setHasNext(false);
     } finally {
       setIsLoading(false);
@@ -67,7 +68,7 @@ export default function MarkPools() {
                   name={pool.name}
                   address={pool.address}
                   isMarked={pool.mark}
-                  onToggleMark={() => toggleMark(index, markedPools, setMarkedPools, token)}
+                  onToggleMark={() => toggleMark(index, markedPools, setMarkedPools)}
                   onClick={() => handlePoolListItemClick(pool.id)}
                 ></PoolListItem>
               );

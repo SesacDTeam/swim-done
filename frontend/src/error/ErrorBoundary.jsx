@@ -3,8 +3,9 @@ import RequestError from './RequestError';
 import instance from '../api/axios';
 import ERROR_CODE from './ERROR_CODE';
 import ERROR_DISPLAY_MODE from './ERROR_DISPLAY_MODE';
+import { logo } from '../utils/staticImagePath';
 
-class SideBarErrorBoundary extends Component {
+class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,9 +25,12 @@ class SideBarErrorBoundary extends Component {
   render() {
     if (this.state.hasError && this.state.error instanceof RequestError) {
       return (
-        <div>
-          <h1>{this.state.error.message}</h1>
-          <h2>잠시후 시도해주세요</h2>
+        <div className="h-full flex flex-col items-center justify-center bg-blue01 text-white gap-5">
+          <img src={logo} alt="" />
+          <h1 className="pretendard-bold text-2xl mb-50 mx-10 whitespace-pre-line text-center">
+            {this.state.error.message}
+          </h1>
+          <button className='text-black'>문의하기</button>
         </div>
       );
     }
@@ -35,4 +39,4 @@ class SideBarErrorBoundary extends Component {
   }
 }
 
-export default SideBarErrorBoundary;
+export default ErrorBoundary;

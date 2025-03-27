@@ -5,6 +5,8 @@ import KakaoMapContainer from '../components/kakaomap/KakaoMapContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideListBar } from '../store/slices/listBarSlice';
 import { setSelectedIndex } from '../store/slices/sideBarSlice';
+import ErrorBoundary from '../error/ErrorBoundary';
+import ErrorCatcher from '../error/ErrorCatcher';
 
 export default function Home() {
   const isHidden = useSelector((state) => state.listBar.isHidden);
@@ -13,7 +15,7 @@ export default function Home() {
 
   useEffect(() => {
     if (location.pathname === '/') {
-      dispatch(setSelectedIndex(null))
+      dispatch(setSelectedIndex(null));
       dispatch(hideListBar());
     }
   }, [location, dispatch]);
@@ -21,15 +23,17 @@ export default function Home() {
   return (
     <>
       <div className="flex h-full">
-        <SideBar></SideBar>
-        <div className="grow relative">
-          <KakaoMapContainer></KakaoMapContainer>
-          {!isHidden && (
-            <section className="absolute inset-0 w-100 z-3000 bg-white overflow-y-auto">
-              <Outlet></Outlet>
-            </section>
-          )}
-        </div>
+        <ErrorCatcher>
+          <SideBar></SideBar>
+          <div className="grow relative">
+            <KakaoMapContainer></KakaoMapContainer>
+            {!isHidden && (
+              <section className="absolute inset-0 w-100 z-3000 bg-white overflow-y-auto">
+                <Outlet></Outlet>
+              </section>
+            )}
+          </div>
+        </ErrorCatcher>
       </div>
     </>
   );

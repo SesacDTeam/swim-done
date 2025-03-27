@@ -7,15 +7,6 @@ export const useToggleMark = () => {
 
   const toggleMark = async (index, pools, setPools) => {
     const isMarked = pools[index].mark;
-    setPools((prev) => {
-      const updatedPools = [...prev];
-      updatedPools[index] = {
-        ...updatedPools[index],
-        mark: !isMarked,
-      };
-
-      return updatedPools;
-    });
 
     try {
       if (isMarked) {
@@ -23,6 +14,17 @@ export const useToggleMark = () => {
       } else {
         await markPoolApi.createMarkedPools(pools[index].id);
       }
+      
+      setPools((prev) => {
+        const updatedPools = [...prev];
+        updatedPools[index] = {
+          ...updatedPools[index],
+          mark: !isMarked,
+        };
+
+        return updatedPools;
+      });
+
     } catch (error) {
       setError(error);
     }

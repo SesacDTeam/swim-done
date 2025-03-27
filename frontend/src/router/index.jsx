@@ -16,6 +16,7 @@ import { hideListBar, showListBar } from '../store/slices/listBarSlice';
 import { hideDetailView, showDetailView } from '../store/slices/detailViewSlice';
 import UnauthenticateRoute from '../components/common/UnauthenticateRoute';
 import { setSelectedIndex } from '../store/slices/sideBarSlice';
+import ErrorBoundary from '../error/ErrorBoundary';
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/pools',
-        element: <PoolList></PoolList>,
+        element: (
+          <ErrorBoundary>
+            <PoolList></PoolList>
+          </ErrorBoundary>
+        ),
         loader: () => {
           store.dispatch(showListBar());
           store.dispatch(hideDetailView());
@@ -60,7 +65,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: '/pools/:poolId',
-            element: <PoolDetail></PoolDetail>,
+            element: (
+              <ErrorBoundary>
+                <PoolDetail></PoolDetail>
+              </ErrorBoundary>
+            ),
             loader: () => {
               store.dispatch(showDetailView());
             },
@@ -68,9 +77,11 @@ const router = createBrowserRouter([
           {
             path: ':poolId/submitted-images',
             element: (
-              <AuthenticateRoute>
-                <SubmitImage></SubmitImage>
-              </AuthenticateRoute>
+              <ErrorBoundary>
+                <AuthenticateRoute>
+                  <SubmitImage></SubmitImage>
+                </AuthenticateRoute>
+              </ErrorBoundary>
             ),
             loader: () => {
               store.dispatch(showDetailView());
@@ -79,9 +90,11 @@ const router = createBrowserRouter([
           {
             path: ':poolId/reviews',
             element: (
-              <AuthenticateRoute>
-                <CreateReview></CreateReview>
-              </AuthenticateRoute>
+              <ErrorBoundary>
+                <AuthenticateRoute>
+                  <CreateReview></CreateReview>
+                </AuthenticateRoute>
+              </ErrorBoundary>
             ),
             loader: () => {
               store.dispatch(showDetailView());
@@ -92,14 +105,16 @@ const router = createBrowserRouter([
       {
         path: '/mark-pools',
         element: (
-          <AuthenticateRoute
-            cancleAction={() => {
-              store.dispatch(hideListBar());
-              store.dispatch(setSelectedIndex(null));
-            }}
-          >
-            <MarkPools></MarkPools>
-          </AuthenticateRoute>
+          <ErrorBoundary>
+            <AuthenticateRoute
+              cancleAction={() => {
+                store.dispatch(hideListBar());
+                store.dispatch(setSelectedIndex(null));
+              }}
+            >
+              <MarkPools></MarkPools>
+            </AuthenticateRoute>
+          </ErrorBoundary>
         ),
         loader: () => {
           store.dispatch(hideDetailView());
@@ -108,7 +123,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: ':poolId',
-            element: <PoolDetail></PoolDetail>,
+            element: (
+              <ErrorBoundary>
+                <PoolDetail></PoolDetail>
+              </ErrorBoundary>
+            ),
             loader: () => {
               store.dispatch(showDetailView());
             },
@@ -116,9 +135,11 @@ const router = createBrowserRouter([
           {
             path: ':poolId/submitted-images',
             element: (
-              <AuthenticateRoute>
-                <SubmitImage></SubmitImage>
-              </AuthenticateRoute>
+              <ErrorBoundary>
+                <AuthenticateRoute>
+                  <SubmitImage></SubmitImage>
+                </AuthenticateRoute>
+              </ErrorBoundary>
             ),
             loader: () => {
               store.dispatch(showDetailView());
@@ -127,9 +148,11 @@ const router = createBrowserRouter([
           {
             path: ':poolId/reviews',
             element: (
-              <AuthenticateRoute>
-                <CreateReview></CreateReview>
-              </AuthenticateRoute>
+              <ErrorBoundary>
+                <AuthenticateRoute>
+                  <CreateReview></CreateReview>
+                </AuthenticateRoute>
+              </ErrorBoundary>
             ),
             loader: () => {
               store.dispatch(showDetailView());

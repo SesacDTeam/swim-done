@@ -17,6 +17,17 @@ const useErrorResolver = (errorDisplayMode) => {
       return;
     }
 
+    if (!error.response) {
+      const requestError = new RequestError(
+        '네트워크 연결을 확인해주세요',
+        error.code,
+        errorDisplayMode,
+        error.config,
+      );
+      dispatch(setRequestError(requestError));
+      throw requestError;
+    }
+
     const errorCode = error.response.data.code;
 
     if (errorCode === ERROR_CODE.REISSUE_FAIL) {
@@ -26,7 +37,7 @@ const useErrorResolver = (errorDisplayMode) => {
     }
 
     const requestError = new RequestError(
-      '데이터를 로드하지 못했습니다.',
+      '데이터를 로드하지 못했습니다. \n 잠시 후 다시 시도해주세요.',
       errorCode,
       errorDisplayMode,
       error.config,
