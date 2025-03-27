@@ -3,6 +3,8 @@ import MyPageItem from './MyPageItem';
 import { useSelector } from 'react-redux';
 import instance from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../store/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 import {
   profile,
@@ -14,36 +16,41 @@ import {
   contactUsColor,
 } from '../../utils/staticImagePath';
 
-function logout() {
-  alert('로그아웃');
-}
-
-function removeUser() {
-  alert('회원탈퇴');
-}
-
 export default function MyPage() {
+  const dispatch = useDispatch();
   const nickName = useSelector((state) => state.user.nickName);
   const email = useSelector((state) => state.user.email);
-  const navigate = useNavigate(); // ✅ useNavigate 훅 사용
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
+    const isConfirmed = window.confirm('로그아웃 하시겠습니까?');
+    if (!isConfirmed) return;
     try {
       await instance.post('/logout');
 
-      console.log('✅ 로그아웃 성공! 이제 액세스 토큰을 삭제합니다.');
+      dispatch(logout());
+      alert('로그아웃이 완료되었습니다.');
+      navigate('/');
     } catch (error) {
-      console.error('❌ 로그아웃 실패:', error);
+      console.error('로그아웃 실패:', error);
     }
+  };
 
-    // ✅ 1. 액세스 토큰 삭제
-    localStorage.removeItem('accessToken');
-    console.log(
-      '🗑️ 액세스 토큰 삭제 완료! 현재 localStorage:',
-      localStorage.getItem('accessToken'),
-    );
-    // ✅ 2. 홈으로 이동
-    navigate('/');
+  // 회원 탈퇴 핸들러
+  const handleWithdraw = async () => {
+    const isConfirmed = window.confirm('정말 회원 탈퇴하시겠습니까?');
+    if (!isConfirmed) return;
+
+    try {
+      await instance.delete('/withdraw');
+      // await instance.post('/logout'); // 회원 탈퇴 후 로그아웃 요청 (안전한 토큰 삭제)
+      dispatch(logout()); // Redux 상태 초기화
+      alert('회원 탈퇴가 완료되었습니다.');
+      navigate('/'); // 메인 페이지로 이동
+    } catch (error) {
+      console.error('회원 탈퇴 실패:', error);
+      alert('회원 탈퇴 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -80,8 +87,11 @@ export default function MyPage() {
         />
       </div>
       <div className="flex justify-center">
-        <button className="relative top-69 h-10 cursor-pointer outline-none" onClick={removeUser}>
-          회원 탈퇴하기
+        <button
+          className="relative top-69 h-10 cursor-pointer outline-none"
+          onClick={handleWithdraw}
+        >
+          회원 탈퇴
         </button>
       </div>
     </div>
