@@ -37,7 +37,7 @@ const useErrorResolver = (errorDisplayMode) => {
     }
 
     const requestError = new RequestError(
-      '데이터를 로드하지 못했습니다. \n 잠시 후 다시 시도해주세요.',
+      error.response.data.message,
       errorCode,
       errorDisplayMode,
       error.config,
