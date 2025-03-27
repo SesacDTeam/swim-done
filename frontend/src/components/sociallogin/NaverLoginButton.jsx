@@ -3,7 +3,6 @@ import React from 'react';
 export default function NaverLoginButton() {
   // 백엔드에서 제공하는 OAuth2 로그인 URL로 이동 (백엔드를 통해 인증하는 방법)
   // 개발 환경에서는 백엔드 주소 기입
-  const DOMAIN = import.meta.env.VITE_DOMAIN;
   // oAuth2 로그인 경로는 spring security 기본 경로 따라야 됨. api 안 붙이는 걸 권장함!
   const NAVER_AUTH_URL = `oauth2/authorization/naver`;
 
@@ -15,8 +14,7 @@ export default function NaverLoginButton() {
     <div className="flex justify-center">
       <button
         onClick={handleNaverLogin}
-        className="min-w-[180px] font-pretendard font-semibold flex items-center bg-ngreen text-white rounded-md px-4 py-3 gap-3 mb-2'
-"
+        className="min-w-[180px] font-pretendard font-semibold flex items-center bg-ngreen text-white rounded-md px-4 py-3 gap-3 mb-2"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none">
           <path
