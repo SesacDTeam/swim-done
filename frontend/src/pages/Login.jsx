@@ -1,8 +1,10 @@
 import React from 'react';
 import KakaoLoginButton from '../components/sociallogin/KakaoLoginButton';
 import NaverLoginButton from '../components/sociallogin/NaverLoginButton';
+import GithubLoginButton from '../components/sociallogin/GithubLoginButton';
 import { Link } from 'react-router-dom';
 import { logoMan } from '../utils/staticImagePath';
+
 
 export default function Login() {
   return (
@@ -22,8 +24,8 @@ export default function Login() {
       <div className="flex flex-col mt-15 space-y-3">
         <NaverLoginButton></NaverLoginButton>
         <KakaoLoginButton></KakaoLoginButton>
+        <GithubLoginButton></GithubLoginButton>
       </div>
-
       <Link to="/">
         <div className="font-pretendard text-center text-gray04 mt-30">🏠 홈으로 가기</div>
       </Link>

@@ -2,10 +2,10 @@ package com.done.swim.oauth2;
 
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
+import com.done.swim.oauth2.provider.GithubUserInfo;
 import com.done.swim.oauth2.provider.KakaoUserInfo;
 import com.done.swim.oauth2.provider.NaverUserInfo;
 import com.done.swim.oauth2.provider.OAuth2UserInfo;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 
 @Slf4j
@@ -41,25 +43,39 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 네이버 로그인 시 id 속성이 null이어서 발생하는 오류 -> userNameAttributeName 가져옴
         if ("naver".equals(registrationId)) {
             Map<String, Object> responseMap = (Map<String, Object>) oAuth2User.getAttributes()
-                .get("response");
+                    .get("response");
             if (responseMap == null) {
                 throw new OAuth2AuthenticationException("네이버 OAuth2 응답에서 response 필드를 찾을 수 없습니다.");
             }
             oAuth2UserInfo = new NaverUserInfo(responseMap);  // 내부 response 값을 전달
         } else if ("kakao".equals(registrationId)) {
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+        } else if ("github".equals(registrationId)) {
+            oAuth2UserInfo = new GithubUserInfo(oAuth2User.getAttributes());
+
+            if (oAuth2UserInfo.getEmail() == null) {
+                String generatedEmail = "github_" + oAuth2UserInfo.getProviderId() + "@github.com";
+                ((GithubUserInfo) oAuth2UserInfo).setEmail(generatedEmail);
+                log.info("GitHub 사용자 이메일이 없어 임의 이메일 생성: {}", generatedEmail);
+                log.info("✅ 수정된 이메일: {}", oAuth2UserInfo.getEmail()); // 이걸 추가해서 확인해보자!
+
+
+            }
         } else {
             throw new OAuth2AuthenticationException("지원하지 않는 소셜 로그인입니다.");
         }
 
+        log.info("GitHub OAuth2 Attributes: {}", oAuth2User.getAttributes());
+
         User user = userRepository.findByEmail(oAuth2UserInfo.getEmail())
-            .orElseGet(() -> userRepository.save(User.builder()
-                .email(oAuth2UserInfo.getEmail())
-                .nickname(oAuth2UserInfo.getNickname())
-                .imageUrl(oAuth2UserInfo.getUserImageUrl())
-                .provider(oAuth2UserInfo.getProvider().name())
-                .providerId(oAuth2UserInfo.getProviderId())
-                .build()));
+                .orElseGet(() -> userRepository.save(User.builder()
+                        .email(oAuth2UserInfo.getEmail())
+                        .nickname(oAuth2UserInfo.getNickname())
+                        .imageUrl(oAuth2UserInfo.getUserImageUrl())
+                        .provider(oAuth2UserInfo.getProvider().name())
+                        .providerId(oAuth2UserInfo.getProviderId())
+                        .build()));
+        log.info("이메일: {}", user.getEmail());
 
         // 카카오 로그인인 경우 카카오 액세스 토큰 저장
         if ("kakao".equals(registrationId)) {
