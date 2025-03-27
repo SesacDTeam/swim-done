@@ -37,27 +37,4 @@ authApi.interceptors.response.use(
   },
 );
 
-export const authApiService = {
-  getUserInfo: async () => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      console.log(token);
-
-      if (!token) {
-        throw new Error('토큰이 없습니다. 로그인이 필요합니다.');
-      }
-
-      // 🔹 Authorization 헤더 추가하여 API 요청
-      const response = await authApi.get('/user/info', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      return response.data; // 사용자 정보 반환
-    } catch (error) {
-      console.error('사용자 정보 가져오기 실패:', error.response ? error.response.data : error);
-      throw error;
-    }
-  },
-};
-
 export default authApi;

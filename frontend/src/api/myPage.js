@@ -14,18 +14,4 @@ export const myPage = {
 
     return response.data;
   },
-
-  createReview: async (token, poolId) => {
-    const response = await instance.post(
-      `/pools/${poolId}/reviews`,
-      {},
-      {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      },
-    );
-
-    return response.data;
-  },
 };

@@ -16,12 +16,10 @@ public class UserService {
   private final UserRepository userRepository;
   private final JwtTokenProvider jwtTokenProvider;
 
-  public GetUserInfoResponseDto getUserInfo(String token) {
-    Long userId = jwtTokenProvider.getUserId(token);
+  public GetUserInfoResponseDto getUserInfo(Long userId) {
 
-    // 사용자 정보 조회 후 DTO 변환
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new RuntimeException("User not found"));
+        .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
 
     return GetUserInfoResponseDto.from(user);
 

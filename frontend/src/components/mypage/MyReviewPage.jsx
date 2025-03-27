@@ -20,27 +20,27 @@ export default function MyReviewPage() {
   // isLoadingRef: API 호출 중 여부
   const isLoadingRef = useRef(false);
 
-  // fetchReviews 함수: API 호출을 통해 리뷰 데이터를 불러오고 상태 업데이트
-  const fetchReviews = async () => {
-    // 이미 로딩 중이거나 더 불러올 데이터가 없으면 종료
-    if (!hasMoreRef.current || isLoadingRef.current) return;
+  const fetchReviews = async (reset = false) => {
+    if (isLoadingRef.current) return;
 
-    // 로딩 상태 업데이트
+    if (reset) {
+      pageRef.current = 0;
+      hasMoreRef.current = true;
+      setReviews([]);
+    }
+
+    if (!hasMoreRef.current) return;
+
     setIsFetching(true);
     isLoadingRef.current = true;
 
     try {
-      // API 호출: 현재 페이지의 데이터 5개 요청
       const data = await myPage.getMyReview(token, pageRef.current, 5);
-      // 기존 리뷰에 새 데이터 추가
-      setReviews((prev) => [...prev, ...data.data.reviews]);
-      console.log(data.data.hasNext);
 
-      // 총 리뷰 개수 업데이트
+      setReviews((prev) => (reset ? data.data.reviews : [...prev, ...data.data.reviews]));
       setTotalCount(data.data.totalCount);
-      // API에서 전달받은 hasNext 값을 사용해 추가 데이터 존재 여부 업데이트
+
       hasMoreRef.current = data.data.hasNext;
-      // 추가 데이터가 있으면 다음 호출을 위해 페이지 번호 증가
       if (data.data.hasNext) {
         pageRef.current += 1;
       }
@@ -56,6 +56,11 @@ export default function MyReviewPage() {
   useEffect(() => {
     fetchReviews();
   }, []);
+
+  // `totalCount`가 변경될 때마다 실행
+  useEffect(() => {
+    fetchReviews(true); // 리뷰 개수가 0으로 변경되면 초기화된 상태로 다시 불러오기
+  }, [totalCount]);
 
   // IntersectionObserver 콜백: observerTarget 요소가 화면에 보이면 fetchReviews 호출
   const handleScroll = useCallback((entries) => {
@@ -96,15 +101,18 @@ export default function MyReviewPage() {
         {reviews.map((review, index) => (
           <MyReviewPageItem
             key={index}
+            reviewId={review.reviewId}
             poolName={review.poolName}
             createdAt={extractDate(review.timestamp)}
             content={review.content}
+            fetchReviews={fetchReviews}
+            setTotalCount={setTotalCount}
           />
         ))}
       </div>
 
       {/* 무한스크롤 트리거: 이 요소가 화면에 보이면 새로운 리뷰를 불러옵니다. */}
-      <div ref={observerTarget} className="h-10 relative -mt-10"></div>
+      <div ref={observerTarget} className="h-20 relative -mt-10"></div>
     </>
   );
 }
