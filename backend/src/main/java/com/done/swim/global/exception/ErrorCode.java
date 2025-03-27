@@ -32,6 +32,9 @@ public enum ErrorCode {
   // 리뷰 오류 (4300번)
   REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "4300", "해당 리뷰가 존재하지 않습니다."),
 
+  // 사진 오류 (4400번)
+  IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "4400", "해당 이미지가 존재하지 않습니다."),
+
   //네트워크, 데이터베이스 오류 등
   SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5000", "서버 내부 오류가 발생했습니다."),
   FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "파일 업로드 중 오류가 발생했습니다."),

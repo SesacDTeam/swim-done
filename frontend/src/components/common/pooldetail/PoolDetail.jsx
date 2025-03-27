@@ -73,7 +73,7 @@ export default function PoolDetail() {
             )
           </div>
 
-          <Link to="submitted-images" className="self-end">
+          <Link to="submitted-images" className="self-end" state={{ poolName: poolDetail?.name }}>
             <button className="bg-blue01 w-35 h-10 rounded-[10px] text-white pretendard-normal text-xs">
               수정 제안하기
             </button>

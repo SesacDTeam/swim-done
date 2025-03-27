@@ -4,9 +4,8 @@ import Login from '../pages/Login';
 import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
-
 import PoolDetail from '../components/common/pooldetail/PoolDetail';
-import SubmitImage from '../components/common/submitImage/SubmitImage';
+import SubmittedImage from '../components/common/submittedImage/SubmittedImage';
 import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
 import NotFound from '../pages/NotFound';
@@ -79,7 +78,7 @@ const router = createBrowserRouter([
             element: (
               <ErrorBoundary>
                 <AuthenticateRoute>
-                  <SubmitImage></SubmitImage>
+                  <SubmittedImage></SubmittedImage>
                 </AuthenticateRoute>
               </ErrorBoundary>
             ),
@@ -137,7 +136,7 @@ const router = createBrowserRouter([
             element: (
               <ErrorBoundary>
                 <AuthenticateRoute>
-                  <SubmitImage></SubmitImage>
+                  <SubmittedImage></SubmittedImage>
                 </AuthenticateRoute>
               </ErrorBoundary>
             ),
