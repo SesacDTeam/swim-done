@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server'; // React 컴포넌트를 HTML 문자열로 변환
 import seoulGu from '../../utils/seoul-gu.json';
 import { kickPan } from '../../utils/staticImagePath';
@@ -13,10 +13,14 @@ import {
   setName,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
-import { showListBar } from '../../store/slices/listBarSlice.js';
+import InfoWindowContentPortal from '../poollist/InfoWindowContentPortal.jsx';
 
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
+
+  const [selectedPool, setSelectedPool] = useState(null); // ✅ 선택된 수영장 데이터
+  const [infoWindowContainer, setInfoWindowContainer] = useState(null); // ✅ 인포윈도우 컨테이너
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -83,18 +87,9 @@ export default function KakaoMapContainer() {
   async function drawInfoWindowContent(poolName) {
     try {
       const { data: pool } = await kakaoMapApi.getPool(poolName);
-      const swimmingTimes = pool.swimmingTimes
-        .map(({ startTime, endTime }) => `<p>${startTime} ~ ${endTime}</p>`)
-        .join('') || <p className="mb-2">자유 수영 시간이 없습니다.</p>;
 
       // React 컴포넌트를 HTML 문자열로 변환하여 반환
-      return renderToStaticMarkup(
-        <InfoWindowContent
-          poolName={poolName}
-          address={pool.address}
-          swimmingTimes={swimmingTimes}
-        />,
-      );
+      return renderToStaticMarkup(<InfoWindowContent pool={pool} />);
     } catch (error) {
       console.error(error);
       return <p className="text-red-500">정보를 불러오는 데 실패했습니다.</p>;
@@ -107,9 +102,20 @@ export default function KakaoMapContainer() {
    * @param {kakao.maps.Marker} marker - 마커 객체
    */
   async function updateInfoWindow(marker) {
-    const newContent = await drawInfoWindowContent(marker.getTitle());
-    infoWindow.setContent(newContent);
-    infoWindow.open(marker.getMap(), marker);
+    try {
+      const { data: pool } = await kakaoMapApi.getPool(marker.getTitle());
+
+      // ✅ 기존 인포윈도우 내용을 비우고 새로운 컨테이너를 생성
+      const container = document.createElement('div');
+      container.className = 'bg-white shadow-lg rounded-lg p-4 w-[337px] border border-gray-200';
+      setInfoWindowContainer(container); // ✅ 포탈을 위한 컨테이너 저장
+      setSelectedPool(pool); // ✅ 선택한 수영장 데이터 업데이트
+
+      infoWindow.setContent(container); // ✅ 인포윈도우에 React 컨테이너 적용
+      infoWindow.open(marker.getMap(), marker);
+    } catch (error) {
+      console.error(error);
+    }
   }
   //#endregion
 
@@ -173,7 +179,7 @@ export default function KakaoMapContainer() {
         dispatch(updateMarkers({ markers }));
         // 지역별 수영장 정보
         dispatch(setPools({ pools }));
-        dispatch(setName({ name }))
+        dispatch(setName({ name }));
         navigate('pools');
       } catch (error) {
         console.error(error);
@@ -198,5 +204,12 @@ export default function KakaoMapContainer() {
     }
   }, []);
 
-  return <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />;
+  return (
+    <>
+      <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
+      {selectedPool && infoWindowContainer && (
+        <InfoWindowContentPortal pool={selectedPool} container={infoWindowContainer} />
+      )}
+    </>
+  );
 }

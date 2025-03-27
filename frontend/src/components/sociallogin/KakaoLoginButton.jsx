@@ -9,7 +9,7 @@ export default function KakaoLoginButton() {
     <div className="flex justify-center mt-2">
       <button
         onClick={handleKakaoLogin}
-        className="font-pretendard font-semibold flex items-center bg-[#FEE500] text-black rounded-md px-4 py-2 gap-3 mb-2"
+        className="font-pretendard font-semibold flex items-center bg-kyello text-black rounded-md px-4 py-3 gap-3 mb-2 min-w-[180px]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ export default function KakaoLoginButton() {
             fill="black"
           />
         </svg>
-        카카오톡 로그인
+        카카오로 계속하기
       </button>
     </div>
   );
