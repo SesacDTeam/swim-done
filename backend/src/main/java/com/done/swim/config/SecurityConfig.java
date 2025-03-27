@@ -27,17 +27,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final CustomAccessDeniedHandler accessDeniedHandler;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final CustomOAuth2UserService customOAuth2UserService;
+  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+  private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
-    @Value("${origin}")
-    private String origin;
-    @Value("${CORS_ALLOWED_ORIGIN}")
-    private String CORS_ALLOWED_ORIGIN;
+  @Value("${origin}")
+  private String origin;
+  @Value("${CORS_ALLOWED_ORIGIN}")
+  private String CORS_ALLOWED_ORIGIN;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -80,29 +80,27 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 인증 오류 핸들러
                 );
 
+    return http.build();
+  }
 
-        return http.build();
-    }
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.addAllowedOrigin(origin);
+    configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin(origin);
-        configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
+    configuration.addAllowedOrigin("http://localhost:5173"); // ✅ 프론트엔드 로컬 개발 환경 추가
 
-        configuration.addAllowedOrigin("http://localhost:5173"); // ✅ 프론트엔드 로컬 개발 환경 추가
+    configuration.addAllowedMethod("*");
+    configuration.addAllowedHeader("*");
+    configuration.setAllowCredentials(true);
+    configuration.addExposedHeader("Authorization");
 
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
-        configuration.addExposedHeader("Authorization");
+    // ✅ 로그아웃 후 쿠키 삭제가 적용되도록 `Set-Cookie` 노출
+    configuration.addExposedHeader("Set-Cookie");
 
-        // ✅ 로그아웃 후 쿠키 삭제가 적용되도록 `Set-Cookie` 노출
-        configuration.addExposedHeader("Set-Cookie");
-
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 }

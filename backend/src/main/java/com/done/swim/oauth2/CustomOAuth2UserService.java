@@ -2,10 +2,7 @@ package com.done.swim.oauth2;
 
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
-import com.done.swim.oauth2.provider.GithubUserInfo;
-import com.done.swim.oauth2.provider.KakaoUserInfo;
-import com.done.swim.oauth2.provider.NaverUserInfo;
-import com.done.swim.oauth2.provider.OAuth2UserInfo;
+import com.done.swim.oauth2.provider.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -41,16 +38,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 네이버는 카카오랑 로직 달라서 바꿔야함 (    // response 키 안에 사용자 정보 있음 (네이버))
         // 네이버의 경우 response 객체 내부의 id를 사용해야 함
         // 네이버 로그인 시 id 속성이 null이어서 발생하는 오류 -> userNameAttributeName 가져옴
-        if ("naver".equals(registrationId)) {
+        if (Provider.NAVER.toLowerCase().equals(registrationId)) {
             Map<String, Object> responseMap = (Map<String, Object>) oAuth2User.getAttributes()
                     .get("response");
             if (responseMap == null) {
                 throw new OAuth2AuthenticationException("네이버 OAuth2 응답에서 response 필드를 찾을 수 없습니다.");
             }
             oAuth2UserInfo = new NaverUserInfo(responseMap);  // 내부 response 값을 전달
-        } else if ("kakao".equals(registrationId)) {
+        } else if (Provider.KAKAO.toLowerCase().equals(registrationId)) {
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
-        } else if ("github".equals(registrationId)) {
+        } else if (Provider.GITHUB.toLowerCase().equals(registrationId)) {
             oAuth2UserInfo = new GithubUserInfo(oAuth2User.getAttributes());
 
             if (oAuth2UserInfo.getEmail() == null) {
