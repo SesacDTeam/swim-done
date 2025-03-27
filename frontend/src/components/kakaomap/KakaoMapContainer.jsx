@@ -10,10 +10,10 @@ import {
   updateMarkers,
   setInfoWindow,
   setPools,
+  setName,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
-import { showSideBar } from '../../store/slices/sideBarSlice.js';
-import InfoWindowContentPortal from '../poollist/InfoWindowContentPortal';
+import InfoWindowContentPortal from '../poollist/InfoWindowContentPortal.jsx';
 
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
@@ -179,8 +179,8 @@ export default function KakaoMapContainer() {
         dispatch(updateMarkers({ markers }));
         // 지역별 수영장 정보
         dispatch(setPools({ pools }));
-        dispatch(showSideBar());
-        navigate('pools', { state: { name } });
+        dispatch(setName({ name }));
+        navigate('pools');
       } catch (error) {
         console.error(error);
       }

@@ -5,6 +5,8 @@ import com.done.swim.domain.submittedimage.dto.responsedto.SubmittedImageRespons
 import com.done.swim.domain.submittedimage.entity.SubmittedImage;
 import com.done.swim.domain.submittedimage.repository.SubmittedImageRepository;
 import com.done.swim.global.awss3.AwsS3Service;
+import com.done.swim.global.exception.ErrorCode;
+import com.done.swim.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +48,7 @@ public class SubmittedImageService {
     // 제보한 이미지 조회
     public SubmittedImageResponseDto getImageById(Long id) {
         SubmittedImage submittedImage = submittedImageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("이미지 찾을 수 없음"));
+                .orElseThrow(() -> new GlobalException(ErrorCode.IMAGE_NOT_FOUND));
 
         return toResponseDto(submittedImage);
     }
@@ -63,7 +65,7 @@ public class SubmittedImageService {
     @Transactional
     public void deleteImage(Long id) {
         SubmittedImage submittedImage = submittedImageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("이미지 찾을 수 없음"));
+                .orElseThrow(() -> new GlobalException(ErrorCode.IMAGE_NOT_FOUND));
 
         awsS3Service.deleteFile(submittedImage.getS3Key());
 
