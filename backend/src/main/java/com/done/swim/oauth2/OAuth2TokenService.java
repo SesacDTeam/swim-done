@@ -70,7 +70,7 @@ public class OAuth2TokenService {
             .secure(true)
             .build();
 
-        // 쿠키 삭제 응답 헤더에 추가
+//         쿠키 삭제 응답 헤더에 추가
         response.addHeader("Set-Cookie", refreshTokenCookie.toString());
         return ResponseEntity.ok("로그아웃 성공");
     }

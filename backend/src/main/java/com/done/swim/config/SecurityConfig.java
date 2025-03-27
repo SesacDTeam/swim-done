@@ -68,13 +68,13 @@ public class SecurityConfig {
                 .successHandler(oAuth2LoginSuccessHandler) // 로그인 성공 핸들러
                 .failureHandler(oAuth2LoginFailureHandler) // 로그인 실패 핸들러
             )
-            .logout(logout -> logout
-                .logoutUrl("/logout")  // 로그아웃 엔드포인트
-                .deleteCookies("JSESSIONID", "refreshToken")  // 쿠키 삭제
-                .clearAuthentication(true)  // 인증 정보 초기화
-                .invalidateHttpSession(true)  // 세션 무효화
-                .logoutSuccessUrl("/")  // 로그아웃 후 리다이렉트 URL
-            )
+//            .logout(logout -> logout
+//                .logoutUrl("/logout")  // 로그아웃 엔드포인트
+//                .deleteCookies("JSESSIONID", "refreshToken")  // 쿠키 삭제
+//                .clearAuthentication(true)  // 인증 정보 초기화
+//                .invalidateHttpSession(true)  // 세션 무효화
+//                .logoutSuccessUrl("/")  // 로그아웃 후 리다이렉트 URL
+//            )
             .addFilterBefore(jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class) // JWT 필터 추가
             .exceptionHandling(exception -> exception
