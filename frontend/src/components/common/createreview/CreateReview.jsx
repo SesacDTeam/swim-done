@@ -34,8 +34,6 @@ export default function CreateReview() {
     try {
       await reviewApi.createReview(poolId, reviewContent);
       navigate(-1)
-      // TODO: Toast 창 2가지 버전 가능하면 toast로 수정 or 불가능하면 그대로 alert 하거나 삭제 / 굳이 필요한가? 모르겠음
-      // alert('소중한 리뷰를 남겨주셔서 감사합니다!');
     } catch (error) {
       setError(error);
     } finally {
@@ -51,22 +49,24 @@ export default function CreateReview() {
           <h1 className="font-pretendard font-bold text-3xl">{poolName}</h1>
         </section>
 
-        <section className="w-150 mt-30 flex flex-col">
+        <section className="w-150 mt-30 flex flex-col font-pretendard font-medium">
           <form onSubmit={handleSubmit}>
             <textarea
-              className="font-pretendard font-medium text-xl w-full h-50 border border-gray04 rounded-lg p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-blue02 transition-all resize-none"
+              className="text-xl w-full h-50 border border-gray04 rounded-lg p-4 mb-4 focus:outline-none focus:ring-1 focus:ring-blue02 transition-all resize-none"
               id="createReview"
               name="createReview"
               placeholder="실제 이용하신 후기를 자유롭게 남겨 주세요."
               value={reviewContent}
               onChange={handleChange}
             ></textarea>
-            <button
-              className={`font-pretendard font-medium text-xl rounded-[10px] px-4 py-2 mt-4 float-right ${reviewContent.trim() ? 'bg-blue02/10 cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
-              type="submit"
-            >
-              제출
-            </button>
+            <div className='flex justify-end'>
+              <button
+                className={`rounded-[10px] px-4 py-2 mt-4 ${reviewContent.trim() ?  'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
+                type="submit"
+              >
+                제출하기
+              </button>
+            </div>
           </form>
         </section>
       </main>
