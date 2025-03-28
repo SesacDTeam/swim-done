@@ -5,6 +5,7 @@ import { xmark, back } from '../../../utils/staticImagePath';
 import reviewApi from '../../../api/reviewApi';
 import useErrorResolver from '../../../hooks/useErrorResolver';
 import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
+import RequestError from '../../../error/RequestError';
 
 export default function CreateReview() {
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
@@ -14,7 +15,7 @@ export default function CreateReview() {
   const { poolId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const poolName = location.state?.poolName || '수영장 없음';
+  const poolName = location.state?.poolName;
 
   const handleChange = async (e) => {
     setReviewContent(e.target.value); // 입력된 값을 reviewText 상태에 저장
@@ -26,14 +27,15 @@ export default function CreateReview() {
 
     // 리뷰 없을 때 (trim 써서 공백만 입력된 경우도 막음)
     if (!reviewContent.trim()) {
-      alert('리뷰를 작성해 주세요!');
+      setError(new RequestError("리뷰를 작성해 주세요!"))
       return;
     }
 
     try {
       await reviewApi.createReview(poolId, reviewContent);
       navigate(-1)
-      alert('리뷰 작성 성공!');
+      // TODO: Toast 창 2가지 버전 가능하면 toast로 수정 or 불가능하면 그대로 alert 하거나 삭제 / 굳이 필요한가? 모르겠음
+      // alert('소중한 리뷰를 남겨주셔서 감사합니다!');
     } catch (error) {
       setError(error);
     } finally {
