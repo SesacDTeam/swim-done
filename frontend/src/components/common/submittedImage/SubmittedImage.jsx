@@ -4,6 +4,9 @@ import { xmark, back } from '../../../utils/staticImagePath';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import submittedImageApi from '../../../api/submittedImageApi';
 import { defaultUploadImage } from '../../../utils/staticImagePath';
+import useErrorResolver from '../../../hooks/useErrorResolver';
+import RequestError from '../../../error/RequestError';
+import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
 
 export default function SubmittedImage() {
   const { poolId } = useParams();
@@ -15,6 +18,7 @@ export default function SubmittedImage() {
   const [previewImage, setPreviewImage] = useState(null);
 
   const fileInputRef = useRef(null);
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
 
   // 파일 선택 버튼 클릭 시 input 클릭 이벤트 발생함 (input 숨겨놓음)
   const handleButtonClick = () => {
@@ -23,12 +27,11 @@ export default function SubmittedImage() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
     // 프론트에서도 파일 크기 제한함
     const maxSize = 3 * 1024 * 1024;
 
     if (file.size > maxSize) {
-      alert("파일 크기가 너무 큽니다. 3MB 이하로 업로드해 주세요.")
+      setError(new RequestError('파일 크기가 너무 큽니다. 3MB 이하로 업로드해 주세요.'));
       return;
     }
 
@@ -56,7 +59,8 @@ export default function SubmittedImage() {
     e.preventDefault();
 
     if (!inputData.file) {
-      alert('파일을 선택해 주세요!');
+      // alert창 대신 토스트로 변경
+      setError(new RequestError('파일을 선택해 주세요!'));
       return;
     }
 
