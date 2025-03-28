@@ -1,9 +1,8 @@
-package com.done.swim.oauth2.logout;
+package com.done.swim.oauth2.controller;
 
 import com.done.swim.domain.user.entity.User;
-import com.done.swim.oauth2.OAuth2TokenService;
-import com.done.swim.oauth2.UserWithdrawService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.done.swim.domain.user.service.UserService;
+import com.done.swim.oauth2.service.OAuth2TokenService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,26 +20,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final OAuth2TokenService oAuth2TokenService;
-    private final HttpServletRequest request;
-    private final UserWithdrawService userWithdrawService;
+    private final UserService userService;
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal User user,
-        HttpServletResponse response) {
+                                         HttpServletResponse response) {
 
         return oAuth2TokenService.logout(user, response);
     }
 
+    /**
+     * 회원 탈퇴
+     *
+     * @param user     유저
+     * @param response
+     */
     @DeleteMapping("/withdraw")
     public ResponseEntity<String> withdrawUser(
-        @AuthenticationPrincipal User user, HttpServletResponse response) {
+            @AuthenticationPrincipal User user, HttpServletResponse response) {
         Long userId = user.getId(); // 인증된 사용자 ID 가져오기
 
         // 1. 리프레시 토큰 삭제 (Redis)
         oAuth2TokenService.deleteRefreshToken(userId);
 
         // 2. 유저 삭제 (DB)
-        userWithdrawService.deleteUserWithTokens(userId); // 유저 삭제
+        userService.deleteUserWithTokens(userId); // 유저 삭제
 
         // 3. 로그아웃 로직 실행 (액세스 토큰 제거)
         oAuth2TokenService.logout(user, response);

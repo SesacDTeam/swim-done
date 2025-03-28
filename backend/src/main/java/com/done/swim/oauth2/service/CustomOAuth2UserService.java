@@ -1,7 +1,8 @@
-package com.done.swim.oauth2;
+package com.done.swim.oauth2.service;
 
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
+import com.done.swim.global.exception.ErrorCode;
 import com.done.swim.oauth2.provider.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +27,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
-        // 카카오 액세스 토큰 추출
-        String kakaoAccessToken = userRequest.getAccessToken().getTokenValue();
 
         // 어떤 OAuth2 제공자인지 확인 (네이버 or 카카오)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -55,7 +53,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             }
         } else {
-            throw new OAuth2AuthenticationException("지원하지 않는 소셜 로그인입니다.");
+            throw new OAuth2AuthenticationException(ErrorCode.INVALID_REQUEST.getMessage());
         }
 
         User user = userRepository.findByEmail(oAuth2UserInfo.getEmail())

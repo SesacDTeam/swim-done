@@ -29,7 +29,9 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // jwt 생성 메서드
+    /**
+     * JWT 생성 메서드
+     */
     public String createToken(User user, long expirationTime) {
 
         Long id = user.getId();
@@ -51,17 +53,23 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // 액세스 토큰 생성
+    /**
+     * 액세스 토큰 생성
+     */
     public String createAccessToken(User user) {
         return createToken(user, accessTokenValidityInMilliseconds);
     }
 
-    // 리프레시 토큰 생성
+    /**
+     * 리프레시 토큰 생성
+     */
     public String createRefreshToken(User user) {
         return createToken(user, refreshTokenValidityInMilliseconds);
     }
 
-    // jwt 유효성 검증
+    /**
+     * JWT 유효성 검증
+     */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -74,6 +82,9 @@ public class JwtTokenProvider {
         }
     }
 
+    /**
+     * 유저 이메일 추출
+     */
     public String getUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
@@ -83,6 +94,9 @@ public class JwtTokenProvider {
                 .get("username", String.class);
     }
 
+    /**
+     * 유저 아이디 추출
+     */
     public Long getUserId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
@@ -91,4 +105,5 @@ public class JwtTokenProvider {
                 .getBody()
                 .get("id", Long.class);
     }
+
 }

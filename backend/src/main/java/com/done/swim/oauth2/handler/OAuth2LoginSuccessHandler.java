@@ -2,8 +2,8 @@ package com.done.swim.oauth2.handler;
 
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.global.jwt.JwtTokenProvider;
-import com.done.swim.oauth2.CustomOAuth2User;
-import com.done.swim.oauth2.OAuth2TokenService;
+import com.done.swim.oauth2.provider.CustomOAuth2User;
+import com.done.swim.oauth2.service.OAuth2TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +40,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
-        String authorizationCode = request.getParameter("code");
-
         // authentication에서 principal을 가져옴
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
@@ -58,9 +56,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // 리프레시 토큰을 HttpOnly 쿠키에 저장
         addRefreshTokenCookie(response, refreshToken);
 
-        // 엑세스 토큰을 프론트엔드에 전달 (응답 헤더로)
-        // 리다이렉트 시키기 때문에 헤더에 넣는 게 불필요함
-//        response.addHeader("Authorization", "Bearer " + accessToken);
 
         // 리다이렉트
         getRedirectStrategy().sendRedirect(request, response,
