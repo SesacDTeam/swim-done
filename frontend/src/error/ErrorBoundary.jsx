@@ -3,7 +3,6 @@ import RequestError from './RequestError';
 import instance from '../api/axios';
 import ERROR_CODE from './ERROR_CODE';
 import ERROR_DISPLAY_MODE from './ERROR_DISPLAY_MODE';
-import { logo } from '../utils/staticImagePath';
 import { Link } from 'react-router';
 
 class ErrorBoundary extends Component {

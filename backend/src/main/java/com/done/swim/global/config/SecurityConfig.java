@@ -1,12 +1,12 @@
-package com.done.swim.config;
+package com.done.swim.global.config;
 
 
 import com.done.swim.global.jwt.JwtAuthenticationFilter;
 import com.done.swim.global.security.handler.CustomAccessDeniedHandler;
 import com.done.swim.global.security.handler.JwtAuthenticationEntryPoint;
-import com.done.swim.oauth2.CustomOAuth2UserService;
 import com.done.swim.oauth2.handler.OAuth2LoginFailureHandler;
 import com.done.swim.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.done.swim.oauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,9 +34,7 @@ public class SecurityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
-    @Value("${origin}")
-    private String origin;
-    @Value("${CORS_ALLOWED_ORIGIN}")
+    @Value("${spring.security.cors.allowed.origin}")
     private String CORS_ALLOWED_ORIGIN;
 
     @Bean
@@ -50,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/images").authenticated()
                         .requestMatchers("/login", "/oauth2/**", "/login-success", "/logout").permitAll() // 로그인, OAuth2, 로그아웃 엔드포인트 허용
                         .requestMatchers("/api/auth/**").permitAll() // API 관련 엔드포인트 허용
-                        .requestMatchers(HttpMethod.GET, "/api/pools/**", "/api/sections/**", "/api/swimmingtimes/**").permitAll() // GET 요청 허용
+                        .requestMatchers(HttpMethod.GET, "/api/pools/**", "/api/sections/**").permitAll() // GET 요청 허용
                         .requestMatchers("/api/swimmingtimes/**").permitAll()
                         .requestMatchers("/withdraw").authenticated() // 🔥 회원 탈퇴는 인증된 사용자만 가능
                         .anyRequest().authenticated() // 그 외의 모든 요청은 인증된 사용자만 접근
@@ -80,18 +78,14 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 인증 오류 핸들러
                 );
 
-
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin(origin);
         configuration.addAllowedOrigin(CORS_ALLOWED_ORIGIN);
-
         configuration.addAllowedOrigin("http://localhost:5173"); // ✅ 프론트엔드 로컬 개발 환경 추가
-
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
@@ -99,7 +93,6 @@ public class SecurityConfig {
 
         // ✅ 로그아웃 후 쿠키 삭제가 적용되도록 `Set-Cookie` 노출
         configuration.addExposedHeader("Set-Cookie");
-
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

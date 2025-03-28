@@ -18,6 +18,9 @@ public class PoolWithSwimmingTimeResponseDto {
     private String dayOfWeek;
     private List<SwimmingTimeResponseDto> swimmingTimes;
 
+    /**
+     * 특정 수영자 요약 정보
+     */
     public static PoolWithSwimmingTimeResponseDto from(Pool entity, String nowDayOfWeek) {
 
         return PoolWithSwimmingTimeResponseDto.builder()

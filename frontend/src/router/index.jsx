@@ -17,6 +17,9 @@ import UnauthenticateRoute from '../components/common/UnauthenticateRoute';
 import { setSelectedIndex } from '../store/slices/sideBarSlice';
 import ErrorBoundary from '../error/ErrorBoundary';
 
+import MyReviewPage from '../components/mypage/MyReviewPage';
+import UpdateReview from '../components/common/updatereview/UpdateReview';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -42,12 +45,16 @@ const router = createBrowserRouter([
           store.dispatch(hideDetailView());
           store.dispatch(showListBar());
         },
-        // children: [
-        //   {
-        //     path: 'reviews',
-        //     element: <내가작성한리뷰></내가작성한리뷰>,
-        //   },
-        // ],
+        children: [
+          {
+            path: 'reviews',
+            element: <MyReviewPage></MyReviewPage>,
+          },
+          {
+            path: 'reviews/:reviewId',
+            element: <UpdateReview></UpdateReview>,
+          },
+        ],
       },
       {
         path: '/pools',

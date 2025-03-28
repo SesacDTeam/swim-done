@@ -1,4 +1,4 @@
-package com.done.swim.config;
+package com.done.swim.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

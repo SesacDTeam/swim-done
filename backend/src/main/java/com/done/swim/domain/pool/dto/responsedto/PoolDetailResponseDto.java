@@ -11,37 +11,40 @@ import java.util.List;
 @Builder
 public class PoolDetailResponseDto {
 
-  private final String name;
-  private final String address;
-  private final double latitude;
-  private final double longitude;
-  private final String additionalInfo;
-  private final String parking;
-  private final String link;
-  private final List<SwimmingTimeResponseDto> swimmingTimes;
-  private final List<PoolDetailReviewResponseDto> reviews;
+    private final String name;
+    private final String address;
+    private final Double latitude;
+    private final Double longitude;
+    private final String additionalInfo;
+    private final String parking;
+    private final String link;
+    private final List<SwimmingTimeResponseDto> swimmingTimes;
+    private final List<PoolDetailReviewResponseDto> reviews;
 
-  public static PoolDetailResponseDto from(Pool pool) {
-    return PoolDetailResponseDto.builder()
-      .name(pool.getName())
-      .address(pool.getAddress())
-      .latitude(pool.getLatitude())
-      .longitude(pool.getLongitude())
-      .additionalInfo(pool.getAdditionalInfo())
-      .parking(pool.getParking())
-      .link(pool.getLink())
-      .swimmingTimes(
-        pool.getSwimmingTimes().stream()
-          .map(SwimmingTimeResponseDto::from)
-          .toList()
-      )
-      .reviews(
-        pool.getPoolReviews().stream()
-          .map(PoolDetailReviewResponseDto::from)
-          .toList()
-      )
-      .build();
-  }
+    /**
+     * 특정 수영장의 정보
+     */
+    public static PoolDetailResponseDto from(Pool pool) {
+        return PoolDetailResponseDto.builder()
+                .name(pool.getName())
+                .address(pool.getAddress())
+                .latitude(pool.getLatitude())
+                .longitude(pool.getLongitude())
+                .additionalInfo(pool.getAdditionalInfo())
+                .parking(pool.getParking())
+                .link(pool.getLink())
+                .swimmingTimes(
+                        pool.getSwimmingTimes().stream()
+                                .map(SwimmingTimeResponseDto::from)
+                                .toList()
+                )
+                .reviews(
+                        pool.getPoolReviews().stream()
+                                .map(PoolDetailReviewResponseDto::from)
+                                .toList()
+                )
+                .build();
+    }
 
 }
 

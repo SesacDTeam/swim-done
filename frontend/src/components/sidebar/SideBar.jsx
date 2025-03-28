@@ -34,6 +34,10 @@ export default function SideBar() {
   const dispatch = useDispatch();
 
   const handleClickItem = (index) => {
+    if (selectedIndex === index) {
+      return;
+    }
+    
     dispatch(setSelectedIndex(index));
     if (index === 0) {
       navigate('/mypage');

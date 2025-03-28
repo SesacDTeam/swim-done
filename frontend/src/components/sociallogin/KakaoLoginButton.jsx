@@ -1,15 +1,14 @@
 import React from 'react';
 export default function KakaoLoginButton() {
   const handleKakaoLogin = async () => {
-    const DOMAIN = import.meta.env.VITE_DOMAIN;
     window.location.href = `oauth2/authorization/kakao`;
   };
 
   return (
-    <div className="flex justify-center mt-2">
+    <div className="flex justify-center">
       <button
         onClick={handleKakaoLogin}
-        className="font-pretendard font-semibold flex items-center bg-kyello text-black rounded-md px-4 py-3 gap-3 mb-2 min-w-[180px]"
+        className="min-w-[180px] font-pretendard font-semibold flex items-center bg-kyello text-black rounded-md px-4 py-3 gap-3 mb-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
