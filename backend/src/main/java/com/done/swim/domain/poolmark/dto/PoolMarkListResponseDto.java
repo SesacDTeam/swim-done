@@ -10,17 +10,22 @@ import java.util.List;
 @Getter
 @Builder
 public class PoolMarkListResponseDto {
-  private List<PoolMarkResponseDto> poolMarks;
-  private Boolean hasNext;
+    private List<PoolMarkResponseDto> poolMarks;
+    private Boolean hasNext;
 
-  public static PoolMarkListResponseDto from(Page<PoolMark> poolMarkPage) {
-    List<PoolMarkResponseDto> poolMarkResponseDtos = poolMarkPage.getContent().stream()
-      .map(PoolMarkResponseDto::from)
-      .toList();
+    /**
+     * 찜 목록
+     *
+     * @param entityPage 페이징 처리된 찜-엔티티
+     */
+    public static PoolMarkListResponseDto from(Page<PoolMark> entityPage) {
+        List<PoolMarkResponseDto> poolMarkResponseDtos = entityPage.getContent().stream()
+                .map(PoolMarkResponseDto::from)
+                .toList();
 
-    return PoolMarkListResponseDto.builder()
-      .poolMarks(poolMarkResponseDtos)
-      .hasNext(poolMarkPage.hasNext())
-      .build();
-  }
+        return PoolMarkListResponseDto.builder()
+                .poolMarks(poolMarkResponseDtos)
+                .hasNext(entityPage.hasNext())
+                .build();
+    }
 }

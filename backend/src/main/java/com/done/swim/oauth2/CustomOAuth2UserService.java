@@ -29,7 +29,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // 카카오 액세스 토큰 추출
         String kakaoAccessToken = userRequest.getAccessToken().getTokenValue();
-        log.info("✅카카오 액세스 토큰: {}", kakaoAccessToken);  // 액세스 토큰을 로그에 출력
 
         // 어떤 OAuth2 제공자인지 확인 (네이버 or 카카오)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -53,16 +52,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             if (oAuth2UserInfo.getEmail() == null) {
                 String generatedEmail = "github_" + oAuth2UserInfo.getProviderId() + "@github.com";
                 ((GithubUserInfo) oAuth2UserInfo).setEmail(generatedEmail);
-                log.info("GitHub 사용자 이메일이 없어 임의 이메일 생성: {}", generatedEmail);
-                log.info("✅ 수정된 이메일: {}", oAuth2UserInfo.getEmail()); // 이걸 추가해서 확인해보자!
-
 
             }
         } else {
             throw new OAuth2AuthenticationException("지원하지 않는 소셜 로그인입니다.");
         }
-
-        log.info("GitHub OAuth2 Attributes: {}", oAuth2User.getAttributes());
 
         User user = userRepository.findByEmail(oAuth2UserInfo.getEmail())
                 .orElseGet(() -> userRepository.save(User.builder()
@@ -72,17 +66,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         .provider(oAuth2UserInfo.getProvider().name())
                         .providerId(oAuth2UserInfo.getProviderId())
                         .build()));
-        log.info("이메일: {}", user.getEmail());
-
-        // 카카오 로그인인 경우 카카오 액세스 토큰 저장
-        if ("kakao".equals(registrationId)) {
-            user.setKakaoAccessToken(kakaoAccessToken);
-            userRepository.save(user);
-            log.info("✅ 카카오 액세스 토큰 저장 완료: {}", kakaoAccessToken);
-        }
-
-        // 이메일을 로그로 출력하여 확인
-        log.info("OAuth2User에서 추출한 이메일: {}", oAuth2UserInfo.getEmail());
 
         return new CustomOAuth2User(user, oAuth2User);
     }

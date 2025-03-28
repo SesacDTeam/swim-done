@@ -31,8 +31,6 @@ public class SubmittedImageController {
             @AuthenticationPrincipal User user,
             @RequestPart("file") MultipartFile file) {
 
-        log.info("file : {}", file.getOriginalFilename());
-
         Pool pool = poolRepository.findById(poolId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.POOL_NOT_FOUND));
 

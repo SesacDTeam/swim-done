@@ -4,27 +4,18 @@ import com.done.swim.domain.poolreview.entity.PoolReview;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
-public class CreatePoolReviewResponseDto {
+public class ReviewResponseDto {
 
     private final String poolName;
     private final String content;
-    private final LocalDateTime createAt;
 
-    /**
-     * 리뷰 생성 응답 DTO
-     *
-     * @param entity
-     * @return
-     */
-    public static CreatePoolReviewResponseDto from(PoolReview entity) {
-        return CreatePoolReviewResponseDto.builder()
+
+    public static ReviewResponseDto from(PoolReview entity) {
+        return ReviewResponseDto.builder()
                 .poolName(entity.getPool().getName())
                 .content(entity.getContent())
-                .createAt(entity.getCreatedAt())
                 .build();
     }
 }

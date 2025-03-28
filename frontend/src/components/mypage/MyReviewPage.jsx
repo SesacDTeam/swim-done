@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { myPage } from '../../api/myPage';
+import { myPageApi } from '../../api/myPageApi';
 import MyReviewPageItem from './MyReviewPageItem';
 
 export default function MyReviewPage() {
-  const token = useSelector((state) => state.auth.accessToken);
-
   const [reviews, setReviews] = useState([]); // 리뷰 데이터
   const [totalCount, setTotalCount] = useState(0); // 총 리뷰 개수
   const [isFetching, setIsFetching] = useState(false); // 데이터 로딩 중 여부
@@ -35,13 +33,14 @@ export default function MyReviewPage() {
     isLoadingRef.current = true;
 
     try {
-      const data = await myPage.getMyReview(token, pageRef.current, 5);
+      const response = await myPageApi.getMyReview(pageRef.current);
+      const { reviews, totalCount, hasNext } = response.data;
 
-      setReviews((prev) => (reset ? data.data.reviews : [...prev, ...data.data.reviews]));
-      setTotalCount(data.data.totalCount);
+      setReviews((prev) => (reset ? reviews : [...prev, ...response.data.reviews]));
+      setTotalCount(totalCount);
 
-      hasMoreRef.current = data.data.hasNext;
-      if (data.data.hasNext) {
+      hasMoreRef.current = hasNext;
+      if (hasNext) {
         pageRef.current += 1;
       }
     } catch (error) {
@@ -103,7 +102,7 @@ export default function MyReviewPage() {
             key={index}
             reviewId={review.reviewId}
             poolName={review.poolName}
-            createdAt={extractDate(review.timestamp)}
+            createdAt={extractDate(review.createdAt)}
             content={review.content}
             fetchReviews={fetchReviews}
             setTotalCount={setTotalCount}

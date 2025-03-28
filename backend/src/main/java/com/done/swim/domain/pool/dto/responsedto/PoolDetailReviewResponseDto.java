@@ -10,20 +10,23 @@ import java.time.LocalDateTime;
 @Builder
 public class PoolDetailReviewResponseDto {
 
-  private final Long authorId;
-  private final String authorNickname;
-  private final String content;
-  private final LocalDateTime createdAt;
-  private final LocalDateTime updatedAt;
+    private final Long authorId;
+    private final String authorNickname;
+    private final String content;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-  public static PoolDetailReviewResponseDto from(PoolReview entity) {
+    /**
+     * 수영장의 리뷰
+     */
+    public static PoolDetailReviewResponseDto from(PoolReview entity) {
 
-    return PoolDetailReviewResponseDto.builder()
-      .authorId(entity.getUser().getId())
-      .authorNickname(entity.getUser().getNickname())
-      .content(entity.getContent())
-      .createdAt(entity.getCreatedAt())
-      .updatedAt(entity.getUpdatedAt())
-      .build();
-  }
+        return PoolDetailReviewResponseDto.builder()
+                .authorId(entity.getUser().getId())
+                .authorNickname(entity.getUser().getNickname())
+                .content(entity.getContent())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
+    }
 }

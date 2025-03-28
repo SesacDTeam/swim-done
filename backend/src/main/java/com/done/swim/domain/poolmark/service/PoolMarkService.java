@@ -17,54 +17,74 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PoolMarkService {
 
-  private final PoolMarkRepository poolMarkRepository;
-  private final PoolRepository poolRepository;
+    private final PoolMarkRepository poolMarkRepository;
+    private final PoolRepository poolRepository;
 
-  @Transactional
-  public void createPoolMark(Long poolId, User user) {
-    Pool pool = fetchPool(poolId);
+    /**
+     * 찜 생성
+     *
+     * @param poolId 수영장 식별 아이디
+     * @param user   유저
+     */
+    @Transactional
+    public void createPoolMark(Long poolId, User user) {
+        Pool pool = fetchPool(poolId);
 
-    PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
+        PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
-    if (alreadyMarkedPool != null) {
-      throw new GlobalException(ErrorCode.ALREADY_MARK);
+        if (alreadyMarkedPool != null) {
+            throw new GlobalException(ErrorCode.ALREADY_MARK);
+        }
+
+        PoolMark poolMark = PoolMark.builder().user(user).pool(pool).build();
+        poolMarkRepository.save(poolMark);
     }
 
-    PoolMark poolMark = PoolMark.builder().user(user).pool(pool).build();
-    poolMarkRepository.save(poolMark);
-  }
+    /**
+     * 유저의 찜 조회
+     *
+     * @param pageable 페이저블
+     * @param userId   유저 아이디
+     */
+    public PoolMarkListResponseDto getMyPoolMark(Pageable pageable, Long userId) {
+        Page<PoolMark> poolMarkPage = poolMarkRepository.findByUserId(userId, pageable);
 
-  public PoolMarkListResponseDto getMyPoolMark(Pageable pageable, Long userId) {
-    Page<PoolMark> poolMarkPage = poolMarkRepository.findByUserId(userId, pageable);
-
-    return PoolMarkListResponseDto.from(poolMarkPage);
-  }
-
-  @Transactional
-  public void deleteMyPoolMark(Long poolId, User user) {
-    Pool pool = fetchPool(poolId);
-
-    PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
-
-    if (alreadyMarkedPool == null) {
-      throw new GlobalException(ErrorCode.NOT_MARK);
+        return PoolMarkListResponseDto.from(poolMarkPage);
     }
 
-    if (alreadyMarkedPool.getUser().getId() != user.getId()) {
-      throw new ForBiddenException(ErrorCode.AUTHOR_ONLY);
+    /**
+     * 찜 삭제
+     *
+     * @param poolId 수영장 식별 아이디
+     * @param user   유저
+     */
+    @Transactional
+    public void deleteMyPoolMark(Long poolId, User user) {
+        Pool pool = fetchPool(poolId);
+
+        PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
+
+        if (alreadyMarkedPool == null) {
+            throw new GlobalException(ErrorCode.NOT_MARK);
+        }
+
+        if (!Objects.equals(alreadyMarkedPool.getUser().getId(), user.getId())) {
+            throw new ForBiddenException(ErrorCode.AUTHOR_ONLY);
+        }
+
+        poolMarkRepository.deleteById(alreadyMarkedPool.getId());
     }
 
-    poolMarkRepository.deleteById(alreadyMarkedPool.getId());
-  }
-
-  private Pool fetchPool(Long poolId) {
-    return poolRepository.findById(poolId)
-      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
-  }
+    private Pool fetchPool(Long poolId) {
+        return poolRepository.findById(poolId)
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
+    }
 }
