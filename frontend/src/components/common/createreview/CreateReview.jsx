@@ -14,7 +14,7 @@ export default function CreateReview() {
   const { poolId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const poolName = location.state?.poolName || '수영장 없음';
+  const poolName = location.state?.poolName;
 
   const handleChange = async (e) => {
     setReviewContent(e.target.value); // 입력된 값을 reviewText 상태에 저장
