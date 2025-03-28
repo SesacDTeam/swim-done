@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface PoolMarkRepository extends JpaRepository<PoolMark, Long> {
 
     /**
@@ -15,7 +17,7 @@ public interface PoolMarkRepository extends JpaRepository<PoolMark, Long> {
      * @param user 유저
      * @param pool 수영장
      */
-    PoolMark findByUserAndPool(User user, Pool pool);
+    Optional<PoolMark> findByUserAndPool(User user, Pool pool);
 
     /**
      * 페이징 처리된 유저의 찜 목록

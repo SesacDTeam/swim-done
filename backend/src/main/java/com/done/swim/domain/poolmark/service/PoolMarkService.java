@@ -7,7 +7,6 @@ import com.done.swim.domain.poolmark.entity.PoolMark;
 import com.done.swim.domain.poolmark.repository.PoolMarkRepository;
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.global.exception.ErrorCode;
-import com.done.swim.global.exception.ForBiddenException;
 import com.done.swim.global.exception.GlobalException;
 import com.done.swim.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -38,9 +37,9 @@ public class PoolMarkService {
     public void createPoolMark(Long poolId, User user) {
         Pool pool = fetchPool(poolId);
 
-        PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
+        Optional<PoolMark> alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
 
-        if (alreadyMarkedPool != null) {
+        if (alreadyMarkedPool.isPresent()) {
             throw new GlobalException(ErrorCode.ALREADY_MARK);
         }
 
@@ -70,17 +69,10 @@ public class PoolMarkService {
     public void deleteMyPoolMark(Long poolId, User user) {
         Pool pool = fetchPool(poolId);
 
-        PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool);
+        PoolMark alreadyMarkedPool = poolMarkRepository.findByUserAndPool(user, pool)
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_MARK));
 
-        if (alreadyMarkedPool == null) {
-            throw new GlobalException(ErrorCode.NOT_MARK);
-        }
-
-        if (!Objects.equals(alreadyMarkedPool.getUser().getId(), user.getId())) {
-            throw new ForBiddenException(ErrorCode.AUTHOR_ONLY);
-        }
-
-        poolMarkRepository.deleteById(alreadyMarkedPool.getId());
+        poolMarkRepository.delete(alreadyMarkedPool);
     }
 
     private Pool fetchPool(Long poolId) {
