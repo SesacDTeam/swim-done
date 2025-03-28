@@ -6,6 +6,7 @@ import { poolApi } from '../../../api/poolApi';
 import { Link, useParams } from 'react-router';
 import { extractDate } from '../../../utils/extractDate';
 import useErrorResolver from '../../../hooks/useErrorResolver';
+import Timetable from './TimeTable';
 
 export default function PoolDetail() {
   const mapContainer = useRef();
@@ -59,20 +60,22 @@ export default function PoolDetail() {
           <div ref={mapContainer} className="w-full h-100"></div>
         </section>
 
-        <section className="relative border-1 w-[80%] rounded-2xl border-blue01 bg-blue02/20 text-body01 pretendard-normal flex flex-col justify-center gap-1 px-4 pt-10 pb-4">
+        <section className="relative border-1 w-[80%] rounded-2xl border-blue01 bg-blue02/20 pretendard-normal flex flex-col justify-center gap-1 px-4 pt-10 pb-4">
           {/* TODO: 시간 데이터 수정 */}
-          <div>평일: 9:00 ~ 9:50, 10:00 ~ 10:50, 19:00 ~ 19:50</div>
-          <div>주말: 9:00 ~ 9:50, 10:00 ~ 10:50, 21:00 ~ 21:50</div>
-          <div>{poolDetail?.additionalInfo}</div>
-          <div>{poolDetail?.parking}</div>
           <div>
-            {poolDetail?.name}(
-            <a href={poolDetail?.link} className="text-blue-600" target="_blank" rel="noreferrer">
-              {poolDetail?.link}
-            </a>
-            )
+            <Timetable></Timetable>
           </div>
-
+          <div className="text-body01">
+            <div>{poolDetail?.additionalInfo}</div>
+            <div>{poolDetail?.parking}</div>
+            <div>
+              {poolDetail?.name}(
+              <a href={poolDetail?.link} className="text-blue-600" target="_blank" rel="noreferrer">
+                {poolDetail?.link}
+              </a>
+              )
+            </div>
+          </div>
           <Link to="submitted-images" className="self-end" state={{ poolName: poolDetail?.name }}>
             <button className="bg-blue01 w-35 h-10 rounded-[10px] text-white pretendard-normal text-xs">
               수정 제안하기
