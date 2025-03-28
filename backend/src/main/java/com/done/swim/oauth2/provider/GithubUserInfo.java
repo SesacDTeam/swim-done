@@ -36,7 +36,7 @@ public class GithubUserInfo implements OAuth2UserInfo {
 
     @Override
     public String getNickname() {
-        return (String) attributes.get("name");
+        return (String) attributes.get("login");
     }
 
     @Override
