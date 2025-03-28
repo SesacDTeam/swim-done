@@ -32,14 +32,16 @@ const router = createBrowserRouter([
       {
         path: '/mypage',
         element: (
-          <AuthenticateRoute
-            cancleAction={() => {
-              store.dispatch(hideListBar());
-              store.dispatch(setSelectedIndex(null));
-            }}
-          >
-            <MyPage></MyPage>
-          </AuthenticateRoute>
+          <ErrorBoundary>
+            <AuthenticateRoute
+              cancleAction={() => {
+                store.dispatch(hideListBar());
+                store.dispatch(setSelectedIndex(null));
+              }}
+            >
+              <MyPage></MyPage>
+            </AuthenticateRoute>
+          </ErrorBoundary>
         ),
         loader: () => {
           store.dispatch(hideDetailView());
