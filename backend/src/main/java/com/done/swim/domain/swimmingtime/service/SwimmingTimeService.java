@@ -22,10 +22,26 @@ public class SwimmingTimeService {
     private final SwimmingTimeRepository swimmingTimeRepository;
     private final PoolRepository poolRepository;
 
+    /**
+     * 수영장 자유 수영 시간 저장
+     *
+     * @param poolId      수영장 아이디
+     * @param requestDtos 요청 DTO
+     */
     @Transactional
     public List<SwimmingTimeResponseDto> createSwimmingTimes(Long poolId, List<SwimmingTimeRequestDto> requestDtos) {
-        Pool pool = poolRepository.findById(poolId).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
-        List<SwimmingTime> swimmingTimes = requestDtos.stream().map((dto) -> dto.toEntity(pool)).toList();
-        return swimmingTimeRepository.saveAll(swimmingTimes).stream().map(SwimmingTimeResponseDto::from).toList();
+
+        Pool pool = poolRepository.findById(poolId).orElseThrow(
+                () -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND)
+        );
+
+        List<SwimmingTime> swimmingTimes = requestDtos.stream().map(
+                (dto) -> dto.toEntity(pool)
+        ).toList();
+
+        return swimmingTimeRepository.saveAll(swimmingTimes)
+                .stream().map(
+                        SwimmingTimeResponseDto::from
+                ).toList();
     }
 }

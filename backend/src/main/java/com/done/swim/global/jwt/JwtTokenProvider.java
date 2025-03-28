@@ -7,18 +7,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import java.util.Base64;
-import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Base64;
+import java.util.Date;
 
 @Slf4j
 @Component
 public class JwtTokenProvider {
 
-    //    private final long accessTokenValidityInMilliseconds = 1000L * 60 * 60 * 24 * 30; // 1시간
-    private final long accessTokenValidityInMilliseconds = 1000L * 30; // 30초 (테스트용)
+    private final long accessTokenValidityInMilliseconds = 1000L * 60 * 60; // 1시간
     private final long refreshTokenValidityInMilliseconds = 1000L * 60 * 60 * 24 * 30; // 30일
 
     @Value("${jwt.secret}")
@@ -29,14 +29,13 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // jwt 생성 메서드
+    /**
+     * JWT 생성 메서드
+     */
     public String createToken(User user, long expirationTime) {
 
         Long id = user.getId();
         String username = user.getUsername();
-
-        log.info("user.getId(): {}", id);
-        log.info("user.getUsername(): {}", username);
 
         Claims claims = Jwts.claims();
         claims.put("id", id);
@@ -47,51 +46,64 @@ public class JwtTokenProvider {
 
         // jwt 토큰 생성 및 반환
         return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(now)
-            .setExpiration(validity)
-            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
-            .compact();
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    // 액세스 토큰 생성
+    /**
+     * 액세스 토큰 생성
+     */
     public String createAccessToken(User user) {
         return createToken(user, accessTokenValidityInMilliseconds);
     }
 
-    // 리프레시 토큰 생성
+    /**
+     * 리프레시 토큰 생성
+     */
     public String createRefreshToken(User user) {
         return createToken(user, refreshTokenValidityInMilliseconds);
     }
 
-    // jwt 유효성 검증
+    /**
+     * JWT 유효성 검증
+     */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
-                .build()
-                .parseClaimsJws(token);
+                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
+    /**
+     * 유저 이메일 추출
+     */
     public String getUsername(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .get("username", String.class);
+                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("username", String.class);
     }
 
+    /**
+     * 유저 아이디 추출
+     */
     public Long getUserId(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .get("id", Long.class);
+                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id", Long.class);
     }
+
 }

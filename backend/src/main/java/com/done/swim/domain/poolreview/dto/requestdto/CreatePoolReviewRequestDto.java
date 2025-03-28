@@ -7,18 +7,25 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
+
 @Getter
 public class CreatePoolReviewRequestDto {
 
-  @NotBlank
-  @Length(max = 100)
-  private String content;
+    @NotBlank
+    @Length(max = 100)
+    private String content;
 
-  public PoolReview toEntity(Pool pool, User userDate) {
-    return PoolReview.builder()
-        .pool(pool)
-        .user(userDate)
-        .content(content)
-        .build();
-  }
+    /**
+     * 리뷰 생성, DTO -> Entity
+     *
+     * @param pool
+     * @param userDate
+     */
+    public PoolReview toEntity(Pool pool, User userDate) {
+        return PoolReview.builder()
+                .pool(pool)
+                .user(userDate)
+                .content(content)
+                .build();
+    }
 }

@@ -25,13 +25,18 @@ public class SubmittedImageController {
     private final SubmittedImageService submittedImageService;
     private final PoolRepository poolRepository;
 
+    /**
+     * 단건 이미지 저장
+     *
+     * @param poolId 수영장 식별 아이디
+     * @param user   유저
+     * @param file   이미지
+     */
     @PostMapping
     public SubmittedImageResponseDto createImage(
             @RequestParam("poolId") Long poolId,
             @AuthenticationPrincipal User user,
             @RequestPart("file") MultipartFile file) {
-
-        log.info("file : {}", file.getOriginalFilename());
 
         Pool pool = poolRepository.findById(poolId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.POOL_NOT_FOUND));
@@ -45,16 +50,29 @@ public class SubmittedImageController {
         return submittedImageService.createImage(requestDto);
     }
 
+    /**
+     * 특정 이미지 조회
+     *
+     * @param id 이미지 아이디
+     */
     @GetMapping("/{id}")
     public SubmittedImageResponseDto getImageById(@PathVariable Long id) {
         return submittedImageService.getImageById(id);
     }
 
+    /**
+     * 모든 이미지 조회
+     */
     @GetMapping
     public List<SubmittedImageResponseDto> getImages() {
         return submittedImageService.getImages();
     }
 
+    /**
+     * 특정 이미지 삭제
+     *
+     * @param id 이미지 아이디
+     */
     @DeleteMapping("/{id}")
     public void deleteImage(@PathVariable Long id) {
         submittedImageService.deleteImage(id);

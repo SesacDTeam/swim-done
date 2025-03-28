@@ -23,23 +23,24 @@ public class PoolService {
 
     private final PoolRepository poolRepository;
 
+    /**
+     * 수영장 상세 정보
+     *
+     * @param poolId 수영장 식별 아이디
+     */
     public PoolDetailResponseDto fetchPoolDetail(Long poolId) {
         Pool pool = poolRepository.findByIdWithCommentAndTimes(poolId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
         return PoolDetailResponseDto.from(pool);
     }
 
-    // TODO : 지역구 좌표정보 조회
-    // 새로운 서비스 클래스로 분리 예정
-    // Repository 도 만들어야 함
-//    public List<CoordinatesResponseDto> getCoordinates() {
-//        List<Coordinates> coordinates = poolRepository.findCoordinates();
-//        return coordinates.stream().map(CoordinatesResponseDto::from).toList();
-//    }
-
+    /**
+     * 수영장 요약 정보
+     *
+     * @param poolName 수영장 이름
+     */
     public PoolWithSwimmingTimeResponseDto getPoolWithName(String poolName) {
-        // 오늘 요일, 예시) 월요일
-        String nowDayOfWeek = Week.getNowDayOfWeekInKorean();
+        String nowDayOfWeek = Week.getNowDayOfWeekInKorean(); // 오늘 요일, 예시) 월요일
         return PoolWithSwimmingTimeResponseDto.from(
                 poolRepository.getPoolWithName(poolName, Week.from(nowDayOfWeek))
                         .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND)),
@@ -47,7 +48,11 @@ public class PoolService {
         );
     }
 
-    public List<PoolWithSectionResponseDto> getPoolsWithSection(String section, long userId) {
+    /**
+     * @param section 지역명
+     * @param userId  유저 아이디
+     */
+    public List<PoolWithSectionResponseDto> getPoolsWithSection(String section, Long userId) {
         List<Pool> pools = poolRepository.findBySectionWithUserId(section, userId);
 
         return pools.stream().map(p -> PoolWithSectionResponseDto.from(p, userId)).toList();

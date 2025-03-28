@@ -12,7 +12,6 @@ public class NaverUserInfo implements OAuth2UserInfo {
         this.attributes = attributes;
     }
 
-    // enum으로 변경함
     @Override
     public Provider getProvider() {
         return Provider.NAVER;
