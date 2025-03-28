@@ -83,6 +83,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // 이메일을 로그로 출력하여 확인
         log.info("OAuth2User에서 추출한 이메일: {}", oAuth2UserInfo.getEmail());
+        log.info("OAuth2User에서 추출한 닉네임: {}", oAuth2UserInfo.getNickname());
+
 
         return new CustomOAuth2User(user, oAuth2User);
     }
