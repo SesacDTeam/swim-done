@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,11 @@ public class SubmittedImageService {
     private final SubmittedImageRepository submittedImageRepository;
     private final AwsS3Service awsS3Service;
 
-    // 제보한 이미지 생성
+    /**
+     * 이미지 생성
+     *
+     * @param requestDto 요청 DTO
+     */
     @Transactional
     public SubmittedImageResponseDto createImage(SubmittedImageRequestDto requestDto) {
 
@@ -34,40 +37,41 @@ public class SubmittedImageService {
 
         Map<String, String> uploadResult = awsS3Service.uploadImage(requestDto.getFile());
 
-        String imageUrl = uploadResult.get("imageUrl");
-        String s3Key = uploadResult.get("s3Key");
-
-        SubmittedImage submittedImage = SubmittedImage.builder()
-                .pool(requestDto.getPool())
-                .user(requestDto.getUser())
-                .imageUrl(imageUrl)
-                .originalName(requestDto.getFile().getOriginalFilename())
-                .s3Key(s3Key)
-                .build();
-
-        SubmittedImage savedSubmittedImage = submittedImageRepository.save(submittedImage);
-
-        return toResponseDto(savedSubmittedImage);
+        return SubmittedImageResponseDto.from(
+                submittedImageRepository.save(
+                        requestDto.toEntity(findOneImage)
+                )
+        );
 
     }
 
-    // 제보한 이미지 조회
+    /**
+     * 특정 이미지 조회
+     *
+     * @param id 이미지 아이디
+     */
     public SubmittedImageResponseDto getImageById(Long id) {
         SubmittedImage submittedImage = submittedImageRepository.findById(id)
                 .orElseThrow(() -> new GlobalException(ErrorCode.IMAGE_NOT_FOUND));
 
-        return toResponseDto(submittedImage);
+        return SubmittedImageResponseDto.from(submittedImage);
     }
 
-    // 제보한 모든 이미지 조회
+    /**
+     * 모든 이미지 조회
+     */
     public List<SubmittedImageResponseDto> getImages() {
         return submittedImageRepository.findAll()
                 .stream()
-                .map(this::toResponseDto)
-                .collect(Collectors.toList());
+                .map(SubmittedImageResponseDto::from)
+                .toList();
     }
 
-    // 제보한 이미지 삭제
+    /**
+     * 이미지 삭제
+     *
+     * @param id 이미지 아이디
+     */
     @Transactional
     public void deleteImage(Long id) {
         SubmittedImage submittedImage = submittedImageRepository.findById(id)
@@ -78,16 +82,6 @@ public class SubmittedImageService {
         submittedImageRepository.delete(submittedImage);
     }
 
-    private SubmittedImageResponseDto toResponseDto(SubmittedImage submittedImage) {
-
-        return SubmittedImageResponseDto.builder()
-                .id(submittedImage.getId())
-                .pool(submittedImage.getPool())
-                .user(submittedImage.getUser())
-                .imageUrl(submittedImage.getImageUrl())
-                .originalName(submittedImage.getOriginalName())
-                .build();
-    }
 
 }
 

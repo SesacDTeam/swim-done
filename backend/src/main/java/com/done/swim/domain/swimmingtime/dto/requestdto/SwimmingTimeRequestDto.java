@@ -22,6 +22,11 @@ public class SwimmingTimeRequestDto {
     private LocalTime endTime;
     private Week dayOfWeek;
 
+    /**
+     * DTO -> Entity
+     *
+     * @param entity 수영장 엔티티
+     */
     public SwimmingTime toEntity(Pool entity) {
         return SwimmingTime.builder()
                 .pool(entity)

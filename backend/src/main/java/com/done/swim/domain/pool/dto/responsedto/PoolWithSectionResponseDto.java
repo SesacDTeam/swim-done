@@ -18,6 +18,9 @@ public class PoolWithSectionResponseDto {
     private Double longitude;
     private Boolean mark;
 
+    /**
+     * 특정 지역구의 수영장 조회 + 유저의 찜 여부
+     */
     public static PoolWithSectionResponseDto from(Pool entity, Long userId) {
         return PoolWithSectionResponseDto.builder()
                 .id(entity.getId())

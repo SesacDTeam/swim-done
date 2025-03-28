@@ -34,7 +34,9 @@ public class AwsS3Service {
     @Value("${REGION}")
     private String region;
 
-    // 이미지 파일 S3에 업로드하고 URL과 객체 키 반환
+    /**
+     * 이미지 파일 S3에 업로드하고 URL과 객체 키 반환
+     */
     public Map<String, String> uploadImage(MultipartFile file) {
 
         // 파일 객체 키 생성
@@ -53,7 +55,9 @@ public class AwsS3Service {
         );
     }
 
-    // 이미지 파일 S3 버킷에 업로드
+    /**
+     * 이미지 파일 S3 버킷에 업로드
+     */
     private void uploadImageToS3(MultipartFile file, String s3Key) {
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -70,7 +74,9 @@ public class AwsS3Service {
         }
     }
 
-    // S3 객체 삭제
+    /**
+     * S3 객체 삭제
+     */
     public void deleteFile(String s3Key) {
         try {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()

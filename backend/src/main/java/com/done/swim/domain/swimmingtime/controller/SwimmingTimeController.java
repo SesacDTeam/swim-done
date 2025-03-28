@@ -17,6 +17,12 @@ public class SwimmingTimeController {
 
     private final SwimmingTimeService swimmingTimeService;
 
+    /**
+     * 특정 수영장의 자유 수영 시간 저장
+     *
+     * @param poolId      수영장 아이디
+     * @param requestDtos 요청 DTO
+     */
     @PostMapping("/{poolId}")
     public ResponseEntity<ApiResponse<List<SwimmingTimeResponseDto>>> createSwimmingTimes(
             @PathVariable("poolId") Long poolId,

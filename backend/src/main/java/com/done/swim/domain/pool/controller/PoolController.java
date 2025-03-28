@@ -15,11 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/pools")
 public class PoolController {
 
-  private final PoolService poolService;
+    private final PoolService poolService;
 
-  @GetMapping("/{poolId}")
-  public ResponseEntity<ApiResponse<PoolDetailResponseDto>> fetchPoolDetail(
-      @PathVariable Long poolId) {
-    return ResponseEntity.ok(ApiResponse.ok(poolService.fetchPoolDetail(poolId)));
-  }
+    /**
+     * 특정 수영장의 상세 정보
+     *
+     * @param poolId 수영장 식별 아이디
+     */
+    @GetMapping("/{poolId}")
+    public ResponseEntity<ApiResponse<PoolDetailResponseDto>> fetchPoolDetail(
+            @PathVariable Long poolId) {
+        return ResponseEntity.ok(ApiResponse.ok(poolService.fetchPoolDetail(poolId)));
+    }
 }
