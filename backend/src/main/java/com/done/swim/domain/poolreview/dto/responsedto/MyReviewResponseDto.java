@@ -18,6 +18,11 @@ public class MyReviewResponseDto {
     private boolean hasNext;
     private List<MyReviewResponseDtoItem> reviews;
 
+    /**
+     * 유저의 리뷰 모음
+     *
+     * @param pageEntity 페이징 처리된 리뷰 엔티티
+     */
     public static MyReviewResponseDto from(Page<PoolReview> pageEntity) {
         return MyReviewResponseDto.builder()
                 .totalCount(pageEntity.getTotalElements())

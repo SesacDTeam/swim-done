@@ -20,7 +20,9 @@ public class AwsS3Config {
     @Value("${SECRET_KEY}")
     private String SECRET_KEY;
 
-    // AWS S3 서비스에 접근할 수 있는 클라이언트 빈 생성 (
+    /**
+     * AWS S3 접근용 빈
+     */
     @Bean
     public S3Client s3Client() {
         StaticCredentialsProvider credential = StaticCredentialsProvider.create(

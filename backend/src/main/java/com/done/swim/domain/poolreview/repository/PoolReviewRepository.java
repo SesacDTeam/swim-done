@@ -18,6 +18,6 @@ public interface PoolReviewRepository extends JpaRepository<PoolReview, Long> {
                 FROM PoolReview pr
                 WHERE pr.id = :poolReviewId AND pr.user.id = :userId
             """)
-    Optional<PoolReview> findByIdWithUserId(@Param("poolReviewId") Long poolReviewId, @Param("userId") Long userId);
+    Optional<PoolReview> findByIdAndUserId(@Param("poolReviewId") Long poolReviewId, @Param("userId") Long userId);
 
 }

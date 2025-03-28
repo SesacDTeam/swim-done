@@ -25,6 +25,9 @@ public enum Week {
         }
     }
 
+    /**
+     * 응답 예시) 금요일
+     */
     @JsonValue
     private final String koreanName;
 
@@ -32,6 +35,11 @@ public enum Week {
         this.koreanName = koreanName;
     }
 
+    /**
+     * 요청 데이터에 Enum 과 매핑
+     *
+     * @param dayOfWeek 요일
+     */
     @JsonCreator
     public static Week from(String dayOfWeek) {
         Week week = lookup.get(dayOfWeek);

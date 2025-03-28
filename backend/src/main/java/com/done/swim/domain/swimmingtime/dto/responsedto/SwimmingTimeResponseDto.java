@@ -19,6 +19,8 @@ public class SwimmingTimeResponseDto {
 
     /**
      * 특정 수영장의 자유 수영 시간, 요일
+     *
+     * @param entity 자유 수영 시간 엔티티
      */
     public static SwimmingTimeResponseDto from(SwimmingTime entity) {
         return SwimmingTimeResponseDto.builder()

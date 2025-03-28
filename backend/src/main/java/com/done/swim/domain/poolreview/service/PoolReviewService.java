@@ -51,7 +51,6 @@ public class PoolReviewService {
 
     /**
      * 유저의 리뷰 모음
-     * // TODO: 코드 수정해야 함
      *
      * @param userId   유저 아이디
      * @param pageable 페이저블
@@ -71,7 +70,7 @@ public class PoolReviewService {
      */
     public ReviewResponseDto getReview(Long reviewId,
                                        Long userId) {
-        PoolReview poolReview = poolReviewRepository.findByIdWithUserId(reviewId, userId)
+        PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
         return ReviewResponseDto.from(poolReview);
@@ -89,7 +88,7 @@ public class PoolReviewService {
                              UpdatePoolReviewRequestDto requestDto,
                              User user) {
 
-        PoolReview poolReview = poolReviewRepository.findByIdWithUserId(reviewId, user.getId())
+        PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
         poolReview.setContent(requestDto.getContent());
@@ -104,7 +103,7 @@ public class PoolReviewService {
      */
     @Transactional
     public void deleteReview(Long reviewId, User user) {
-        PoolReview poolReview = poolReviewRepository.findByIdWithUserId(reviewId, user.getId())
+        PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
         poolReviewRepository.delete(poolReview);

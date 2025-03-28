@@ -20,7 +20,6 @@ public class CreatePoolReviewRequestDto {
      *
      * @param pool
      * @param userDate
-     * @return
      */
     public PoolReview toEntity(Pool pool, User userDate) {
         return PoolReview.builder()

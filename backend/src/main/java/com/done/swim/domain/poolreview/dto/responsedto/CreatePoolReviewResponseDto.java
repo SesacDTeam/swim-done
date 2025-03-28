@@ -17,8 +17,7 @@ public class CreatePoolReviewResponseDto {
     /**
      * 리뷰 생성 응답 DTO
      *
-     * @param entity
-     * @return
+     * @param entity 리뷰 엔티티
      */
     public static CreatePoolReviewResponseDto from(PoolReview entity) {
         return CreatePoolReviewResponseDto.builder()
