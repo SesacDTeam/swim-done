@@ -32,7 +32,7 @@ export default function CreateReview() {
 
     try {
       await reviewApi.createReview(poolId, reviewContent);
-      navigate(`/mark-pools/${poolId}`);
+      navigate(-1)
       alert('리뷰 작성 성공!');
     } catch (error) {
       setError(error);
@@ -46,13 +46,13 @@ export default function CreateReview() {
       <main className="flex flex-col items-center w-full">
         <DetailViewHeader backButtonImage={back} closeButtonImage={xmark}></DetailViewHeader>
         <section className="w-[80%] flex flex-col items-center mb-10">
-          <h1 className="pretendard-bold text-3xl">{poolName}</h1>
+          <h1 className="font-pretendard font-bold text-3xl">{poolName}</h1>
         </section>
 
         <section className="w-150 mt-30 flex flex-col">
           <form onSubmit={handleSubmit}>
             <textarea
-              className="pretendard-medium text-xl w-full h-50 border border-gray04 rounded-lg p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-blue02 transition-all resize-none"
+              className="font-pretendard font-medium text-xl w-full h-50 border border-gray04 rounded-lg p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-blue02 transition-all resize-none"
               id="createReview"
               name="createReview"
               placeholder="실제 이용하신 후기를 자유롭게 남겨 주세요."
@@ -60,7 +60,7 @@ export default function CreateReview() {
               onChange={handleChange}
             ></textarea>
             <button
-              className={` pretendard-medium text-xl rounded-[10px] px-4 py-2 mt-4 float-right ${reviewContent.trim() ? 'bg-blue02/10 cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
+              className={`font-pretendard font-medium text-xl rounded-[10px] px-4 py-2 mt-4 float-right ${reviewContent.trim() ? 'bg-blue02/10 cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
               type="submit"
             >
               제출
