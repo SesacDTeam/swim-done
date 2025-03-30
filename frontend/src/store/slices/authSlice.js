@@ -3,6 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   accessToken: localStorage.getItem('accessToken'),
   isLoggedIn: !!localStorage.getItem('accessToken'),
+  // 로그인 이력 표시하기 위해 소셜 로그인 서비스 정보랑 로그인 이력 추가
+  provider: localStorage.getItem('provider'),
+  loginHistory: JSON.parse(localStorage.getItem('loginHistory')) || [],
 };
 
 const authSlice = createSlice({
@@ -10,14 +13,30 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.accessToken = action.payload;
+      const { accessToken, provider } = action.payload
+      state.accessToken = accessToken;
+      state.provider = provider;
       state.isLoggedIn = true;
-      localStorage.setItem('accessToken', action.payload);
+
+      const newHistory = [
+        ...state.loginHistory,
+        { provider, timestamp: new Date().toISOString() }
+      ];
+      state.loginHistory = newHistory;
+
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('provider', provider);
+      localStorage.setItem('loginHistory', JSON.stringify(newHistory)); // 배열로 로그인 이력 저장
     },
     logout: (state) => {
       state.accessToken = null;
+      state.provider = null;
       state.isLoggedIn = false;
+      state.loginHistory = []; // 로그인 이력 초기화
+
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('provider');
+      localStorage.removeItem('loginHistory');
     },
   },
 });

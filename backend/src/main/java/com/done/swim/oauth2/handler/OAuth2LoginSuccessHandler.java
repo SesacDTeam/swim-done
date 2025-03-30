@@ -59,7 +59,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         // 리다이렉트
         getRedirectStrategy().sendRedirect(request, response,
-                successLogin + "/login-success?token=" + accessToken);
+                successLogin + "/login-success?token=" + accessToken + "&provider=" + oAuth2User.getUser().getProvider());
     }
 
     // 리프레시 토큰을 HttpOnly 쿠키에 저장 (함수로 따로 뺌)
