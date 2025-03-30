@@ -39,37 +39,37 @@
 
 @layer components {
   .pretendard-bold {
-    font: var(--font-pretendard);
+    font-family: var(--font-pretendard);
     @apply font-bold;
   }
 
   .pretendard-semibold {
-    font: var(--font-pretendard);
+    font-family: var(--font-pretendard);
     @apply font-semibold;
   }
 
   .pretendard-medium {
-    font: var(--font-pretendard);
+    font-family: var(--font-pretendard);
     @apply font-medium;
   }
 
   .pretendard-normal {
-    font: var(--font-pretendard);
+    font-family: var(--font-pretendard);
     @apply font-normal;
   }
 
   .pretendard-light {
-    font: var(--font-pretendard);
+    font-family: var(--font-pretendard);
     @apply font-light;
   }
 
   .pretendard-extralight {
-    font: var(--font-pretendard);
+    font-family: var(--font-pretendard);
     @apply font-extralight;
   }
 
   .pretendard-thin {
-    font: var(--font-pretendard);
+    font-family: var(--font-pretendard);
     @apply font-thin;
   }
 
