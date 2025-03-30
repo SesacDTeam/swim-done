@@ -18,6 +18,7 @@ const authSlice = createSlice({
       state.provider = provider;
       state.isLoggedIn = true;
 
+      // 기존 이력 유지하면서 새로운 로그인 기록 추가함
       const newHistory = [
         ...state.loginHistory,
         { provider, timestamp: new Date().toISOString() }
@@ -32,11 +33,9 @@ const authSlice = createSlice({
       state.accessToken = null;
       state.provider = null;
       state.isLoggedIn = false;
-      state.loginHistory = []; // 로그인 이력 초기화
 
       localStorage.removeItem('accessToken');
       localStorage.removeItem('provider');
-      localStorage.removeItem('loginHistory');
     },
   },
 });
