@@ -43,6 +43,7 @@ public class PoolReview extends BaseTimeEntity {
     @Column(nullable = false, length = 100)
     private String content;
 
+
     @Builder
     public PoolReview(Pool pool, User user, String content) {
         this.pool = pool;
