@@ -34,6 +34,7 @@
 @layer base {
   body {
     @apply overflow-hidden m-0 p-0;
+    font-family: Pretendard;
   }
 }
 

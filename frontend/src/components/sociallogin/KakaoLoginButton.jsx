@@ -9,7 +9,7 @@ export default function KakaoLoginButton() {
     <div className="flex justify-center">
       <button
         onClick={handleKakaoLogin}
-        className="min-w-[180px] font-pretendard font-semibold flex items-center bg-kyello text-black rounded-md px-4 py-3 gap-3 mb-2"
+        className="min-w-[180px] font-semibold flex items-center bg-kyello text-black rounded-md px-4 py-3 gap-3 mb-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

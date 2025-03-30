@@ -52,7 +52,7 @@ export default function PoolDetail() {
     <>
       <main className="flex flex-col items-center w-full">
         <DetailViewHeader closeButtonImage={xmark}></DetailViewHeader>
-        <section className="w-[80%] flex flex-col items-center mb-10 font-pretendard">
+        <section className="w-[80%] flex flex-col items-center mb-10">
           <h1 className="font-bold text-3xl mb-1">{poolDetail?.name}</h1>
           <p className="text-body01 mb-10">{poolDetail?.address}</p>
 
