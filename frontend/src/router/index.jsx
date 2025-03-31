@@ -51,10 +51,16 @@ const router = createBrowserRouter([
           {
             path: 'reviews',
             element: <MyReviewPage></MyReviewPage>,
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
           {
             path: 'reviews/:reviewId',
             element: <UpdateReview></UpdateReview>,
+            loader: () => {
+              store.dispatch(showDetailView());
+            },
           },
         ],
       },

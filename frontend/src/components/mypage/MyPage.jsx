@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import MyPageItem from './MyPageItem';
 import { Outlet } from 'react-router-dom';
-import DetailViewHeader from '../common/DetailViewHeader';
 import instance from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../store/slices/authSlice';
@@ -13,34 +12,24 @@ import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
 import {
   profile,
   myReview,
-  keywordReview,
   contactUs,
   myReviewColor,
-  keywordReviewColor,
-  contactUsColor,
-  xmark,
+  contactUsColor
 } from '../../utils/staticImagePath';
 
 export default function MyPage() {
   const dispatch = useDispatch();
-  const nickName = useSelector((state) => state.user.nickName);
-  const email = useSelector((state) => state.user.email);
   const [userInfo, setUserInfo] = useState(null);
-  const [isOutletVisible, setIsOutletVisible] = useState(false);
+  const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
+  const navigate = useNavigate();
 
   const getUserInfo = async () => {
     try {
       const response = await userApi.getUserInfo();
-
-      if (response && response.data) {
-        setUserInfo(response.data);
-      } else {
-        throw new Error('응답 데이터가 올바르지 않습니다.');
-      }
+      setUserInfo(response.data);
     } catch (error) {
       setError(error);
-      console.error('사용자 정보 가져오기 실패:', error);
     }
   };
 
@@ -48,15 +37,9 @@ export default function MyPage() {
     getUserInfo();
   }, []);
 
-  const handleItemClick = () => {
-    setIsOutletVisible(true); // Outlet 보이도록 상태 변경
+  const handleMyReviewsClick = () => {
+    navigate('reviews');
   };
-
-  const handleCloseButtonClick = () => {
-    setIsOutletVisible(false); // close 버튼 클릭 시 Outlet을 숨김
-  };
-
-  const navigate = useNavigate(); // ✅ useNavigate 훅 사용
 
   const handleLogout = async () => {
     const isConfirmed = window.confirm('로그아웃 하시겠습니까?');
@@ -67,8 +50,7 @@ export default function MyPage() {
       dispatch(logout());
       alert('로그아웃이 완료되었습니다.');
       navigate('/');
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   // 회원 탈퇴 핸들러
@@ -87,26 +69,16 @@ export default function MyPage() {
     }
   };
 
-  if (!userInfo) {
-    return (
-      <>
-        <div className="flex items-center justify-center h-screen">
-          <div>로딩 중...</div>
-        </div>
-      </>
-    );
-  }
-
   return (
     <div className="select-none">
       <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky text-center">마이페이지</h1>
       <div className="flex justify-between relative top-18 h-26 w-85 mx-auto">
         <div className="flex flex-col justify-between h-full">
           <div>
-            <div className="text-2xl pretendard-bold mb-1">{userInfo.nickname} 님</div>
+            <div className="text-2xl pretendard-bold mb-1">{userInfo?.nickname} 님</div>
             <div className="text-2xl pretendard-bold text-blue01">오늘도 즐수하세요!</div>
           </div>
-          <div>{userInfo.email}</div>
+          <div>{userInfo?.email}</div>
         </div>
         <div className="w-20 h-18">
           <img src={profile} alt="" className="h-full w-full" />
@@ -120,10 +92,8 @@ export default function MyPage() {
           image={myReview}
           hoverImage={myReviewColor}
           text="내가 남긴 리뷰"
-          navigateTo="/mypage/reviews"
-          onClick={handleItemClick}
+          onClick={handleMyReviewsClick}
         />
-        {/* <MyPageItem image={keywordReview} hoverImage={keywordReviewColor} text="키워드리뷰" /> */}
         <MyPageItem
           image={contactUs}
           hoverImage={contactUsColor}
@@ -145,14 +115,8 @@ export default function MyPage() {
         </button>
       </div>
 
-      {isOutletVisible && ( // isOutletVisible이 true일 때만 Outlet 보이도록
+      {!isDetailViewHidden && (
         <div className="fixed top-5 right-5 left-135 bottom-5 min-w-200 rounded-3xl bg-white overflow-y-auto">
-          <div className="relative top-16 flex justify-center items-center ">
-            <DetailViewHeader
-              closeButtonImage={xmark}
-              onClose={handleCloseButtonClick}
-            ></DetailViewHeader>
-          </div>
           <Outlet />
         </div>
       )}
