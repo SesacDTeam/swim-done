@@ -35,7 +35,7 @@ public class SubmittedImageService {
             throw new GlobalException(ErrorCode.PAYLOAD_TOO_LARGE);
         }
 
-        Map<String, String> uploadResult = awsS3Service.uploadImage(requestDto.getFile());
+        Map<String, String> findOneImage = awsS3Service.uploadImage(requestDto.getFile());
 
         return SubmittedImageResponseDto.from(
                 submittedImageRepository.save(

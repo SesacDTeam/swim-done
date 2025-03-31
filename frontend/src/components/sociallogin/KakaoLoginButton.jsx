@@ -1,4 +1,5 @@
 import React from 'react';
+
 export default function KakaoLoginButton() {
   const handleKakaoLogin = async () => {
     window.location.href = `oauth2/authorization/kakao`;

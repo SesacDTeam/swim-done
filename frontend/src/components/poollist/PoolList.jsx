@@ -27,7 +27,6 @@ export default function PoolList() {
       setHasNext(currentIndex < pools.length);
     } catch {
       // TODO: 에러 핸들링 예정
-      console.log('에러');
       setHasNext(false);
     } finally {
       setIsLoading(false);
@@ -52,7 +51,6 @@ export default function PoolList() {
   }, []);
 
   useEffect(() => { 
-    console.log("poollist" + pools)
   }, [pools])
 
   return (

@@ -22,4 +22,3 @@ export { default as kickPan } from '../assets/kickPan.svg';
 export { default as xmark } from '../assets/xmark.svg';
 export { default as back } from '../assets/back.svg';
 export { default as logo2 } from '../assets/logo2.svg'
-export { default as logoMan } from '../assets/logoMan.svg'

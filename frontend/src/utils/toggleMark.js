@@ -20,6 +20,5 @@ export const toggleMark = async (index, pools, setPools) => {
         await markPoolApi.createMarkedPools(pools[index].id);
       }
     } catch (error) {
-      console.log(error);
     }
 };

@@ -5,7 +5,6 @@ export default function NaverLoginButton() {
   // 개발 환경에서는 백엔드 주소 기입
   // oAuth2 로그인 경로는 spring security 기본 경로 따라야 됨. api 안 붙이는 걸 권장함!
   const NAVER_AUTH_URL = `oauth2/authorization/naver`;
-
   const handleNaverLogin = () => {
     window.location.href = NAVER_AUTH_URL;
   };

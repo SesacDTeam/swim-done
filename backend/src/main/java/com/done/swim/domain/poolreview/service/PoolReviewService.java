@@ -23,92 +23,91 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PoolReviewService {
 
-    private final PoolReviewRepository poolReviewRepository;
-    private final PoolRepository poolRepository;
+  private final PoolReviewRepository poolReviewRepository;
+  private final PoolRepository poolRepository;
 
-    /**
-     * 리뷰 생성
-     *
-     * @param poolId     수영장 식별 아이디
-     * @param requestDto 요청 DTO
-     * @param user       유저
-     */
-    @Transactional
-    public CreatePoolReviewResponseDto createReview(Long poolId,
-                                                    CreatePoolReviewRequestDto requestDto,
-                                                    User user
-    ) {
-        Pool pool = poolRepository.findById(poolId)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
+  /**
+   * 리뷰 생성
+   *
+   * @param poolId     수영장 식별 아이디
+   * @param requestDto 요청 DTO
+   * @param user       유저
+   */
+  @Transactional
+  public CreatePoolReviewResponseDto createReview(Long poolId,
+                                                  CreatePoolReviewRequestDto requestDto,
+                                                  User user
+  ) {
+    Pool pool = poolRepository.findById(poolId)
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.POOL_NOT_FOUND));
 
-        PoolReview poolReview = requestDto.toEntity(pool, user);
-        poolReviewRepository.save(poolReview);
+    PoolReview poolReview = requestDto.toEntity(pool, user);
+    poolReviewRepository.save(poolReview);
 
-        return CreatePoolReviewResponseDto.from(poolReview);
+    return CreatePoolReviewResponseDto.from(poolReview);
 
-    }
+  }
 
 
-    /**
-     * 유저의 리뷰 모음
-     *
-     * @param userId   유저 아이디
-     * @param pageable 페이저블
-     */
-    public MyReviewResponseDto getMyReviews(Long userId, Pageable pageable) {
-        Page<PoolReview> poolReviews = poolReviewRepository.findAllByUserId(userId, pageable);
+  /**
+   * 유저의 리뷰 모음
+   *
+   * @param userId   유저 아이디
+   * @param pageable 페이저블
+   */
+  public MyReviewResponseDto getMyReviews(Long userId, Pageable pageable) {
+    Page<PoolReview> poolReviews = poolReviewRepository.findAllByUserId(userId, pageable);
 
-        return MyReviewResponseDto.from(poolReviews);
+    return MyReviewResponseDto.from(poolReviews);
 
-    }
+  }
 
-    /**
-     * 리뷰 단건 조회
-     *
-     * @param reviewId 리뷰 아이디
-     * @param userId   유저 아이디
-     */
-    public ReviewResponseDto getReview(Long reviewId,
-                                       Long userId) {
-        PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, userId)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
+  /**
+   * 리뷰 단건 조회
+   *
+   * @param reviewId 리뷰 아이디
+   * @param userId   유저 아이디
+   */
+  public ReviewResponseDto getReview(Long reviewId,
+                                     Long userId) {
+    PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, userId)
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
-        return ReviewResponseDto.from(poolReview);
-    }
+    return ReviewResponseDto.from(poolReview);
+  }
 
-    /**
-     * 리뷰 수정
-     *
-     * @param reviewId   리뷰 아이디
-     * @param requestDto 요청 DTO
-     * @param user       유저
-     */
-    @Transactional
-    public void updateReview(Long reviewId,
-                             UpdatePoolReviewRequestDto requestDto,
-                             User user) {
+  /**
+   * 리뷰 수정
+   *
+   * @param reviewId   리뷰 아이디
+   * @param requestDto 요청 DTO
+   * @param user       유저
+   */
+  @Transactional
+  public void updateReview(Long reviewId,
+                           UpdatePoolReviewRequestDto requestDto,
+                           User user) {
 
-        PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
+    PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, user.getId())
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
-        poolReview.setContent(requestDto.getContent());
+    poolReview.setContent(requestDto.getContent());
 
-    }
+  }
 
-    /**
-     * 리뷰 삭제
-     *
-     * @param reviewId 리뷰 아이디
-     * @param user     유저
-     */
-    @Transactional
-    public void deleteReview(Long reviewId, User user) {
-        PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
+  /**
+   * 리뷰 삭제
+   *
+   * @param reviewId 리뷰 아이디
+   * @param user     유저
+   */
+  @Transactional
+  public void deleteReview(Long reviewId, User user) {
+    PoolReview poolReview = poolReviewRepository.findByIdAndUserId(reviewId, user.getId())
+      .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REVIEW_NOT_FOUND));
 
-        poolReviewRepository.delete(poolReview);
-    }
+    poolReviewRepository.delete(poolReview);
+  }
 
 
 }
-

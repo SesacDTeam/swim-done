@@ -17,6 +17,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -24,26 +26,28 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PoolReview extends BaseTimeEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @JoinColumn(name = "pool_id")
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Pool pool;
+    @JoinColumn(name = "pool_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Pool pool;
 
-  @JoinColumn(name = "user_id")
-  @ManyToOne(fetch = FetchType.LAZY)
-  private User user;
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
-  @Setter
-  @Column(nullable = false, length = 100)
-  private String content;
+    @Setter
+    @Column(nullable = false, length = 100)
+    private String content;
 
-  @Builder
-  public PoolReview(Pool pool, User user, String content) {
-    this.pool = pool;
-    this.user = user;
-    this.content = content;
-  }
+
+    @Builder
+    public PoolReview(Pool pool, User user, String content) {
+        this.pool = pool;
+        this.user = user;
+        this.content = content;
+    }
 }

@@ -7,6 +7,8 @@ import instance from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../store/slices/authSlice';
 import userApi from '../../api/userApi';
+import useErrorResolver from '../../hooks/useErrorResolver';
+import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
 
 import {
   profile,
@@ -25,6 +27,7 @@ export default function MyPage() {
   const email = useSelector((state) => state.user.email);
   const [userInfo, setUserInfo] = useState(null);
   const [isOutletVisible, setIsOutletVisible] = useState(false);
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
 
   const getUserInfo = async () => {
     try {
@@ -36,6 +39,7 @@ export default function MyPage() {
         throw new Error('응답 데이터가 올바르지 않습니다.');
       }
     } catch (error) {
+      setError(error);
       console.error('사용자 정보 가져오기 실패:', error);
     }
   };
@@ -64,7 +68,6 @@ export default function MyPage() {
       alert('로그아웃이 완료되었습니다.');
       navigate('/');
     } catch (error) {
-      console.error('로그아웃 실패:', error);
     }
   };
 
@@ -80,7 +83,6 @@ export default function MyPage() {
       alert('회원 탈퇴가 완료되었습니다.');
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
-      console.error('회원 탈퇴 실패:', error);
       alert('회원 탈퇴 중 오류가 발생했습니다.');
     }
   };

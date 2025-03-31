@@ -91,7 +91,6 @@ export default function KakaoMapContainer() {
       // React 컴포넌트를 HTML 문자열로 변환하여 반환
       return renderToStaticMarkup(<InfoWindowContent pool={pool} />);
     } catch (error) {
-      console.error(error);
       return <p className="text-red-500">정보를 불러오는 데 실패했습니다.</p>;
     }
   }
@@ -114,7 +113,6 @@ export default function KakaoMapContainer() {
       infoWindow.setContent(container); // ✅ 인포윈도우에 React 컨테이너 적용
       infoWindow.open(marker.getMap(), marker);
     } catch (error) {
-      console.error(error);
     }
   }
   //#endregion
@@ -182,7 +180,6 @@ export default function KakaoMapContainer() {
         dispatch(setName({ name }));
         navigate('pools');
       } catch (error) {
-        console.error(error);
       }
     });
   }

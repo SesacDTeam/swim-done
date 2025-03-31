@@ -5,7 +5,7 @@ import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 import PoolDetail from '../components/common/pooldetail/PoolDetail';
-import SubmittedImage from '../components/common/submittedImage/SubmittedImage';
+import SubmittedImage from '../components/common/submittedimage/SubmittedImage';
 import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
 import NotFound from '../pages/NotFound';
@@ -32,14 +32,16 @@ const router = createBrowserRouter([
       {
         path: '/mypage',
         element: (
-          <AuthenticateRoute
-            cancleAction={() => {
-              store.dispatch(hideListBar());
-              store.dispatch(setSelectedIndex(null));
-            }}
-          >
-            <MyPage></MyPage>
-          </AuthenticateRoute>
+          <ErrorBoundary>
+            <AuthenticateRoute
+              cancleAction={() => {
+                store.dispatch(hideListBar());
+                store.dispatch(setSelectedIndex(null));
+              }}
+            >
+              <MyPage></MyPage>
+            </AuthenticateRoute>
+          </ErrorBoundary>
         ),
         loader: () => {
           store.dispatch(hideDetailView());

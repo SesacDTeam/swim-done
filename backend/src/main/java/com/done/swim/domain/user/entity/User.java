@@ -1,7 +1,24 @@
 package com.done.swim.domain.user.entity;
 
 import com.done.swim.common.BaseTimeEntity;
+
+import com.done.swim.domain.poolmark.entity.PoolMark;
+import com.done.swim.domain.poolreview.entity.PoolReview;
+import com.done.swim.domain.submittedimage.entity.SubmittedImage;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +53,16 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 //    @Enumerated(EnumType.STRING)
 //    private Role role;
+
+    // 리뷰 등이 있을 때 회원탈퇴가 안되는 현상 해결 코드
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<PoolReview> poolReviews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<PoolMark> poolMarks;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<SubmittedImage> images;
 
     @Builder
     public User(String email, String nickname, String provider, String providerId,

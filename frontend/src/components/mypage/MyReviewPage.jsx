@@ -44,7 +44,6 @@ export default function MyReviewPage() {
         pageRef.current += 1;
       }
     } catch (error) {
-      console.error('리뷰를 가져오는 데 실패했습니다', error);
     } finally {
       setIsFetching(false);
       isLoadingRef.current = false;
