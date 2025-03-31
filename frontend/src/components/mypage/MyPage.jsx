@@ -14,7 +14,7 @@ import {
   myReview,
   contactUs,
   myReviewColor,
-  contactUsColor
+  contactUsColor,
 } from '../../utils/staticImagePath';
 import AlertModal from '../common/AlertModal';
 
@@ -45,8 +45,6 @@ export default function MyPage() {
   const handleMyReviewsClick = () => {
     navigate('reviews');
   };
-
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     setModalMessage(['로그아웃 하시겠습니까?']);
