@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { myPageApi } from '../../api/myPageApi';
 import MyReviewPageItem from './MyReviewPageItem';
+import DetailViewHeader from '../common/DetailViewHeader';
+import { xmark } from '../../utils/staticImagePath';
 
 export default function MyReviewPage() {
   const [reviews, setReviews] = useState([]); // 리뷰 데이터
@@ -90,27 +91,29 @@ export default function MyReviewPage() {
 
   return (
     <>
-      <div>
-        <div className="top-15 pretendard-bold text-2xl text-center">내가 남긴 리뷰</div>
+      <main className="flex flex-col items-center w-full">
+        <DetailViewHeader closeButtonImage={xmark}></DetailViewHeader>
+
+        <div className="top-15 pretendard-bold text-3xl text-center">내가 남긴 리뷰</div>
         <h2 className="self-start pretendard-semibold text-2xl ml-17 mt-10">리뷰 ({totalCount})</h2>
-      </div>
 
-      <div className=" w-[90%] mx-auto">
-        {reviews.map((review, index) => (
-          <MyReviewPageItem
-            key={index}
-            reviewId={review.reviewId}
-            poolName={review.poolName}
-            createdAt={extractDate(review.createdAt)}
-            content={review.content}
-            fetchReviews={fetchReviews}
-            setTotalCount={setTotalCount}
-          />
-        ))}
-      </div>
+        <div className=" w-[90%] mx-auto">
+          {reviews.map((review, index) => (
+            <MyReviewPageItem
+              key={index}
+              reviewId={review.reviewId}
+              poolName={review.poolName}
+              createdAt={extractDate(review.createdAt)}
+              content={review.content}
+              fetchReviews={fetchReviews}
+              setTotalCount={setTotalCount}
+            />
+          ))}
+        </div>
 
-      {/* 무한스크롤 트리거: 이 요소가 화면에 보이면 새로운 리뷰를 불러옵니다. */}
-      <div ref={observerTarget} className="h-20 relative -mt-10"></div>
+        {/* 무한스크롤 트리거: 이 요소가 화면에 보이면 새로운 리뷰를 불러옵니다. */}
+        <div ref={observerTarget} className="h-20 relative -mt-10"></div>
+      </main>
     </>
   );
 }

@@ -48,7 +48,7 @@ export default function PoolDetail() {
       }
     })();
   }, [poolId]);
-
+  
   return (
     <>
       <main className="flex flex-col items-center w-full">
