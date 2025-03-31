@@ -1,4 +1,3 @@
-
 const setupRequestInterceptors = (instance) => {
   instance.interceptors.request.use(
     (config) => {
@@ -13,6 +12,6 @@ const setupRequestInterceptors = (instance) => {
       return Promise.reject(error);
     },
   );
-}
+};
 
-export default setupRequestInterceptors
+export default setupRequestInterceptors;

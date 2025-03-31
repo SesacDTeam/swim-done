@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 export default function SideBarItem({ image, selectedImage, title, isSelected, onClick }) {
   return (

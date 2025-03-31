@@ -68,7 +68,6 @@ export default function MyPage() {
       alert('로그아웃이 완료되었습니다.');
       navigate('/');
     } catch (error) {
-      console.error('로그아웃 실패:', error);
     }
   };
 
@@ -84,7 +83,6 @@ export default function MyPage() {
       alert('회원 탈퇴가 완료되었습니다.');
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
-      console.error('회원 탈퇴 실패:', error);
       alert('회원 탈퇴 중 오류가 발생했습니다.');
     }
   };

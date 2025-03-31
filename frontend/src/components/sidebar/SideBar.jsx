@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   mypage,
   markPool,
@@ -37,7 +37,7 @@ export default function SideBar() {
     if (selectedIndex === index) {
       return;
     }
-    
+
     dispatch(setSelectedIndex(index));
     if (index === 0) {
       navigate('/mypage');

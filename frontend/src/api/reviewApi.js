@@ -8,19 +8,16 @@ const reviewApi = {
 
   getReviewBeforeDate: async (reviewId) => {
     const response = await instance.get(`/my/reviews/${reviewId}`);
-
     return response;
   },
 
   deleteReview: async (reviewId) => {
     const response = await instance.delete(`/my/reviews/${reviewId}`);
-
     return response;
   },
 
   updateReview: async (reviewId, reviewContent) => {
     const response = await instance.put(`/my/reviews/${reviewId}`, { content: reviewContent });
-
     return response;
   },
 };

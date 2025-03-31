@@ -13,18 +13,13 @@ export default function LoginRedirect() {
   useEffect(() => {
     setIsLoading(true);
     try {
-      // 현재 url에서 토큰 가져오기
 
+      // 현재 url에서 토큰 가져오기
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('token');
       const kakaoAccessToken = urlParams.get('kakaoAccessToken'); // 카카오 액세스 토큰 (예시로 'kakao_token'이라고 가정)
 
-      console.log('현재 URL:', window.location.href);
-      console.log('추출된 토큰:', accessToken);
-      console.log('추출된 카카오 토큰:', kakaoAccessToken);
-
       if (!accessToken) {
-        console.log('🚨 토큰이 없어서 홈으로 이동');
         setError(true);
         navigate('/');
         return;
@@ -33,7 +28,6 @@ export default function LoginRedirect() {
       if (kakaoAccessToken) {
         // 카카오 액세스 토큰도 저장
         localStorage.setItem('kakaoAccessToken', kakaoAccessToken); // 로컬 스토리지에 카카오 액세스 토큰 저장
-        console.log('카카오 액세스 토큰 저장됨:', kakaoAccessToken);
       }
 
       // JWT 토큰을 Redux에 저장
