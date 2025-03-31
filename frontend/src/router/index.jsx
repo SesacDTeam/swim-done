@@ -6,7 +6,6 @@ import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 import PoolDetail from '../components/common/pooldetail/PoolDetail';
 import SubmittedImage from '../components/common/submittedimage/SubmittedImage';
-import CreateReview from '../components/common/createreview/CreateReview';
 import LoginRedirect from '../pages/LoginRedirect';
 import NotFound from '../pages/NotFound';
 import AuthenticateRoute from '../components/common/AuthenticateRoute';
@@ -16,9 +15,9 @@ import { hideDetailView, showDetailView } from '../store/slices/detailViewSlice'
 import UnauthenticateRoute from '../components/common/UnauthenticateRoute';
 import { setSelectedIndex } from '../store/slices/sideBarSlice';
 import ErrorBoundary from '../error/ErrorBoundary';
-
 import MyReviewPage from '../components/mypage/MyReviewPage';
-import UpdateReview from '../components/common/updatereview/UpdateReview';
+import UpdateReview from '../components/common/review/UpdateReview';
+import CreateReview from '../components/common/review/CreateReview';
 
 const router = createBrowserRouter([
   {

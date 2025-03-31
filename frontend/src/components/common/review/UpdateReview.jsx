@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import reviewApi from '../../../api/reviewApi';
 import DetailViewHeader from '../DetailViewHeader';
 import { xmark, back } from '../../../utils/staticImagePath';
+import ReviewForm from './reviewForm';
 
 export default function UpdateReview() {
   const [error, setError] = useState('');
   const [reviewContent, setReviewContent] = useState('');
   const [poolName, setPollName] = useState('');
+  const [canSubmit, setCanSubmit] = useState(false);
   const { reviewId } = useParams();
   const navigate = useNavigate();
+  const initialContent = useRef();
 
   const handleChange = async (e) => {
-    setReviewContent(e.target.value); // 입력된 값을 reviewText 상태에 저장
+    const inputValue = e.target.value;
+    setReviewContent(inputValue);
+    setCanSubmit(initialContent.current !== inputValue && inputValue.trim() !== '');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!canSubmit) {
+      return;
+    }
 
     if (!reviewContent.trim()) {
       alert('리뷰를 작성해 주세요!');
@@ -30,7 +38,6 @@ export default function UpdateReview() {
         navigate('/mypage/reviews');
       }
     } catch (err) {
-      alert('애러남');
       setError(err.message);
     }
   };
@@ -42,11 +49,11 @@ export default function UpdateReview() {
       if (response && response.data) {
         setPollName(response.data.data.poolName);
         setReviewContent(response.data.data.content);
+        initialContent.current = response.data.data.content;
       } else {
         throw new Error('응답 데이터가 올바르지 않습니다.');
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -62,24 +69,12 @@ export default function UpdateReview() {
         <section className="w-[80%] flex flex-col items-center mb-10">
           <h1 className="pretendard-bold text-3xl">{poolName}</h1>
         </section>
-
-        <section className="w-150 mt-30 flex flex-col">
-          <form onSubmit={handleSubmit}>
-            <textarea
-              className="pretendard-medium text-xl w-full h-50 border border-gray04 rounded-lg p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-blue02 transition-all resize-none"
-              id="createReview"
-              name="createReview"
-              value={reviewContent}
-              onChange={handleChange}
-            ></textarea>
-            <button
-              className={` pretendard-medium text-xl rounded-[10px] px-4 py-2 mt-4 float-right ${reviewContent.trim() ? 'bg-blue02/10 cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'} `}
-              type="submit"
-            >
-              제출
-            </button>
-          </form>
-        </section>
+        <ReviewForm
+          onSubmit={handleSubmit}
+          onChange={handleChange}
+          content={reviewContent}
+          canSubmit={canSubmit}
+        ></ReviewForm>
       </main>
     </>
   );
