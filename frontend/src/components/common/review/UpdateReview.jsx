@@ -36,7 +36,7 @@ export default function UpdateReview() {
 
   return (
     <>
-      <div className="relative  flex justify-center items-center ">
+      <div className="relative flex justify-center items-center">
         <DetailViewHeader closeButtonImage={xmark} backButtonImage={back}></DetailViewHeader>
       </div>
       <main className="flex flex-col items-center w-full">

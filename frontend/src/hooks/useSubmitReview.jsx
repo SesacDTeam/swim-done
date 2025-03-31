@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import ERROR_DISPLAY_MODE from '../error/ERROR_DISPLAY_MODE';
 import useErrorResolver from './useErrorResolver';
-import { useNavigate } from 'react-router';
 
 export const useSubmitReview = (content = '', submitApi) => {
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
