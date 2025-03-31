@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server'; // React 컴포넌트를 HTML 문자열로 변환
 import seoulGu from '../../utils/seoul-gu.json';
 import { kickPan } from '../../utils/staticImagePath';
 import kakaoMapApi from '../../api/kakaoMapApi';
-import InfoWindowContent from '../poollist/InfoWindowContent';
 import { useDispatch } from 'react-redux';
 import {
   setMap,
   updateMarkers,
-  setInfoWindow,
   setPools,
   setName,
+  setInfoWindow,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
 import InfoWindowContentPortal from '../poollist/InfoWindowContentPortal.jsx';
@@ -32,7 +30,6 @@ export default function KakaoMapContainer() {
   const polygons = [];
   const markers = [];
   const infoWindow = new kakao.maps.InfoWindow({ removable: true });
-  dispatch(setInfoWindow({ infoWindow })); // 인포윈도우 리덕스에 보관, 지도에서 삭제 때 사용
   const customOverlay = new kakao.maps.CustomOverlay({});
   const markerImageSize = new kakao.maps.Size(20, 30);
   //#endregion 지도 기본 설정
@@ -71,29 +68,16 @@ export default function KakaoMapContainer() {
       clickable: true,
       title,
     });
-    kakao.maps.event.addListener(marker, 'click', () => updateInfoWindow(marker));
+    kakao.maps.event.addListener(marker, 'click', () => {
+      updateInfoWindow(marker);
+      navigate('pools');
+    });
     return marker;
   }
 
   //#endregion
 
   //#region InfoWindow
-
-  /**
-   * @description 인포윈도우 콘텐츠를 생성하는 함수 (React 컴포넌트를 HTML 문자열로 변환)
-   * @param {string} poolName - 수영장 이름
-   * @returns {Promise} 인포윈도우 콘텐츠 HTML 문자열
-   */
-  async function drawInfoWindowContent(poolName) {
-    try {
-      const { data: pool } = await kakaoMapApi.getPool(poolName);
-
-      // React 컴포넌트를 HTML 문자열로 변환하여 반환
-      return renderToStaticMarkup(<InfoWindowContent pool={pool} />);
-    } catch (error) {
-      return <p className="text-red-500">정보를 불러오는 데 실패했습니다.</p>;
-    }
-  }
 
   /**
    * @description
@@ -112,6 +96,7 @@ export default function KakaoMapContainer() {
 
       infoWindow.setContent(container); // ✅ 인포윈도우에 React 컨테이너 적용
       infoWindow.open(marker.getMap(), marker);
+      dispatch(setInfoWindow({ infoWindow })); // ✅ 인포윈도우 리덕스에 보관
     } catch (error) {}
   }
   //#endregion
