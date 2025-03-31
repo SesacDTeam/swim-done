@@ -13,13 +13,13 @@ export default function DetailViewHeader({ backButtonImage, closeButtonImage, on
     }
     dispatch(hideDetailView());
     const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(/\/(mark-pools|pools)\/\d+.*$/, '/$1');
+    const newPath = currentPath.replace(/\/(mark-pools|pools|mypage)\/[^/]+.*$/, '/$1');
     navigate(newPath);
   };
 
   const handleBackButtonClick = () => {
     const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(/(\/(mark-pools|pools)\/\d+).*/, '$1');
+    const newPath = currentPath.replace(/(\/(mark-pools|pools|mypage)\/[^/]+).*/, '$1');
     navigate(newPath);
   };
 
