@@ -8,13 +8,15 @@ import { logout } from '../../store/slices/authSlice';
 import userApi from '../../api/userApi';
 import useErrorResolver from '../../hooks/useErrorResolver';
 import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
+import LoadingSpinner from '../common/LoadingSpinner';
+import { showLoading, hideLoading } from '../../store/slices/loadingSlice';
 
 import {
   profile,
   myReview,
   contactUs,
   myReviewColor,
-  contactUsColor
+  contactUsColor,
 } from '../../utils/staticImagePath';
 
 export default function MyPage() {
@@ -23,6 +25,7 @@ export default function MyPage() {
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
   const navigate = useNavigate();
+  const isLoading = useSelector((state) => state.loading.isLoading);
 
   const getUserInfo = async () => {
     try {
@@ -30,10 +33,13 @@ export default function MyPage() {
       setUserInfo(response.data);
     } catch (error) {
       setError(error);
+    } finally {
+      dispatch(hideLoading());
     }
   };
 
   useEffect(() => {
+    dispatch(showLoading());
     getUserInfo();
   }, []);
 
@@ -44,13 +50,18 @@ export default function MyPage() {
   const handleLogout = async () => {
     const isConfirmed = window.confirm('로그아웃 하시겠습니까?');
     if (!isConfirmed) return;
+
+    // dispatch(showLoading());
     try {
       await instance.post('/logout');
 
       dispatch(logout());
       alert('로그아웃이 완료되었습니다.');
       navigate('/');
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      // dispatch(hideLoading());
+    }
   };
 
   // 회원 탈퇴 핸들러
@@ -66,11 +77,15 @@ export default function MyPage() {
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
       alert('회원 탈퇴 중 오류가 발생했습니다.');
+    } finally {
     }
   };
-
+  if (isLoading || !userInfo) {
+    return <LoadingSpinner />;
+  }
   return (
     <div className="select-none">
+      {isLoading && <LoadingSpinner />}
       <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky text-center">마이페이지</h1>
       <div className="flex justify-between relative top-18 h-26 w-85 mx-auto">
         <div className="flex flex-col justify-between h-full">

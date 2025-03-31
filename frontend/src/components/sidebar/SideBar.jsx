@@ -15,6 +15,8 @@ import { hideListBar } from '../../store/slices/listBarSlice';
 import { setSelectedIndex } from '../../store/slices/sideBarSlice';
 // import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
+import { showLoading } from '../../store/slices/loadingSlice';
+
 const sideBarItems = [
   {
     image: mypage,
@@ -42,6 +44,7 @@ export default function SideBar() {
     if (index === 0) {
       navigate('/mypage');
     } else {
+      dispatch(showLoading());
       navigate('/mark-pools');
     }
   };
