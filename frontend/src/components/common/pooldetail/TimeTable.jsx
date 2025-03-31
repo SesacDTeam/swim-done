@@ -1,5 +1,8 @@
 export default function Timetable({ schedule }) {
+  console.log('schedule', schedule); // schedule 데이터 확인
+
   if (!schedule || !schedule.length) {
+    // if (!schedule || !Object.values(schedule).length) {
     return (
       <>
         <div className="text-body01 font-bold">준비된 시간표가 없습니다</div>
@@ -7,7 +10,6 @@ export default function Timetable({ schedule }) {
       </>
     );
   }
-  console.log('schedule', schedule); // schedule 데이터 확인
 
   const days = ['월', '화', '수', '목', '금', '토', '일'];
   const dayKeys = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
@@ -27,8 +29,73 @@ export default function Timetable({ schedule }) {
     }
   });
 
+  const ver1_result = baseTimes.map((item) =>
+    Object.entries(item).map(([baseTime, days], idx) => (
+      <tr key={idx} className="even:bg-gray01/50">
+        <td className="border p-1">
+          {baseTime} ~ {baseTime.replace('00', '50')}
+        </td>
+        {dayKeys.map((day, index) => (
+          <td key={index} className={`border p-1 ${days[day] ? 'bg-blue01/15' : ''}`}>
+            {days[day] || ''}
+          </td>
+        ))}
+      </tr>
+    )),
+  );
+  const ver2_result = schedule.map((item, idx) => {
+    return (
+      <tr key={idx} className="even:bg-gray01/50">
+        <td className="border p-1">
+          {item.startTime} ~ {item.endTime}
+        </td>
+        {dayKeys.map((day, index) => (
+          <td key={index} className={`border p-1 ${item.days[day] ? 'bg-blue01/15' : ''}`}>
+            {item.days[day] || ''}
+          </td>
+        ))}
+      </tr>
+    );
+  });
+
+  // const ver3_result = (
+  //   <div>
+  //     {dayKeys.map((day, index) => (
+  //       <div key={index} className={`p-1`}>
+  //         {schedule.days[day]?.length ? (
+  //           <>
+  //             <div key={index}>{day}</div>
+  //             <div>
+  //               {schedule.days[day].map(({ startTime, endTime }, idx) => {
+  //                 return (
+  //                   <>
+  //                     <span key={idx}>
+  //                       {startTime} ~ {endTime}
+  //                       {schedule.days[day].length - 1 == idx ? (
+  //                         ''
+  //                       ) : (
+  //                         <span key={`span-${idx}`} className="m-2">
+  //                           {''}
+  //                         </span>
+  //                       )}
+  //                     </span>
+  //                     {!((idx + 1) % 5) ? <br /> : ''}
+  //                   </>
+  //                 );
+  //               })}
+  //             </div>
+  //           </>
+  //         ) : (
+  //           ''
+  //         )}
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
+
   return (
     <div className="overflow-x-auto p-3">
+      {/* <div>{ver3_result}</div> */}
       <table className="table-auto border-collapse border w-full text-center">
         <thead>
           <tr className="bg-blue01/70">
@@ -41,22 +108,7 @@ export default function Timetable({ schedule }) {
           </tr>
         </thead>
 
-        <tbody>
-          {baseTimes.map((item) =>
-            Object.entries(item).map(([baseTime, days], idx) => (
-              <tr key={idx} className="even:bg-gray01/50">
-                <td className="border p-1">
-                  {baseTime} ~ {baseTime.replace('00', '50')}
-                </td>
-                {dayKeys.map((day, index) => (
-                  <td key={index} className={`border p-1 ${days[day] ? 'bg-blue01/15' : ''}`}>
-                    {days[day] || ''}
-                  </td>
-                ))}
-              </tr>
-            )),
-          )}
-        </tbody>
+        <tbody>{ver2_result}</tbody>
       </table>
     </div>
   );
