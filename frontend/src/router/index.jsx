@@ -23,7 +23,11 @@ import UpdateReview from '../components/common/updatereview/UpdateReview';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home></Home>,
+    element: (
+      <ErrorBoundary>
+        <Home></Home>
+      </ErrorBoundary>
+    ),
     loader: () => {
       store.dispatch(hideListBar());
     },

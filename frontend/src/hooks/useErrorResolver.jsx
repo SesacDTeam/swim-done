@@ -54,7 +54,6 @@ const useErrorResolver = (errorDisplayMode) => {
       errorDisplayMode,
       error.config,
     );
-
     if (errorDisplayMode === ERROR_DISPLAY_MODE.TOAST) {
       dispatch(setRequestError(requestError));
       return;
