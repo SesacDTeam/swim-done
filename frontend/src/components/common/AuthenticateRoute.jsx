@@ -46,7 +46,10 @@ export default function AuthenticateRoute({ children, cancleAction }) {
             <div>로그인하시겠습니까?</div>
           </div>
           <div className="flex w-full h-12">
-            <button className="flex-1 bg-gray03 text-white w-full" onClick={handleCancleButtonClick}>
+            <button
+              className="flex-1 bg-gray03 text-white w-full"
+              onClick={handleCancleButtonClick}
+            >
               취소
             </button>
             <button className="flex-1 bg-blue01 text-white" onClick={handleOkButtonClick}>
