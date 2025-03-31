@@ -131,7 +131,13 @@ export default function SubmittedImage() {
           </form>
         </div>
       </main>
-      {isModalOpen && <AlertModal message={modalMessage} onClose={closeModal} />}
+      {isModalOpen && (
+        <AlertModal
+          isSingleButton={true} // 확인 버튼만 표시
+          message={modalMessage}
+          onConfirm={closeModal}
+        />
+      )}
     </>
   );
 }

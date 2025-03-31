@@ -37,7 +37,7 @@ export default function CreateReview() {
 
     try {
       await reviewApi.createReview(poolId, reviewContent);
-      setModalMessage('소중한 리뷰를 작성해 주셔서 감사합니다!')
+      setModalMessage('소중한 리뷰를 작성해 주셔서 감사합니다!');
       setIsModalOpen(true);
     } catch (error) {
       setError(error);
@@ -80,7 +80,13 @@ export default function CreateReview() {
           </form>
         </section>
       </main>
-      {isModalOpen && <AlertModal message={modalMessage} onClose={closeModal} />}
+      {isModalOpen && (
+        <AlertModal
+          isSingleButton={true} // 확인 버튼만 표시
+          message={modalMessage}
+          onConfirm={closeModal}
+        />
+      )}
     </>
   );
 }

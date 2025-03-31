@@ -41,9 +41,8 @@ export default function UpdateReview() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate('/mypage/reviews')// 모달 닫은 후 이전 페이지로 돌아가기
+    navigate('/mypage/reviews'); // 모달 닫은 후 이전 페이지로 돌아가기
   };
-
 
   const getReviewBeforeDate = async () => {
     try {
@@ -55,8 +54,7 @@ export default function UpdateReview() {
       } else {
         throw new Error('응답 데이터가 올바르지 않습니다.');
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -91,7 +89,13 @@ export default function UpdateReview() {
           </form>
         </section>
       </main>
-      {isModalOpen && <AlertModal message={modalMessage} onClose={closeModal} />}
+      {isModalOpen && (
+        <AlertModal
+          isSingleButton={true} // 확인 버튼만 표시
+          message={modalMessage}
+          onConfirm={closeModal}
+        />
+      )}
     </>
   );
 }
