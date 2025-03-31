@@ -31,13 +31,12 @@ public class GithubUserInfo implements OAuth2UserInfo {
 
     @Override
     public String getEmail() {
-//        return (String) attributes.get("email");
         return email;
     }
 
     @Override
     public String getNickname() {
-        return (String) attributes.get("name");
+        return (String) attributes.get("login");
     }
 
     @Override

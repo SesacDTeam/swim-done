@@ -7,17 +7,22 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PoolMarkResponseDto {
-  private Long id;
-  private String name;
-  private String address;
-  private Boolean mark;
+    private Long id;
+    private String name;
+    private String address;
+    private Boolean mark;
 
-  public static PoolMarkResponseDto from(PoolMark poolMark) {
-    return PoolMarkResponseDto.builder()
-      .id(poolMark.getPool().getId())
-      .name(poolMark.getPool().getName())
-      .address(poolMark.getPool().getAddress())
-      .mark(true)
-      .build();
-  }
+    /**
+     * PoolMarkListResponseDto의 요소
+     *
+     * @param entity 찜-엔티티
+     */
+    public static PoolMarkResponseDto from(PoolMark entity) {
+        return PoolMarkResponseDto.builder()
+                .id(entity.getPool().getId())
+                .name(entity.getPool().getName())
+                .address(entity.getPool().getAddress())
+                .mark(true)
+                .build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.done.swim.domain.user.entity;
 
 import com.done.swim.common.BaseTimeEntity;
+
 import com.done.swim.domain.poolmark.entity.PoolMark;
 import com.done.swim.domain.poolreview.entity.PoolReview;
 import com.done.swim.domain.submittedimage.entity.SubmittedImage;
@@ -15,12 +16,18 @@ import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 
 @Entity
@@ -44,8 +51,6 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     private String imageUrl;
 
-    private String kakaoAccessToken;
-
 //    @Enumerated(EnumType.STRING)
 //    private Role role;
 
@@ -61,19 +66,13 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Builder
     public User(String email, String nickname, String provider, String providerId,
-        String imageUrl, String kakaoAccessToken) {
+                String imageUrl) {
         this.email = email;
         this.nickname = nickname;
         this.provider = provider;
         this.providerId = providerId;
         this.imageUrl = imageUrl;
-        this.kakaoAccessToken = kakaoAccessToken;
     }
-
-    public void setKakaoAccessToken(String kakaoAccessToken) {
-        this.kakaoAccessToken = kakaoAccessToken;
-    }
-
 
     // UserDetails 인터페이스 구현
     @Override
