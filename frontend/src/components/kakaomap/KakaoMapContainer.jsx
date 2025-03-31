@@ -112,8 +112,7 @@ export default function KakaoMapContainer() {
 
       infoWindow.setContent(container); // ✅ 인포윈도우에 React 컨테이너 적용
       infoWindow.open(marker.getMap(), marker);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
   //#endregion
 
@@ -179,8 +178,7 @@ export default function KakaoMapContainer() {
         dispatch(setPools({ pools }));
         dispatch(setName({ name }));
         navigate('pools');
-      } catch (error) {
-      }
+      } catch (error) {}
     });
   }
 
