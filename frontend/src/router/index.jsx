@@ -5,7 +5,7 @@ import MyPage from '../components/mypage/MyPage';
 import PoolList from '../components/poollist/PoolList';
 import MarkPools from '../components/markpools/MarkPools';
 import PoolDetail from '../components/common/pooldetail/PoolDetail';
-import SubmittedImage from '../components/common/submittedimage/SubmittedImage';
+import SubmittedImage from '../components/common/submittedImage/SubmittedImage';
 import LoginRedirect from '../pages/LoginRedirect';
 import NotFound from '../pages/NotFound';
 import AuthenticateRoute from '../components/common/AuthenticateRoute';
