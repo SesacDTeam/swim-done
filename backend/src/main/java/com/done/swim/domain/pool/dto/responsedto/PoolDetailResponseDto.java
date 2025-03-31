@@ -1,8 +1,6 @@
 package com.done.swim.domain.pool.dto.responsedto;
 
 import com.done.swim.domain.pool.entity.Pool;
-import com.done.swim.domain.poolreview.dto.responsedto.GroupedSwimmingTimeByWeekResponseDto;
-import com.done.swim.domain.poolreview.dto.responsedto.GroupedSwimmingTimeByWeekResponseDtoItem;
 import com.done.swim.domain.swimmingtime.dto.responsedto.SwimmingTimeResponseDto;
 import com.done.swim.domain.swimmingtime.entity.SwimmingTime;
 import com.done.swim.domain.swimmingtime.entity.Week;
@@ -11,7 +9,10 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -26,8 +27,7 @@ public class PoolDetailResponseDto {
     private final String additionalInfo;
     private final String parking;
     private final String link;
-    private final List<GroupedSwimmingTimeResponseDto> swimmingTimes;
-    //    private final GroupedSwimmingTimeByWeekResponseDto swimmingTimes;
+    private final List<GroupedSwimmingTimeByWeekResponseDto> swimmingTimes;
     private final List<PoolDetailReviewResponseDto> reviews;
 
     /**
@@ -35,11 +35,10 @@ public class PoolDetailResponseDto {
      */
     public static PoolDetailResponseDto from(Pool pool) {
 
-        Map<LocalTime, GroupedSwimmingTimeResponseDto> groupedSwimmingTimes = getGroupedSwimmingTimes(pool.getSwimmingTimes());
+        Map<LocalTime, GroupedSwimmingTimeByWeekResponseDto> groupedSwimmingTimes = getGroupedSwimmingTimesByWeek(pool.getSwimmingTimes());
 
-        List<GroupedSwimmingTimeResponseDto> sortedSwimmingTimes = sortedSwimmingTimes(groupedSwimmingTimes);
+        List<GroupedSwimmingTimeByWeekResponseDto> sortedSwimmingTimes = sortedSwimmingTimes(groupedSwimmingTimes);
 
-        GroupedSwimmingTimeByWeekResponseDto groupedSwimmingTimesByWeek = getGroupedSwimmingTimesByWeek(pool.getSwimmingTimes());
 
         return PoolDetailResponseDto.builder()
                 .name(pool.getName())
@@ -49,7 +48,6 @@ public class PoolDetailResponseDto {
                 .additionalInfo(pool.getAdditionalInfo())
                 .parking(pool.getParking())
                 .link(pool.getLink())
-//                .swimmingTimes(groupedSwimmingTimesByWeek)
                 .swimmingTimes(sortedSwimmingTimes)
                 .reviews(
                         pool.getPoolReviews().stream()
@@ -59,39 +57,20 @@ public class PoolDetailResponseDto {
                 .build();
     }
 
-    static GroupedSwimmingTimeByWeekResponseDto getGroupedSwimmingTimesByWeek(List<SwimmingTime> swimmingTimes) {
-
-
-        Map<Week, List<GroupedSwimmingTimeByWeekResponseDtoItem>> result = new HashMap<>();
-        for (SwimmingTime swimmingTime : swimmingTimes) {
-            //swimmingTime의 요일로 리스트를 꺼냄 없으면 리스트 생성
-
-            List<GroupedSwimmingTimeByWeekResponseDtoItem> times = result.getOrDefault(swimmingTime.getDayOfWeek(), new ArrayList<>());
-            times.add(GroupedSwimmingTimeByWeekResponseDtoItem.from(swimmingTime));
-            times = times.stream().sorted(Comparator.comparing(GroupedSwimmingTimeByWeekResponseDtoItem::getStartTime)).collect(Collectors.toList());
-            result.put(swimmingTime.getDayOfWeek(), times);
-
-        }
-        return GroupedSwimmingTimeByWeekResponseDto.builder()
-                .days(result)
-                .build();
-
-
-    }
 
     /**
      * 시간 데이터 그룹핑
      *
      * @param swimmingTimes 자유 수영 시간 엔티티
      */
-    private static Map<LocalTime, GroupedSwimmingTimeResponseDto> getGroupedSwimmingTimes(List<SwimmingTime> swimmingTimes) {
+    private static Map<LocalTime, GroupedSwimmingTimeByWeekResponseDto> getGroupedSwimmingTimesByWeek(List<SwimmingTime> swimmingTimes) {
         return swimmingTimes.stream().map(SwimmingTimeResponseDto::from) // entity -> 응답 DTO로 변경
                 .collect(Collectors.toMap( // 시간대 별로 그룹핑
                         SwimmingTimeResponseDto::getStartTime, // key
                         time -> { // value
                             Map<Week, String> daysMap = new HashMap<>();
                             daysMap.put(time.getDayOfWeek(), "자유 수영");
-                            return GroupedSwimmingTimeResponseDto.builder()
+                            return GroupedSwimmingTimeByWeekResponseDto.builder()
                                     .startTime(time.getStartTime())
                                     .endTime(time.getEndTime())
                                     .days(daysMap)
@@ -109,16 +88,16 @@ public class PoolDetailResponseDto {
      *
      * @param groupedSwimmingTimes 그룹화된 시간데이터
      */
-    private static List<GroupedSwimmingTimeResponseDto> sortedSwimmingTimes(Map<LocalTime, GroupedSwimmingTimeResponseDto> groupedSwimmingTimes) {
+    private static List<GroupedSwimmingTimeByWeekResponseDto> sortedSwimmingTimes(Map<LocalTime, GroupedSwimmingTimeByWeekResponseDto> groupedSwimmingTimes) {
         return groupedSwimmingTimes.values().stream()
                 .sorted( // 시작 시간 기준 오름차순 정렬
-                        Comparator.comparing(GroupedSwimmingTimeResponseDto::getStartTime)
+                        Comparator.comparing(GroupedSwimmingTimeByWeekResponseDto::getStartTime)
                 ).toList();
     }
 
     @Getter
     @Builder
-    static class GroupedSwimmingTimeResponseDto {
+    static class GroupedSwimmingTimeByWeekResponseDto {
 
         private final Map<Week, String> days;
         @JsonFormat(pattern = "HH:mm")
