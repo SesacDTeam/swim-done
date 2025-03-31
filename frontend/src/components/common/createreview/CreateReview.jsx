@@ -5,6 +5,7 @@ import { xmark, back } from '../../../utils/staticImagePath';
 import reviewApi from '../../../api/reviewApi';
 import useErrorResolver from '../../../hooks/useErrorResolver';
 import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
+import RequestError from '../../../error/RequestError';
 
 export default function CreateReview() {
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
@@ -26,14 +27,13 @@ export default function CreateReview() {
 
     // 리뷰 없을 때 (trim 써서 공백만 입력된 경우도 막음)
     if (!reviewContent.trim()) {
-      alert('리뷰를 작성해 주세요!');
+      setError(new RequestError("리뷰를 작성해 주세요!"))
       return;
     }
 
     try {
       await reviewApi.createReview(poolId, reviewContent);
-      navigate(`/mark-pools/${poolId}`);
-      alert('리뷰 작성 성공!');
+      navigate(-1)
     } catch (error) {
       setError(error);
     } finally {
@@ -46,25 +46,27 @@ export default function CreateReview() {
       <main className="flex flex-col items-center w-full">
         <DetailViewHeader backButtonImage={back} closeButtonImage={xmark}></DetailViewHeader>
         <section className="w-[80%] flex flex-col items-center mb-10">
-          <h1 className="pretendard-bold text-3xl">{poolName}</h1>
+          <h1 className="font-pretendard font-bold text-3xl">{poolName}</h1>
         </section>
 
-        <section className="w-150 mt-30 flex flex-col">
+        <section className="w-150 mt-30 flex flex-col font-pretendard font-medium">
           <form onSubmit={handleSubmit}>
             <textarea
-              className="pretendard-medium text-xl w-full h-50 border border-gray04 rounded-lg p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-blue02 transition-all resize-none"
+              className="text-xl w-full h-50 border border-gray04 rounded-lg p-4 mb-4 focus:outline-none focus:ring-1 focus:ring-blue02 transition-all resize-none"
               id="createReview"
               name="createReview"
               placeholder="실제 이용하신 후기를 자유롭게 남겨 주세요."
               value={reviewContent}
               onChange={handleChange}
             ></textarea>
-            <button
-              className={` pretendard-medium text-xl rounded-[10px] px-4 py-2 mt-4 float-right ${reviewContent.trim() ? 'bg-blue02/10 cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
-              type="submit"
-            >
-              제출
-            </button>
+            <div className='flex justify-end'>
+              <button
+                className={`rounded-[10px] px-4 py-2 mt-4 ${reviewContent.trim() ?  'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
+                type="submit"
+              >
+                제출하기
+              </button>
+            </div>
           </form>
         </section>
       </main>

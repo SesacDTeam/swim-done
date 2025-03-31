@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import submittedImageApi from '../../../api/submittedImageApi';
 import { defaultUploadImage } from '../../../utils/staticImagePath';
 import useErrorResolver from '../../../hooks/useErrorResolver';
+import RequestError from '../../../error/RequestError';
 import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
 
 export default function SubmittedImage() {
@@ -26,6 +27,13 @@ export default function SubmittedImage() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    // 프론트에서도 파일 크기 제한함
+    const maxSize = 3 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+      setError(new RequestError('파일 크기가 너무 큽니다. 3MB 이하로 업로드해 주세요.'));
+      return;
+    }
 
     if (file) {
       setInputData({ file });
@@ -51,7 +59,8 @@ export default function SubmittedImage() {
     e.preventDefault();
 
     if (!inputData.file) {
-      alert('파일을 선택해 주세요!');
+      // alert창 대신 토스트로 변경
+      setError(new RequestError('파일을 선택해 주세요!'));
       return;
     }
 
@@ -61,7 +70,7 @@ export default function SubmittedImage() {
 
     try {
       await submittedImageApi.createImage(formData);
-      navigate(`/mark-pools/${poolId}`);
+      navigate(-1);
     } catch (error) {
       setError(error);
     }
@@ -69,19 +78,18 @@ export default function SubmittedImage() {
 
   return (
     <>
-      <main className="flex flex-col items-center w-full">
+      <main className="flex flex-col items-center w-full font-pretendard">
         <DetailViewHeader backButtonImage={back} closeButtonImage={xmark}></DetailViewHeader>
-
         <section className="w-[80%] flex flex-col items-center mb-10">
-          <h1 className="pretendard-bold text-3xl">{poolName}</h1>
-          <p className="pretendard-medium text-body01 text-2xl mb-10 mt-10">
+          <h1 className="font-bold text-3xl">{poolName}</h1>
+          <p className="font-medium text-body01 text-xl mb-10 mt-10">
             수정하실 시간표 이미지를 첨부해 주세요.
           </p>
         </section>
 
         <div>
           <div
-            className="w-90 h-60 flex justify-center items-center border border-gray02 rounded-lg bg-gray-200 cursor-pointer"
+            className="w-90 h-60 flex justify-center items-center border border-gray03 rounded-lg bg-gray-200 cursor-pointer "
             onClick={handleButtonClick}
           >
             {previewImage ? (
@@ -98,12 +106,11 @@ export default function SubmittedImage() {
           {/* 제출 영역임 */}
           <form onSubmit={handleSubmit} className="mt-8 flex justify-end gap-4">
             <button
-              className="pretendard-medium rounded-[10px] px-4 py-3 bg-blue01 text-white cursor-pointer"
+              className={`rounded-[10px] px-4 py-2 mt-4 ${inputData.file ?  'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
               type="submit"
             >
               제출하기
             </button>
-
             <input
               type="file"
               ref={fileInputRef}

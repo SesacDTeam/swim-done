@@ -7,6 +7,8 @@ import instance from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../store/slices/authSlice';
 import userApi from '../../api/userApi';
+import useErrorResolver from '../../hooks/useErrorResolver';
+import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
 
 import {
   profile,
@@ -25,6 +27,7 @@ export default function MyPage() {
   const email = useSelector((state) => state.user.email);
   const [userInfo, setUserInfo] = useState(null);
   const [isOutletVisible, setIsOutletVisible] = useState(false);
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
 
   const getUserInfo = async () => {
     try {
@@ -36,6 +39,8 @@ export default function MyPage() {
         throw new Error('응답 데이터가 올바르지 않습니다.');
       }
     } catch (error) {
+      setError(error);
+      console.error('사용자 정보 가져오기 실패:', error);
     }
   };
 

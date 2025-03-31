@@ -29,6 +29,12 @@ public class SubmittedImageService {
      */
     @Transactional
     public SubmittedImageResponseDto createImage(SubmittedImageRequestDto requestDto) {
+
+        // application.properties에서 크기 제한 설정 해놨지만 클라이언트 에러메세지 보여주도록 추가 처리
+        if (requestDto.getFile().getSize() > 3 * 1024 * 1024) {
+            throw new GlobalException(ErrorCode.PAYLOAD_TOO_LARGE);
+        }
+
         Map<String, String> findOneImage = awsS3Service.uploadImage(requestDto.getFile());
 
         return SubmittedImageResponseDto.from(
