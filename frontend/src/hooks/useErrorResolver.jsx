@@ -16,14 +16,16 @@ const useErrorResolver = (errorDisplayMode) => {
     if (!error) {
       return;
     }
-    
+
     // RequestError 인스턴스인 경우 바로 디스패치 (리뷰 작성 및 이미지 업로드 시 발생하는 에러 처리)
     if (error instanceof RequestError) {
-      dispatch(setRequestError({
-        message: error.message,
-        code: error.code,
-        errorDisplayMode: error.errorDisplayMode
-      }));
+      dispatch(
+        setRequestError({
+          message: error.message,
+          code: error.code,
+          errorDisplayMode: error.errorDisplayMode,
+        }),
+      );
       return;
     }
 

@@ -8,13 +8,15 @@ export const useToggleMark = () => {
   const toggleMark = async (index, pools, setPools) => {
     const isMarked = pools[index].mark;
 
+    // 로그인 상태인지 아닌지 useselector
+
     try {
       if (isMarked) {
         await markPoolApi.deleteMyMarkedPools(pools[index].id);
       } else {
         await markPoolApi.createMarkedPools(pools[index].id);
       }
-      
+
       setPools((prev) => {
         const updatedPools = [...prev];
         updatedPools[index] = {
@@ -24,7 +26,6 @@ export const useToggleMark = () => {
 
         return updatedPools;
       });
-
     } catch (error) {
       setError(error);
     }

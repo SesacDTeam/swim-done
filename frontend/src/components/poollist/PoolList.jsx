@@ -2,26 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
-import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { logo } from '../../utils/staticImagePath';
 import NoContent from '../common/NoContent';
+import { useToggleMark } from '../../hooks/useToggleMark';
 
 export default function PoolList() {
   const navigate = useNavigate();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const name = useSelector((state) => state.kakaoMap.name)
+  const name = useSelector((state) => state.kakaoMap.name);
 
   const [isLoading, setIsLoading] = useState(false);
   const [pools, setPools] = useState(useSelector((state) => state.kakaoMap.pools));
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hasNext, setHasNext] = useState(true);
+  const { toggleMark } = useToggleMark();
 
   const getPools = () => {
     setIsLoading(true);
     try {
-
       //처음에 5개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
       setCurrentIndex((prev) => prev + 2); // 인덱스로 바꾸면 될듯
       setHasNext(currentIndex < pools.length);
@@ -46,12 +46,11 @@ export default function PoolList() {
 
   useEffect(() => {
     if (name === null) {
-      navigate("/")
+      navigate('/');
     }
   }, []);
 
-  useEffect(() => { 
-  }, [pools])
+  useEffect(() => {}, [pools]);
 
   return (
     <>
