@@ -156,14 +156,16 @@ export default function KakaoMapContainer() {
     });
 
     kakao.maps.event.addListener(polygon, 'click', async (e) => {
+      if (markers && markers.length) {
+        markers.forEach((marker) => marker.setMap(null));
+      }
       try {
-        const { data: pools } = await kakaoMapApi.getSectionWithPools(name);
-
         map.setLevel(7);
         map.panTo(e.latLng);
-        markers.forEach((marker) => marker.setMap(null));
         customOverlay.setMap(null);
         polygon.setOptions({ fillColor: '#fff' });
+
+        const { data: pools } = await kakaoMapApi.getSectionWithPools(name);
 
         const markers = pools.map(({ latitude, longitude, name }) =>
           createMarker(new kakao.maps.LatLng(latitude, longitude), name),
@@ -175,6 +177,8 @@ export default function KakaoMapContainer() {
         dispatch(setName({ name }));
         navigate('pools');
       } catch (error) {
+        console.log(error);
+
         setError(new RequestError('연결 상태를 확인해 주세요', ERROR_CODE.INTERNAL_SERVER_ERROR));
       }
     });
