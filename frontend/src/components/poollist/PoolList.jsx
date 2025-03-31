@@ -10,7 +10,7 @@ import NoContent from '../common/NoContent';
 export default function PoolList() {
   const navigate = useNavigate();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const name = useSelector((state) => state.kakaoMap.name)
+  const name = useSelector((state) => state.kakaoMap.name);
 
   const [isLoading, setIsLoading] = useState(false);
   const [pools, setPools] = useState(useSelector((state) => state.kakaoMap.pools));
@@ -21,7 +21,6 @@ export default function PoolList() {
   const getPools = () => {
     setIsLoading(true);
     try {
-
       //처음에 5개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
       setCurrentIndex((prev) => prev + 2); // 인덱스로 바꾸면 될듯
       setHasNext(currentIndex < pools.length);
@@ -46,12 +45,11 @@ export default function PoolList() {
 
   useEffect(() => {
     if (name === null) {
-      navigate("/")
+      navigate('/');
     }
   }, []);
 
-  useEffect(() => { 
-  }, [pools])
+  useEffect(() => {}, [pools]);
 
   return (
     <>

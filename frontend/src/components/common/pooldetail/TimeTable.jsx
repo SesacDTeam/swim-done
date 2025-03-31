@@ -1,27 +1,31 @@
-export default function Timetable() {
-  const schedule = [
-    { time: '06:00-06:50', days: { MON: '자유 수영' } },
-    { time: '06:00-06:50', days: { SAT: '자유 수영' } },
-    { time: '07:00-07:50', days: { SAT: '자유 수영' } },
-    { time: '08:00-08:50', days: { SAT: '자유 수영' } },
-    { time: '09:00-09:50', days: { SAT: '자유 수영' } },
-    { time: '10:00-10:50', days: { SAT: '자유 수영' } },
-    { time: '11:00-11:50', days: { SAT: '자유 수영' } },
-    { time: '12:00-12:50', days: { SAT: '자유 수영', SUN: '자유 수영' } },
-    {
-      time: '13:00-13:50',
-      days: { TUE: '자유 수영', WED: '자유 수영', THU: '자유 수영', FRI: '자유 수영' },
-    },
-    { time: '14:00-14:50', days: {} },
-    { time: '15:00-15:50', days: { THU: '자유 수영' } },
-    { time: '16:00-16:50', days: { THU: '자유 수영' } },
-    { time: '17:00-17:50', days: {} },
-    { time: '18:00-18:50', days: {} },
-    { time: '19:00-19:50', days: { TUE: '자유 수영', WED: '자유 수영' } },
-  ];
+export default function Timetable({ schedule }) {
+  if (!schedule || !schedule.length) {
+    return (
+      <>
+        <div className="text-body01 font-bold">준비된 시간표가 없습니다</div>
+        <hr className="m-2" />
+      </>
+    );
+  }
+  console.log('schedule', schedule); // schedule 데이터 확인
 
   const days = ['월', '화', '수', '목', '금', '토', '일'];
   const dayKeys = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+  const baseTimes = []; // 06:00 ~ 21:00
+  for (let i = 6; i < 22; i++) {
+    baseTimes.push({ [`${String(i).padStart(2, '0')}:00`]: null });
+  }
+
+  baseTimes.forEach((baseTime, idx) => {
+    const time = Object.keys(baseTime)[0];
+    const scheduleItem = schedule.find((item) => item.startTime === time);
+    if (scheduleItem) {
+      baseTimes[idx] = { [time]: scheduleItem.days };
+    } else {
+      baseTimes[idx] = { [time]: {} };
+    }
+  });
 
   return (
     <div className="overflow-x-auto p-3">
@@ -36,17 +40,22 @@ export default function Timetable() {
             ))}
           </tr>
         </thead>
+
         <tbody>
-          {schedule.map((slot, idx) => (
-            <tr key={idx} className="even:bg-gray01/50">
-              <td className="border p-1">{slot.time}</td>
-              {dayKeys.map((key, index) => (
-                <td key={index} className={`border p-1 ${slot.days[key] ? 'bg-blue01/15' : ''}`}>
-                  {slot.days[key] || ''}
+          {baseTimes.map((item) =>
+            Object.entries(item).map(([baseTime, days], idx) => (
+              <tr key={idx} className="even:bg-gray01/50">
+                <td className="border p-1">
+                  {baseTime} ~ {baseTime.replace('00', '50')}
                 </td>
-              ))}
-            </tr>
-          ))}
+                {dayKeys.map((day, index) => (
+                  <td key={index} className={`border p-1 ${days[day] ? 'bg-blue01/15' : ''}`}>
+                    {days[day] || ''}
+                  </td>
+                ))}
+              </tr>
+            )),
+          )}
         </tbody>
       </table>
     </div>
