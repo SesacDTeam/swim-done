@@ -1,7 +1,13 @@
 export default function Timetable({ schedule }) {
-  if (!schedule) {
-    return <div>준비된 시간표가 없습니다</div>;
+  if (!schedule || !schedule.length) {
+    return (
+      <>
+        <div className="text-body01 font-bold">준비된 시간표가 없습니다</div>
+        <hr className="m-2" />
+      </>
+    );
   }
+  console.log('schedule', schedule); // schedule 데이터 확인
 
   const days = ['월', '화', '수', '목', '금', '토', '일'];
   const dayKeys = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];

@@ -61,7 +61,6 @@ export default function PoolDetail() {
         </section>
 
         <section className="relative border-1 w-[80%] rounded-2xl border-blue01 bg-blue02/20 pretendard-normal flex flex-col justify-center gap-1 px-4 pt-10 pb-4">
-          {/* TODO: 시간 데이터 수정 */}
           <div>
             <Timetable schedule={poolDetail?.swimmingTimes}></Timetable>
           </div>
