@@ -6,13 +6,17 @@ import reviewApi from '../../../api/reviewApi';
 import useErrorResolver from '../../../hooks/useErrorResolver';
 import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
 import RequestError from '../../../error/RequestError';
+import AlertModal from '../AlertModal';
 
 export default function CreateReview() {
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const [isLoading, setIsLoading] = useState(false);
   const [reviewContent, setReviewContent] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const { poolId } = useParams();
+
   const navigate = useNavigate();
   const location = useLocation();
   const poolName = location.state?.poolName;
@@ -27,18 +31,24 @@ export default function CreateReview() {
 
     // 리뷰 없을 때 (trim 써서 공백만 입력된 경우도 막음)
     if (!reviewContent.trim()) {
-      setError(new RequestError("리뷰를 작성해 주세요!"))
+      setError(new RequestError('리뷰를 작성해 주세요!'));
       return;
     }
 
     try {
       await reviewApi.createReview(poolId, reviewContent);
-      navigate(-1)
+      setModalMessage('소중한 리뷰를 작성해 주셔서 감사합니다!');
+      setIsModalOpen(true);
     } catch (error) {
       setError(error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate(-1); // 모달 닫은 후 이전 페이지로 돌아가기
   };
 
   return (
@@ -59,9 +69,9 @@ export default function CreateReview() {
               value={reviewContent}
               onChange={handleChange}
             ></textarea>
-            <div className='flex justify-end'>
+            <div className="flex justify-end">
               <button
-                className={`rounded-[10px] px-4 py-2 mt-4 ${reviewContent.trim() ?  'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
+                className={`rounded-[10px] px-4 py-2 mt-4 ${reviewContent.trim() ? 'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'} `}
                 type="submit"
               >
                 제출하기
@@ -70,6 +80,13 @@ export default function CreateReview() {
           </form>
         </section>
       </main>
+      {isModalOpen && (
+        <AlertModal
+          isSingleButton={true} // 확인 버튼만 표시
+          message={modalMessage}
+          onConfirm={closeModal}
+        />
+      )}
     </>
   );
 }

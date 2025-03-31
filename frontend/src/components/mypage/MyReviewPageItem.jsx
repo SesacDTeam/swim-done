@@ -3,6 +3,7 @@ import { swimming, more } from '../../utils/staticImagePath';
 import { useNavigate } from 'react-router-dom'; // 추가
 import reviewApi from '../../api/reviewApi';
 import { useEffect } from 'react';
+import AlertModal from '../common/AlertModal';
 
 export default function MyReviewPageItem({
   poolName,
@@ -14,6 +15,9 @@ export default function MyReviewPageItem({
 }) {
   const [isToggled, setIsToggled] = useState(false);
   const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -32,22 +36,32 @@ export default function MyReviewPageItem({
     };
   }, [isToggled]);
 
-  const reviewDelete = async () => {
-    const confirmed = window.confirm('정말 삭제하시겠습니까?');
-    if (confirmed) {
-      try {
-        const response = await reviewApi.deleteReview(reviewId);
+  const reviewDelete = () => {
+    setModalMessage('정말 삭제하시겠습니까?');
+    setIsModalOpen(true);
+  };
 
-        if (response.status === 204) {
-          alert('리뷰가 삭제되었습니다.');
-          fetchReviews();
-          setIsToggled(false);
-          setTotalCount((prev) => prev - 1);
-        } else {
-          alert('리뷰 삭제에 실패했습니다.');
-        }
-      } catch (error) {}
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await reviewApi.deleteReview(reviewId);
+
+      if (response.status === 204) {
+        fetchReviews();
+        setIsToggled(false);
+        setTotalCount((prev) => prev - 1);
+      } else {
+        alert('리뷰 삭제에 실패했습니다.'); // TODO: 에러 toast창으로 변경
+      }
+    } catch (error) {
+      alert('오류 발생'); // TODO: 에러 toast창으로 변경
     }
+
+    // 모달 닫기
+    setIsModalOpen(false);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -103,6 +117,14 @@ export default function MyReviewPageItem({
           <p className="mb-6 mt-6 text-2xl">{content}</p>
         </div>
       </article>
+      {isModalOpen && (
+        <AlertModal
+          isSingleButton={false} // 확인, 취소 버튼 2개 표시
+          message={modalMessage}
+          onConfirm={handleConfirmDelete} // 삭제 확인 시 실행
+          onCancel={handleCloseModal} // 취소 시 실행
+        />
+      )}
     </>
   );
 }

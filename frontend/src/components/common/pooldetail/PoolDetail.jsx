@@ -93,7 +93,7 @@ export default function PoolDetail() {
           <h2 className="self-start pretendard-semibold text-2xl">리뷰</h2>
           <Link to="reviews" className="self-end" state={{ poolName: poolDetail?.name }}>
             <button className="text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-xs">
-              리뷰쓰러가기
+              리뷰 쓰러가기
             </button>
           </Link>
 
