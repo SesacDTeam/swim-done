@@ -6,6 +6,7 @@ import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { logo } from '../../utils/staticImagePath';
 import NoContent from '../common/NoContent';
 import { useToggleMark } from '../../hooks/useToggleMark';
+import AuthenticateRoute from '../common/AuthenticateRoute';
 
 export default function PoolList() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function PoolList() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hasNext, setHasNext] = useState(true);
-  const { toggleMark } = useToggleMark();
+  const { toggleMark, showLoginModal, setShowLoginModal } = useToggleMark();
 
   const getPools = () => {
     setIsLoading(true);
@@ -59,6 +60,9 @@ export default function PoolList() {
           <img src={logo} alt="" className="animate-spin w-30" />
         </div>
       )}
+
+      {showLoginModal && <AuthenticateRoute cancleAction={() => setShowLoginModal(false)} />}
+
       <div class="p-6">
         <h1 class="text-2xl font-bold mb-4">
           <span class="text-black">'{name}'</span> 수영할 곳 찾고 계셨죠?
