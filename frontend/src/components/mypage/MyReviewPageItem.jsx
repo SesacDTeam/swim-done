@@ -46,8 +46,7 @@ export default function MyReviewPageItem({
         } else {
           alert('리뷰 삭제에 실패했습니다.');
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
