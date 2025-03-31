@@ -21,6 +21,13 @@ public class SwimmingTimeResponseDto {
      * 특정 수영장의 자유 수영 시간, 요일
      *
      * @param entity 자유 수영 시간 엔티티
+     * @return [
+     * {
+     * "startTime" : "08:00",
+     * "endTime" : "08:50",
+     * "dayOfWeek" : "MON
+     * }
+     * ]
      */
     public static SwimmingTimeResponseDto from(SwimmingTime entity) {
         return SwimmingTimeResponseDto.builder()
