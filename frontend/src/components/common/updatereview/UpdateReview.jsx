@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import reviewApi from '../../../api/reviewApi';
 import DetailViewHeader from '../DetailViewHeader';
 import { xmark, back } from '../../../utils/staticImagePath';
+import AlertModal from '../AlertModal';
 
 export default function UpdateReview() {
   const [error, setError] = useState('');
@@ -11,6 +12,9 @@ export default function UpdateReview() {
   const [poolName, setPollName] = useState('');
   const { reviewId } = useParams();
   const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const handleChange = async (e) => {
     setReviewContent(e.target.value); // 입력된 값을 reviewText 상태에 저장
@@ -20,20 +24,26 @@ export default function UpdateReview() {
     e.preventDefault();
 
     if (!reviewContent.trim()) {
-      alert('리뷰를 작성해 주세요!');
+      alert('리뷰를 작성해 주세요!'); // TODO: 에러 toast창으로 변경
       return;
     }
     try {
       const response = await reviewApi.updateReview(reviewId, reviewContent);
       if (response) {
-        alert('내용이 수정되었습니다.');
-        navigate('/mypage/reviews');
+        setModalMessage('리뷰 내용이 수정되었습니다!');
+        setIsModalOpen(true);
       }
     } catch (err) {
-      alert('애러남');
+      alert('애러남'); // TODO: 에러 toast창으로 변경
       setError(err.message);
     }
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate('/mypage/reviews')// 모달 닫은 후 이전 페이지로 돌아가기
+  };
+
 
   const getReviewBeforeDate = async () => {
     try {
@@ -81,6 +91,7 @@ export default function UpdateReview() {
           </form>
         </section>
       </main>
+      {isModalOpen && <AlertModal message={modalMessage} onClose={closeModal} />}
     </>
   );
 }
