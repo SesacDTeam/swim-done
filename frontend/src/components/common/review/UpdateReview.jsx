@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import reviewApi from '../../../api/reviewApi';
 import DetailViewHeader from '../DetailViewHeader';
 import { xmark, back } from '../../../utils/staticImagePath';
 import ReviewForm from './reviewForm';
 import { useSubmitReview } from '../../../hooks/useSubmitReview';
+import AlertModal from '../AlertModal';
 
 export default function UpdateReview() {
   const [canSubmit, setCanSubmit] = useState(false);
@@ -13,8 +14,8 @@ export default function UpdateReview() {
   const location = useLocation();
   const poolName = location.state?.poolName;
   const content = location.state?.content;
-
-  const { reviewContent, setReviewContent, handleSubmit } = useSubmitReview(
+  const navigate = useNavigate();
+  const { reviewContent, setReviewContent, handleSubmit, isModalOpen } = useSubmitReview(
     content,
     async (reviewContent) => {
       reviewApi.updateReview(reviewId, reviewContent);
@@ -25,6 +26,12 @@ export default function UpdateReview() {
     const inputValue = e.target.value;
     setReviewContent(inputValue);
     setCanSubmit(content !== inputValue && inputValue.trim());
+  };
+
+  const closeModal = () => {
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(/\/[^\/]+$/, '');
+    navigate(newPath);
   };
 
   return (
@@ -42,6 +49,13 @@ export default function UpdateReview() {
           content={reviewContent}
           canSubmit={canSubmit}
         ></ReviewForm>
+        {isModalOpen && (
+          <AlertModal
+            isSingleButton={true} // 확인 버튼만 표시
+            message={'리뷰 내용이 수정되었습니다.'}
+            onConfirm={closeModal}
+          />
+        )}
       </main>
     </>
   );

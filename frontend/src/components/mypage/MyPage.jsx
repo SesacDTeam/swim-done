@@ -46,8 +46,6 @@ export default function MyPage() {
     navigate('reviews');
   };
 
-  const navigate = useNavigate();
-
   const handleLogout = () => {
     setModalMessage(['로그아웃 하시겠습니까?']);
     setModalAction(() => logoutAction); // 로그아웃 액션을 모달의 확인 버튼에 연결

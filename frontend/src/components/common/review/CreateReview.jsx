@@ -5,14 +5,16 @@ import { xmark, back } from '../../../utils/staticImagePath';
 import reviewApi from '../../../api/reviewApi';
 import ReviewForm from './reviewForm';
 import { useSubmitReview } from '../../../hooks/useSubmitReview';
+import AlertModal from '../AlertModal';
 
 export default function CreateReview() {
   const [canSubmit, setCanSubmit] = useState(false);
+  const navigate = useNavigate();
 
   const { poolId } = useParams();
   const location = useLocation();
   const poolName = location.state?.poolName;
-  const { reviewContent, setReviewContent, handleSubmit } = useSubmitReview(
+  const { reviewContent, setReviewContent, handleSubmit, isModalOpen } = useSubmitReview(
     '',
     async (reviewContent) => {
       reviewApi.createReview(poolId, reviewContent);
@@ -23,6 +25,12 @@ export default function CreateReview() {
     const inputValue = e.target.value;
     setReviewContent(inputValue);
     setCanSubmit(inputValue.trim());
+  };
+
+  const closeModal = () => {
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(/\/[^\/]+$/, '');
+    navigate(newPath);
   };
 
   return (
@@ -38,6 +46,13 @@ export default function CreateReview() {
           content={reviewContent}
           canSubmit={canSubmit}
         ></ReviewForm>
+        {isModalOpen && (
+          <AlertModal
+            isSingleButton={true} // 확인 버튼만 표시
+            message={'리뷰 내용이 수정되었습니다.'}
+            onConfirm={closeModal}
+          />
+        )}
       </main>
     </>
   );
