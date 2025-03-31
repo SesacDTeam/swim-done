@@ -49,6 +49,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 //    @Enumerated(EnumType.STRING)
 //    private Role role;
 
+    // 리뷰 등이 있을 때 회원탈퇴가 안되는 현상 해결 코드
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<PoolReview> poolReviews;
 
@@ -57,7 +58,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<SubmittedImage> images;
-    
+
     @Builder
     public User(String email, String nickname, String provider, String providerId,
         String imageUrl, String kakaoAccessToken) {
