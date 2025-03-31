@@ -11,7 +11,7 @@ import Timetable from './TimeTable';
 export default function PoolDetail() {
   const mapContainer = useRef();
   const { poolId } = useParams();
-  const [poolDetail, setPoolDetail] = useState();
+  const [poolDetail, setPoolDetail] = useState(null);
   const mapRef = useRef();
   const { setError } = useErrorResolver();
 
@@ -61,9 +61,8 @@ export default function PoolDetail() {
         </section>
 
         <section className="relative border-1 w-[80%] rounded-2xl border-blue01 bg-blue02/20 pretendard-normal flex flex-col justify-center gap-1 px-4 pt-10 pb-4">
-          {/* TODO: 시간 데이터 수정 */}
           <div>
-            <Timetable></Timetable>
+            <Timetable schedule={poolDetail?.swimmingTimes}></Timetable>
           </div>
           <div className="text-body01">
             <div>{poolDetail?.additionalInfo}</div>
@@ -94,7 +93,7 @@ export default function PoolDetail() {
           <h2 className="self-start pretendard-semibold text-2xl">리뷰</h2>
           <Link to="reviews" className="self-end" state={{ poolName: poolDetail?.name }}>
             <button className="text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-xs">
-              리뷰쓰러가기
+              리뷰 쓰러가기
             </button>
           </Link>
 

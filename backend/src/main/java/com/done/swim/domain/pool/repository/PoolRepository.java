@@ -14,13 +14,16 @@ public interface PoolRepository extends JpaRepository<Pool, Long> {
     /**
      * @param id 수영장 식별 아이디
      */
-    @Query("SELECT p FROM Pool p " +
-            "LEFT JOIN FETCH p.swimmingTimes st " +
-            "WHERE p.id = :id")
+    @Query("""
+            SELECT p FROM Pool p
+            LEFT JOIN FETCH p.swimmingTimes st
+            WHERE p.id = :id
+            """
+    )
     Optional<Pool> findByIdWithCommentAndTimes(@Param("id") Long id);
 
     /**
-     * 수영장 요약 정보 + 요일 자유 수영 시간
+     * 수영장 요약 정보 + 금일 자유 수영 시간
      *
      * @param poolName     수영장 이름
      * @param nowDayOfWeek 요일

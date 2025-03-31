@@ -77,4 +77,5 @@ public class SubmittedImageController {
     public void deleteImage(@PathVariable Long id) {
         submittedImageService.deleteImage(id);
     }
+
 }

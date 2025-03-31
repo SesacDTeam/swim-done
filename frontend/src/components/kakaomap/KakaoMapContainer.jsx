@@ -1,25 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server'; // React 컴포넌트를 HTML 문자열로 변환
 import seoulGu from '../../utils/seoul-gu.json';
 import { kickPan } from '../../utils/staticImagePath';
 import kakaoMapApi from '../../api/kakaoMapApi';
-import InfoWindowContent from '../poollist/InfoWindowContent';
 import { useDispatch } from 'react-redux';
 import {
   setMap,
   updateMarkers,
-  setInfoWindow,
   setPools,
   setName,
+  setInfoWindow,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
 import InfoWindowContentPortal from '../poollist/InfoWindowContentPortal.jsx';
-
+import ERROR_CODE from '../../error/ERROR_CODE';
+import RequestError from '../../error/RequestError';
+import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
+import { setRequestError } from '../../store/slices/errorSlice';
+import useErrorResolver from '../../hooks/useErrorResolver.jsx';
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
 
   const [selectedPool, setSelectedPool] = useState(null); // ✅ 선택된 수영장 데이터
   const [infoWindowContainer, setInfoWindowContainer] = useState(null); // ✅ 인포윈도우 컨테이너
+
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,7 +36,6 @@ export default function KakaoMapContainer() {
   const polygons = [];
   const markers = [];
   const infoWindow = new kakao.maps.InfoWindow({ removable: true });
-  dispatch(setInfoWindow({ infoWindow })); // 인포윈도우 리덕스에 보관, 지도에서 삭제 때 사용
   const customOverlay = new kakao.maps.CustomOverlay({});
   const markerImageSize = new kakao.maps.Size(20, 30);
   //#endregion 지도 기본 설정
@@ -45,13 +48,17 @@ export default function KakaoMapContainer() {
    * @returns {kakao.maps.Map} 생성된 지도 객체
    */
   function createMap(mapContainer) {
-    map = new kakao.maps.Map(mapContainer, options);
-    map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
-    map.setMaxLevel(9);
+    try {
+      map = new kakao.maps.Map(mapContainer, options);
+      map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+      map.setMaxLevel(9);
 
-    kakao.maps.event.addListener(map, 'click', () => infoWindow.close());
-    kakao.maps.event.addListener(map, 'zoom_changed', () => togglePolygons(map.getLevel() > 8));
-    return map;
+      kakao.maps.event.addListener(map, 'click', () => infoWindow.close());
+      kakao.maps.event.addListener(map, 'zoom_changed', () => togglePolygons(map.getLevel() > 8));
+      return map;
+    } catch (error) {
+      console.error('Error creating map:', error);
+    }
   }
   //#endregion
 
@@ -71,29 +78,16 @@ export default function KakaoMapContainer() {
       clickable: true,
       title,
     });
-    kakao.maps.event.addListener(marker, 'click', () => updateInfoWindow(marker));
+    kakao.maps.event.addListener(marker, 'click', () => {
+      updateInfoWindow(marker);
+      navigate('pools');
+    });
     return marker;
   }
 
   //#endregion
 
   //#region InfoWindow
-
-  /**
-   * @description 인포윈도우 콘텐츠를 생성하는 함수 (React 컴포넌트를 HTML 문자열로 변환)
-   * @param {string} poolName - 수영장 이름
-   * @returns {Promise} 인포윈도우 콘텐츠 HTML 문자열
-   */
-  async function drawInfoWindowContent(poolName) {
-    try {
-      const { data: pool } = await kakaoMapApi.getPool(poolName);
-
-      // React 컴포넌트를 HTML 문자열로 변환하여 반환
-      return renderToStaticMarkup(<InfoWindowContent pool={pool} />);
-    } catch (error) {
-      return <p className="text-red-500">정보를 불러오는 데 실패했습니다.</p>;
-    }
-  }
 
   /**
    * @description
@@ -112,6 +106,7 @@ export default function KakaoMapContainer() {
 
       infoWindow.setContent(container); // ✅ 인포윈도우에 React 컨테이너 적용
       infoWindow.open(marker.getMap(), marker);
+      dispatch(setInfoWindow({ infoWindow })); // ✅ 인포윈도우 리덕스에 보관
     } catch (error) {}
   }
   //#endregion
@@ -161,13 +156,14 @@ export default function KakaoMapContainer() {
     });
 
     kakao.maps.event.addListener(polygon, 'click', async (e) => {
-      map.setLevel(7);
-      map.panTo(e.latLng);
-      markers.forEach((marker) => marker.setMap(null));
-      customOverlay.setMap(null);
-      polygon.setOptions({ fillColor: '#fff' });
       try {
         const { data: pools } = await kakaoMapApi.getSectionWithPools(name);
+
+        map.setLevel(7);
+        map.panTo(e.latLng);
+        markers.forEach((marker) => marker.setMap(null));
+        customOverlay.setMap(null);
+        polygon.setOptions({ fillColor: '#fff' });
 
         const markers = pools.map(({ latitude, longitude, name }) =>
           createMarker(new kakao.maps.LatLng(latitude, longitude), name),
@@ -178,7 +174,9 @@ export default function KakaoMapContainer() {
         dispatch(setPools({ pools }));
         dispatch(setName({ name }));
         navigate('pools');
-      } catch (error) {}
+      } catch (error) {
+        setError(new RequestError('연결 상태를 확인해 주세요', ERROR_CODE.INTERNAL_SERVER_ERROR));
+      }
     });
   }
 

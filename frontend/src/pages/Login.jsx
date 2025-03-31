@@ -15,7 +15,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="font-pretendard font-bold text-center text-5xl mt-40 mb-10 text-title">
+      <div className="font-pretendard font-bold text-center text-5xl mt-30 mb-10 text-title">
         <h1 className="mb-5">
           <span className="text-blue01">자유 수영</span>의 모든 것
         </h1>
@@ -28,7 +28,7 @@ export default function Login() {
       </div>
 
       {/* 각 버튼 위에 최근 로그인 정보 표시 */}
-      <div className="flex flex-col mt-17 space-y-3 font-semibold items-center">
+      <div className="flex flex-col mt-15 space-y-3 font-semibold items-center">
         {/* 카카오 로그인 */}
         <div className="relative w-fit flex">
           {recentProvider === 'KAKAO' && (
@@ -73,7 +73,7 @@ export default function Login() {
       </div>
 
       <Link to="/">
-        <div className="font-pretendard text-center text-gray04 mt-15">🏠 홈으로 가기</div>
+        <div className="font-pretendard text-center text-gray04 mt-10">🏠 홈으로 가기</div>
       </Link>
     </>
   );
