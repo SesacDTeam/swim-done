@@ -35,14 +35,10 @@ public class PoolDetailResponseDto {
      */
     public static PoolDetailResponseDto from(Pool pool) {
 
-        Map<LocalTime, GroupedSwimmingTimeResponseDto> groupedTimes = getGroupedTimes(pool.getSwimmingTimes());
+        Map<LocalTime, GroupedSwimmingTimeResponseDto> groupedSwimmingTimes = getGroupedSwimmingTimes(pool.getSwimmingTimes());
 
+        List<GroupedSwimmingTimeResponseDto> sortedSwimmingTimes = sortedSwimmingTimes(groupedSwimmingTimes);
 
-        List<GroupedSwimmingTimeResponseDto> sortedSwimmingTimes =
-                groupedTimes.values().stream()
-                        .sorted( // 시작 시간 기준 오름차순 정렬
-                                Comparator.comparing(GroupedSwimmingTimeResponseDto::getStartTime)
-                        ).toList();
 
         return PoolDetailResponseDto.builder()
                 .name(pool.getName())
@@ -65,9 +61,8 @@ public class PoolDetailResponseDto {
      * 시간 데이터 그룹핑
      *
      * @param swimmingTimes 자유 수영 시간 엔티티
-     * @return {"09:00" : "days" : [ {"MON":"자유 수영"}, {"TUE":"자유 수영"} ] }
      */
-    private static Map<LocalTime, GroupedSwimmingTimeResponseDto> getGroupedTimes(List<SwimmingTime> swimmingTimes) {
+    private static Map<LocalTime, GroupedSwimmingTimeResponseDto> getGroupedSwimmingTimes(List<SwimmingTime> swimmingTimes) {
         return swimmingTimes.stream().map(SwimmingTimeResponseDto::from) // entity -> 응답 DTO로 변경
                 .collect(Collectors.toMap( // 시간대 별로 그룹핑
                         SwimmingTimeResponseDto::getStartTime, // key
@@ -80,11 +75,23 @@ public class PoolDetailResponseDto {
                                     .days(daysMap)
                                     .build();
                         },
-                        (existing, replacement) -> { // 존재 하는 old_value를 새로운 new_value로 변경
+                        (existing, replacement) -> { // 존재 하는 old_value에 새로운 new_value를 추가
                             existing.getDays().putAll(replacement.getDays());
                             return existing;
                         }
                 ));
+    }
+
+    /**
+     * startTime 기준 오름차순 정렬
+     *
+     * @param groupedSwimmingTimes 그룹화된 시간데이터
+     */
+    private static List<GroupedSwimmingTimeResponseDto> sortedSwimmingTimes(Map<LocalTime, GroupedSwimmingTimeResponseDto> groupedSwimmingTimes) {
+        return groupedSwimmingTimes.values().stream()
+                .sorted( // 시작 시간 기준 오름차순 정렬
+                        Comparator.comparing(GroupedSwimmingTimeResponseDto::getStartTime)
+                ).toList();
     }
 
     @Getter
