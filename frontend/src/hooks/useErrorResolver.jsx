@@ -37,7 +37,6 @@ const useErrorResolver = (errorDisplayMode) => {
         error.config,
       );
       dispatch(setRequestError(requestError));
-      throw requestError;
     }
 
     const errorCode = error.response.data.code;
