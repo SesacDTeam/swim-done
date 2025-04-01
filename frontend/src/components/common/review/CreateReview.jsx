@@ -9,12 +9,12 @@ import AlertModal from '../AlertModal';
 
 export default function CreateReview() {
   const [canSubmit, setCanSubmit] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-
   const { poolId } = useParams();
   const location = useLocation();
   const poolName = location.state?.poolName;
-  const { reviewContent, setReviewContent, handleSubmit, isModalOpen } = useSubmitReview(
+  const { reviewContent, setReviewContent, handleSubmit } = useSubmitReview(
     '',
     async (reviewContent) => {
       reviewApi.createReview(poolId, reviewContent);
@@ -41,7 +41,10 @@ export default function CreateReview() {
           <h1 className="font-pretendard font-bold text-3xl">{poolName}</h1>
         </section>
         <ReviewForm
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            handleSubmit(e);
+            setIsModalOpen(true);
+          }}
           onChange={handleChange}
           content={reviewContent}
           canSubmit={canSubmit}

@@ -5,7 +5,6 @@ import useErrorResolver from './useErrorResolver';
 export const useSubmitReview = (content = '', submitApi) => {
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const [reviewContent, setReviewContent] = useState(content);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,11 +16,10 @@ export const useSubmitReview = (content = '', submitApi) => {
 
     try {
       await submitApi(reviewContent);
-      setIsModalOpen(true)
     } catch (error) {
       setError(error);
     }
   };
 
-  return { reviewContent, setReviewContent, handleSubmit, isModalOpen };
+  return { reviewContent, setReviewContent, handleSubmit };
 };

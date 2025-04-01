@@ -10,12 +10,14 @@ import AlertModal from '../AlertModal';
 
 export default function UpdateReview() {
   const [canSubmit, setCanSubmit] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { reviewId } = useParams();
   const location = useLocation();
   const poolName = location.state?.poolName;
   const content = location.state?.content;
   const navigate = useNavigate();
-  const { reviewContent, setReviewContent, handleSubmit, isModalOpen } = useSubmitReview(
+  const { reviewContent, setReviewContent, handleSubmit } = useSubmitReview(
     content,
     async (reviewContent) => {
       reviewApi.updateReview(reviewId, reviewContent);
@@ -44,7 +46,10 @@ export default function UpdateReview() {
           <h1 className="pretendard-bold text-3xl">{poolName}</h1>
         </section>
         <ReviewForm
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            handleSubmit(e);
+            setIsModalOpen(true);
+          }}
           onChange={handleChange}
           content={reviewContent}
           canSubmit={canSubmit}
