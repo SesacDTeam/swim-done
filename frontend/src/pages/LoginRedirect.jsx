@@ -40,7 +40,7 @@ export default function LoginRedirect() {
 
       if (mapPools !== null) {
         const pools = JSON.parse(mapPools);
-        dispatch(setPools({ pools }));
+        dispatch(setPools(pools));
       }
 
       navigate(path || '/', { replace: true, state: { poolName } }).then(() => {
