@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetMap } from '../../store/slices/kakaoMapSlice';
 import { hideListBar } from '../../store/slices/listBarSlice';
 import { setSelectedIndex } from '../../store/slices/sideBarSlice';
-// import { initCenterHandler } from '../kakaomap/KakaoMapService';
 
 const sideBarItems = [
   {

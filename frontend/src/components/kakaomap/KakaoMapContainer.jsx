@@ -105,7 +105,7 @@ export default function KakaoMapContainer() {
 
       infoWindow.setContent(container); // 인포윈도우에 React 컨테이너 적용
       infoWindow.open(marker.getMap(), marker);
-      dispatch(setInfoWindow({ infoWindow })); // 인포윈도우 리덕스에 보관
+      dispatch(setInfoWindow(infoWindow)); // 인포윈도우 리덕스에 보관
     } catch (error) {
       console.log(error);
       setError(error);
@@ -137,7 +137,7 @@ export default function KakaoMapContainer() {
     kakao.maps.event.addListener(polygon, 'mouseover', (e) => {
       polygon.setOptions({ fillColor: '#09f' });
       customOverlay.setContent(
-        `<div class="absolute bg-white border border-gray-500 rounded-sm text-xs top-[-5px] left-[15px] p-[2px]">
+        `<div class="absolute bg-white border border-gray-500 rounded-sm text-lg top-[-15px] left-[15px] p-1">
         ${name}
       </div>`,
       );
@@ -168,15 +168,14 @@ export default function KakaoMapContainer() {
         polygon.setOptions({ fillColor: '#fff' });
 
         const { data: pools } = await kakaoMapApi.getSectionWithPools(name);
-
         const markers = pools.map(({ latitude, longitude, name }) =>
           createMarker(new kakao.maps.LatLng(latitude, longitude), name),
         );
         // 마커 화면에서 제거에 활용
-        dispatch(updateMarkers({ markers }));
+        dispatch(updateMarkers(markers));
         // 지역별 수영장 정보
-        dispatch(setPools({ pools }));
-        dispatch(setName({ name }));
+        dispatch(setPools(pools));
+        dispatch(setName(name));
         navigate('pools');
       } catch (error) {
         setError(
@@ -198,7 +197,7 @@ export default function KakaoMapContainer() {
 
   useEffect(() => {
     if (kakao && kakao.maps) {
-      dispatch(setMap({ map: createMap(mapContainer.current) }));
+      dispatch(setMap(createMap(mapContainer.current)));
       drawPolygons(seoulGu);
     }
   }, []);
