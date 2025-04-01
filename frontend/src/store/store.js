@@ -4,8 +4,8 @@ import listBarSlice from './slices/listBarSlice';
 import userSlice from './slices/userSlice';
 import detailViewSlice from './slices/detailViewSlice';
 import kakaoMapSlice from './slices/kakaoMapSlice';
-import sideBarSlice from './slices/sideBarSlice'
-import errorSlice from './slices/errorSlice'
+import sideBarSlice from './slices/sideBarSlice';
+import errorSlice from './slices/errorSlice';
 
 const store = configureStore({
   reducer: {
@@ -15,7 +15,7 @@ const store = configureStore({
     kakaoMap: kakaoMapSlice,
     user: userSlice,
     sideBar: sideBarSlice,
-    error: errorSlice
+    error: errorSlice,
   },
 });
 

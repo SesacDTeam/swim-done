@@ -7,8 +7,8 @@ import store from './store/store.js';
 function App() {
   return (
     <Provider store={store}>
-        <div className="main-container">
-          <RouterProvider router={router}></RouterProvider>
+      <div className="main-container">
+        <RouterProvider router={router}></RouterProvider>
       </div>
     </Provider>
   );

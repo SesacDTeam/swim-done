@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
-import { logo } from '../../utils/staticImagePath';
 import NoContent from '../common/NoContent';
+import LoadingSpinner from '../common/LoadingSpinner';
 import { useToggleMark } from '../../hooks/useToggleMark';
 import AuthenticateRoute from '../common/AuthenticateRoute';
 
@@ -55,14 +55,8 @@ export default function PoolList() {
 
   return (
     <>
-      {isLoading && (
-        <div className="absolute top-0 bottom-0 left-0 right-0 z-3000 flex justify-center bg-white">
-          <img src={logo} alt="" className="animate-spin w-30" />
-        </div>
-      )}
-
+      {isLoading && <LoadingSpinner></LoadingSpinner>}
       {showLoginModal && <AuthenticateRoute cancleAction={() => setShowLoginModal(false)} />}
-
       <div class="p-6">
         <h1 class="text-2xl font-bold mb-4">
           <span class="text-black">'{name}'</span> 수영할 곳 찾고 계셨죠?
