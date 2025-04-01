@@ -37,6 +37,9 @@ const useErrorResolver = (errorDisplayMode) => {
         error.config,
       );
       dispatch(setRequestError(requestError));
+      if (errorDisplayMode === ERROR_DISPLAY_MODE.FALLBACK_UI) {
+        throw requestError;
+      }
       return;
     }
 
