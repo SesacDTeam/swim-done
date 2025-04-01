@@ -35,19 +35,17 @@ export default function MyPage() {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      setIsLoading(true);
       try {
         const response = await userApi.getUserInfo();
         setUserInfo(response.data);
       } catch (error) {
-        setError(error);
+        errorResolverFallbackUi.setError(error);
       } finally {
         setIsLoadingData(false);
-        setIsLoading(false);
       }
     };
     getUserInfo();
-  }, [dispatch, setError]);
+  }, []);
 
   const handleMyReviewsClick = () => {
     navigate('reviews');
@@ -96,7 +94,7 @@ export default function MyPage() {
   return (
     <div className="select-none">
       {isLoadingData ? ( // 데이터가 로딩 중일 때는 로딩 UI만 표시
-        <LoadingSpinner isLoading={isLoading} />
+        <LoadingSpinner isLoading={isLoadingData} />
       ) : (
         <>
           <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky text-center">마이페이지</h1>
