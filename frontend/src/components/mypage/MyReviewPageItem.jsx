@@ -92,7 +92,12 @@ export default function MyReviewPageItem({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/mypage/reviews/${reviewId}`);
+                    navigate(`/mypage/reviews/${reviewId}`, {
+                      state: {
+                        poolName,
+                        content,
+                      },
+                    });
                   }}
                   className="cursor-pointer"
                 >
