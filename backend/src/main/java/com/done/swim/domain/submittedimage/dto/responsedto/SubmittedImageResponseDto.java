@@ -1,8 +1,6 @@
 package com.done.swim.domain.submittedimage.dto.responsedto;
 
-import com.done.swim.domain.pool.entity.Pool;
 import com.done.swim.domain.submittedimage.entity.SubmittedImage;
-import com.done.swim.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SubmittedImageResponseDto {
     private Long id;
-    private Pool pool;
-    private User user;
+    private Long poolId;
+    private Long userId;
     private String imageUrl;
     private String originalName;
 
@@ -23,8 +21,8 @@ public class SubmittedImageResponseDto {
 
         return SubmittedImageResponseDto.builder()
                 .id(submittedImage.getId())
-                .pool(submittedImage.getPool())
-                .user(submittedImage.getUser())
+                .poolId(submittedImage.getPool().getId())
+                .userId(submittedImage.getUser().getId())
                 .imageUrl(submittedImage.getImageUrl())
                 .originalName(submittedImage.getOriginalName())
                 .build();
