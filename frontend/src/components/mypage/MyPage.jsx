@@ -17,12 +17,15 @@ import {
   contactUsColor,
 } from '../../utils/staticImagePath';
 import AlertModal from '../common/AlertModal';
+import RequestError from '../../error/RequestError';
+import ERROR_CODE from '../../error/ERROR_CODE';
 
 export default function MyPage() {
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState(null);
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
+  const errorResolverFallbackUi = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
+  const errorResolverToast = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +37,7 @@ export default function MyPage() {
       const response = await userApi.getUserInfo();
       setUserInfo(response.data);
     } catch (error) {
-      setError(error);
+      errorResolverFallbackUi.setError(error);
     }
   };
 
@@ -78,7 +81,9 @@ export default function MyPage() {
       dispatch(logout()); // Redux 상태 초기화
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
-      alert('회원 탈퇴 중 오류가 발생했습니다.'); // TODO: 에러 toast창으로 변경
+      errorResolverToast.setError(
+        new RequestError('회원 탈퇴 중 오류가 발생했습니다.', ERROR_CODE.INTERNAL_SERVER_ERROR),
+      );
     }
   };
 
