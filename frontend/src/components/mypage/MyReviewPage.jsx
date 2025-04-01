@@ -3,7 +3,7 @@ import { myPageApi } from '../../api/myPageApi';
 import MyReviewPageItem from './MyReviewPageItem';
 import DetailViewHeader from '../common/DetailViewHeader';
 import { xmark } from '../../utils/staticImagePath';
-
+import LoadingSpinner from '../common/LoadingSpinner';
 export default function MyReviewPage() {
   const [reviews, setReviews] = useState([]); // 리뷰 데이터
   const [totalCount, setTotalCount] = useState(0); // 총 리뷰 개수
@@ -44,6 +44,7 @@ export default function MyReviewPage() {
       if (hasNext) {
         pageRef.current += 1;
       }
+      setIsDataLoaded(true);
     } catch (error) {
     } finally {
       setIsFetching(false);
@@ -56,7 +57,7 @@ export default function MyReviewPage() {
     fetchReviews();
   }, []);
 
-  // `totalCount`가 변경될 때마다 실행
+  // totalCount가 변경될 때마다 실행
   useEffect(() => {
     fetchReviews(true); // 리뷰 개수가 0으로 변경되면 초기화된 상태로 다시 불러오기
   }, [totalCount]);
@@ -88,6 +89,10 @@ export default function MyReviewPage() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('ko-KR', options);
   };
+
+  if (isFetching) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>

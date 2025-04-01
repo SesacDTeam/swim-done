@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { login } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setName, setPools } from '../store/slices/kakaoMapSlice';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 export default function LoginRedirect() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export default function LoginRedirect() {
       // 현재 url에서 토큰 가져오기
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('token');
-      const provider = urlParams.get('provider')
+      const provider = urlParams.get('provider');
 
       if (!accessToken) {
         setError(true);
@@ -50,11 +51,11 @@ export default function LoginRedirect() {
       });
     } catch (error) {
       setError(true);
-      navigate('/'); // 토큰 없으면 home으로 이동
-    } finally {
       setIsLoading(false);
+
+      navigate('/'); // 토큰 없으면 home으로 이동
     }
   }, [navigate, dispatch]);
 
-  return <div>로그인 중입니다.</div>;
+  return <>{isLoading && <LoadingSpinner />}</>;
 }
