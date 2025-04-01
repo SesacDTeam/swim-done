@@ -3,11 +3,17 @@ import { myPageApi } from '../../api/myPageApi';
 import MyReviewPageItem from './MyReviewPageItem';
 import DetailViewHeader from '../common/DetailViewHeader';
 import { xmark } from '../../utils/staticImagePath';
-
+import { useSelector, useDispatch } from 'react-redux';
+import LoadingSpinner from '../common/LoadingSpinner';
+import { showLoading, hideLoading } from '../../store/slices/loadingSlice';
 export default function MyReviewPage() {
   const [reviews, setReviews] = useState([]); // 리뷰 데이터
   const [totalCount, setTotalCount] = useState(0); // 총 리뷰 개수
   const [isFetching, setIsFetching] = useState(false); // 데이터 로딩 중 여부
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.loading.isLoading);
+
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   // 무한스크롤 관련 ref들
   // observerTarget: IntersectionObserver가 감시할 요소
@@ -20,6 +26,8 @@ export default function MyReviewPage() {
   const isLoadingRef = useRef(false);
 
   const fetchReviews = async (reset = false) => {
+    dispatch(showLoading());
+    setIsDataLoaded(false);
     if (isLoadingRef.current) return;
 
     if (reset) {
@@ -44,8 +52,10 @@ export default function MyReviewPage() {
       if (hasNext) {
         pageRef.current += 1;
       }
+      setIsDataLoaded(true);
     } catch (error) {
     } finally {
+      dispatch(hideLoading());
       setIsFetching(false);
       isLoadingRef.current = false;
     }
@@ -56,7 +66,7 @@ export default function MyReviewPage() {
     fetchReviews();
   }, []);
 
-  // `totalCount`가 변경될 때마다 실행
+  // totalCount가 변경될 때마다 실행
   useEffect(() => {
     fetchReviews(true); // 리뷰 개수가 0으로 변경되면 초기화된 상태로 다시 불러오기
   }, [totalCount]);
@@ -88,6 +98,10 @@ export default function MyReviewPage() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('ko-KR', options);
   };
+
+  if (!isDataLoaded) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
