@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'; // 추가
 import reviewApi from '../../api/reviewApi';
 import { useEffect } from 'react';
 import AlertModal from '../common/AlertModal';
+import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
+import useErrorResolver from '../../hooks/useErrorResolver';
 
 export default function MyReviewPageItem({
   poolName,
@@ -18,6 +20,7 @@ export default function MyReviewPageItem({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -50,10 +53,10 @@ export default function MyReviewPageItem({
         setIsToggled(false);
         setTotalCount((prev) => prev - 1);
       } else {
-        alert('리뷰 삭제에 실패했습니다.'); // TODO: 에러 toast창으로 변경
+        setError('리뷰 삭제에 실패했습니다.');
       }
     } catch (error) {
-      alert('오류 발생'); // TODO: 에러 toast창으로 변경
+      setError('오류 발생');
     }
 
     // 모달 닫기
