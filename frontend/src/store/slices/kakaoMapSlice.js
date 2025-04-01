@@ -6,10 +6,10 @@ const initialState = {
     center: new kakao.maps.LatLng(37.566826, 126.9786567),
     level: 9,
   },
-  markers: null,
-  infoWindow: null,
-  pools: null,
+  markers: [],
+  pools: [],
   name: null,
+  infoWindow: null,
 };
 
 const kakaoMapSlice = createSlice({
@@ -17,10 +17,18 @@ const kakaoMapSlice = createSlice({
   initialState,
   reducers: {
     resetMap: (state, action) => {
-      state.map.setLevel(state.options.level);
-      state.map.panTo(state.options.center);
-      state.markers.forEach((marker) => marker.setMap(null));
-      state.infoWindow.close();
+      if (state.map){
+        state.map.setLevel(state.options.level);
+        state.map.panTo(state.options.center);
+      }
+      if (state.markers) {
+        state.markers.forEach((marker) => marker.setMap(null));
+      }
+      if(state.infoWindow) {
+        console.log("infoWindow", state.infoWindow.getMap());
+        
+        state.infoWindow.close();
+      }
     },
     setMap: (state, action) => {
       state.map = action.payload.map;
@@ -29,7 +37,7 @@ const kakaoMapSlice = createSlice({
       state.infoWindow = action.payload.infoWindow;
     },
     updateMarkers: (state, action) => {
-      state.markers = action.payload.markers;
+      state.markers = [...state.markers, ...action.payload.markers];
     },
     setPools: (state, action) => {
       state.pools = action.payload.pools;

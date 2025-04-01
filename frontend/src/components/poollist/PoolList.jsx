@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
-import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { useToggleMark } from '../../hooks/useToggleMark';
+import AuthenticateRoute from '../common/AuthenticateRoute';
 
 export default function PoolList() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function PoolList() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hasNext, setHasNext] = useState(true);
+  const { toggleMark, showLoginModal, setShowLoginModal } = useToggleMark();
 
   const getPools = () => {
     setIsLoading(true);
@@ -54,6 +56,7 @@ export default function PoolList() {
   return (
     <>
       {isLoading && <LoadingSpinner></LoadingSpinner>}
+      {showLoginModal && <AuthenticateRoute cancleAction={() => setShowLoginModal(false)} />}
       <div class="p-6">
         <h1 class="text-2xl font-bold mb-4">
           <span class="text-black">'{name}'</span> 수영할 곳 찾고 계셨죠?

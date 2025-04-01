@@ -7,6 +7,7 @@ import { defaultUploadImage } from '../../../utils/staticImagePath';
 import useErrorResolver from '../../../hooks/useErrorResolver';
 import RequestError from '../../../error/RequestError';
 import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
+import AlertModal from '../AlertModal';
 
 export default function SubmittedImage() {
   const { poolId } = useParams();
@@ -19,6 +20,9 @@ export default function SubmittedImage() {
 
   const fileInputRef = useRef(null);
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   // 파일 선택 버튼 클릭 시 input 클릭 이벤트 발생함 (input 숨겨놓음)
   const handleButtonClick = () => {
@@ -70,10 +74,16 @@ export default function SubmittedImage() {
 
     try {
       await submittedImageApi.createImage(formData);
-      navigate(-1);
+      setModalMessage('이미지를 제보해 주셔서 감사합니다!');
+      setIsModalOpen(true);
     } catch (error) {
       setError(error);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate(-1); // 모달 닫은 후 이전 페이지로 돌아가기
   };
 
   return (
@@ -106,7 +116,7 @@ export default function SubmittedImage() {
           {/* 제출 영역임 */}
           <form onSubmit={handleSubmit} className="mt-8 flex justify-end gap-4">
             <button
-              className={`rounded-[10px] px-4 py-2 mt-4 ${inputData.file ?  'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'  } `}
+              className={`rounded-[10px] px-4 py-2 mt-4 ${inputData.file ? 'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'} `}
               type="submit"
             >
               제출하기
@@ -121,6 +131,13 @@ export default function SubmittedImage() {
           </form>
         </div>
       </main>
+      {isModalOpen && (
+        <AlertModal
+          isSingleButton={true} // 확인 버튼만 표시
+          message={modalMessage}
+          onConfirm={closeModal}
+        />
+      )}
     </>
   );
 }

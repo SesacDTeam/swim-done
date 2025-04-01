@@ -1,7 +1,6 @@
 package com.done.swim.oauth2.provider;
 
 import lombok.Setter;
-
 import java.util.Map;
 
 public class GithubUserInfo implements OAuth2UserInfo {
@@ -34,6 +33,7 @@ public class GithubUserInfo implements OAuth2UserInfo {
         return email;
     }
 
+    // 깃허브에서 login이란 이름으로 이름 제공함
     @Override
     public String getNickname() {
         return (String) attributes.get("login");

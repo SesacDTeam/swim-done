@@ -16,15 +16,22 @@ import {
   myReviewColor,
   contactUsColor,
 } from '../../utils/staticImagePath';
+import AlertModal from '../common/AlertModal';
+import RequestError from '../../error/RequestError';
+import ERROR_CODE from '../../error/ERROR_CODE';
 
 export default function MyPage() {
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState(null);
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
+  const errorResolverFallbackUi = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
+  const errorResolverToast = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalAction, setModalAction] = useState(() => () => {});
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -46,29 +53,43 @@ export default function MyPage() {
     navigate('reviews');
   };
 
-  const handleLogout = async () => {
-    if (!window.confirm('로그아웃 하시겠습니까?')) return;
+  const handleLogout = () => {
+    setModalMessage(['로그아웃 하시겠습니까?']);
+    setModalAction(() => logoutAction); // 로그아웃 액션을 모달의 확인 버튼에 연결
+    setIsModalOpen(true);
+  };
 
+  // 로그아웃 액션
+  const logoutAction = async () => {
     try {
       await instance.post('/logout');
       dispatch(logout());
-      alert('로그아웃이 완료되었습니다.');
       navigate('/');
     } catch (error) {
       console.error('로그아웃 중 오류 발생', error);
     }
   };
 
-  const handleWithdraw = async () => {
-    if (!window.confirm('정말 회원 탈퇴하시겠습니까?')) return;
+  // 회원 탈퇴 핸들러
+  const handleWithdraw = () => {
+    setModalMessage([
+      '정말 회원 탈퇴하시겠습니까?',
+      '회원 탈퇴를 원하시면 확인 버튼을 눌러주세요.',
+    ]);
+    setModalAction(() => withdrawAction); // 회원 탈퇴 액션을 모달의 확인 버튼에 연결
+    setIsModalOpen(true);
+  };
 
+  // 회원 탈퇴 액션
+  const withdrawAction = async () => {
     try {
       await instance.delete('/withdraw');
-      dispatch(logout());
-      alert('회원 탈퇴가 완료되었습니다.');
-      navigate('/');
+      dispatch(logout()); // Redux 상태 초기화
+      navigate('/'); // 메인 페이지로 이동
     } catch (error) {
-      alert('회원 탈퇴 중 오류가 발생했습니다.');
+      errorResolverToast.setError(
+        new RequestError('회원 탈퇴 중 오류가 발생했습니다.', ERROR_CODE.INTERNAL_SERVER_ERROR),
+      );
     }
   };
 
@@ -131,6 +152,18 @@ export default function MyPage() {
             </div>
           )}
         </>
+      )}
+
+      {isModalOpen && (
+        <AlertModal
+          isSingleButton={false} // 두 개의 버튼(취소, 확인) 필요
+          message={modalMessage}
+          onCancel={() => setIsModalOpen(false)} // 취소 버튼 클릭 시 모달 닫기
+          onConfirm={() => {
+            modalAction(); // 확인 버튼 클릭 시 연결된 액션 실행
+            setIsModalOpen(false); // 모달 닫기
+          }}
+        />
       )}
     </div>
   );
