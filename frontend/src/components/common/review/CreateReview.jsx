@@ -41,9 +41,9 @@ export default function CreateReview() {
           <h1 className="font-pretendard font-bold text-3xl">{poolName}</h1>
         </section>
         <ReviewForm
-          onSubmit={(e) => {
-            handleSubmit(e);
-            if (!error) {
+          onSubmit={async (e) => {
+            const isSuccess = await handleSubmit(e);
+            if (isSuccess) {
               setIsModalOpen(true);
             }
           }}
