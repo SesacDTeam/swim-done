@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import reviewApi from '../../../api/reviewApi';
 import DetailViewHeader from '../DetailViewHeader';
 import { xmark, back } from '../../../utils/staticImagePath';
-import ReviewForm from './reviewForm';
+import ReviewForm from './ReviewForm';
 import { useSubmitReview } from '../../../hooks/useSubmitReview';
 import AlertModal from '../AlertModal';
 
@@ -17,10 +17,10 @@ export default function UpdateReview() {
   const poolName = location.state?.poolName;
   const content = location.state?.content;
   const navigate = useNavigate();
-  const { reviewContent, setReviewContent, handleSubmit } = useSubmitReview(
+  const { reviewContent, setReviewContent, handleSubmit, error } = useSubmitReview(
     content,
     async (reviewContent) => {
-      reviewApi.updateReview(reviewId, reviewContent);
+      return reviewApi.updateReview(reviewId, reviewContent);
     },
   );
 
@@ -48,7 +48,9 @@ export default function UpdateReview() {
         <ReviewForm
           onSubmit={(e) => {
             handleSubmit(e);
-            setIsModalOpen(true);
+            if (!error) {
+              setIsModalOpen(true);
+            }
           }}
           onChange={handleChange}
           content={reviewContent}
