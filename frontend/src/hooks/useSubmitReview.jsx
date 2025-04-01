@@ -3,7 +3,7 @@ import ERROR_DISPLAY_MODE from '../error/ERROR_DISPLAY_MODE';
 import useErrorResolver from './useErrorResolver';
 
 export const useSubmitReview = (content = '', submitApi) => {
-  const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
+  const { error, setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const [reviewContent, setReviewContent] = useState(content);
 
   const handleSubmit = async (e) => {
@@ -21,5 +21,5 @@ export const useSubmitReview = (content = '', submitApi) => {
     }
   };
 
-  return { reviewContent, setReviewContent, handleSubmit };
+  return { reviewContent, setReviewContent, handleSubmit, error };
 };
