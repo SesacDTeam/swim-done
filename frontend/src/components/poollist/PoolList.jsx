@@ -7,13 +7,18 @@ import NoContent from '../common/NoContent';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useToggleMark } from '../../hooks/useToggleMark';
 import AuthenticateRoute from '../common/AuthenticateRoute';
+import { setPools } from '../../store/slices/kakaoMapSlice';
 
 export default function PoolList() {
   const navigate = useNavigate();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const name = useSelector((state) => state.kakaoMap.name);
   const pools = useSelector((state) => state.kakaoMap.pools);
+<<<<<<< HEAD
   const [poolList, setPoolList] = useState(pools);
+=======
+  const [poolList, setPoolList] = useState(useSelector((state) => state.kakaoMap.pools));
+>>>>>>> acc1f59f4433a95890d9e74ef235eb993a34bc92
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,8 +29,13 @@ export default function PoolList() {
   const getPools = () => {
     setIsLoading(true);
     try {
+<<<<<<< HEAD
       //처음에 6개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
       setCurrentIndex((prev) => prev + 6);
+=======
+      //처음에 5개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
+      setCurrentIndex((prev) => prev + 2);
+>>>>>>> acc1f59f4433a95890d9e74ef235eb993a34bc92
       setHasNext(currentIndex < pools.length);
     } catch {
       // TODO: 에러 핸들링 예정
