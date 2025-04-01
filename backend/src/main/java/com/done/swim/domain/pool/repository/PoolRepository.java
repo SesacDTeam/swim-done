@@ -49,7 +49,6 @@ public interface PoolRepository extends JpaRepository<Pool, Long> {
             FROM Pool p
             LEFT JOIN FETCH p.poolMarks pm
             WHERE p.section = :section
-            AND (pm.user.id = :userId OR pm.user IS NULL)
             """)
-    List<Pool> findBySectionWithUserId(@Param("section") String section, @Param("userId") Long userId);
+    List<Pool> findBySection(@Param("section") String section);
 }

@@ -25,25 +25,25 @@ const kakaoMapSlice = createSlice({
         state.markers.forEach((marker) => marker.setMap(null));
       }
       if(state.infoWindow) {
-        console.log("infoWindow", state.infoWindow.getMap());
-        
         state.infoWindow.close();
       }
     },
     setMap: (state, action) => {
-      state.map = action.payload.map;
+      state.map = action.payload;
     },
     setInfoWindow: (state, action) => {
-      state.infoWindow = action.payload.infoWindow;
+      state.infoWindow = action.payload;
     },
     updateMarkers: (state, action) => {
-      state.markers = [...state.markers, ...action.payload.markers];
+      state.markers = [...state.markers, ...action.payload];
     },
     setPools: (state, action) => {
-      state.pools = action.payload.pools;
+      console.log(action.payload);
+      
+      state.pools = [...action.payload];
     },
     setName: (state, action) => {
-      state.name = action.payload.name;
+      state.name = action.payload;
     },
   },
 });

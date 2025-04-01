@@ -19,7 +19,6 @@ const KAKAOMAP_API = '/sections';
     if (section[section.length - 1] === '구') {
       section = section.substring(0, section.length - 1);
     }
-
     const response = await instance.get(`${KAKAOMAP_API}/${section}/pools`);
     return response.data;
   },

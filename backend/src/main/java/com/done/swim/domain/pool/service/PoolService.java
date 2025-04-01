@@ -53,7 +53,7 @@ public class PoolService {
      * @param userId  유저 아이디
      */
     public List<PoolWithSectionResponseDto> getPoolsWithSection(String section, Long userId) {
-        List<Pool> pools = poolRepository.findBySectionWithUserId(section, userId);
+        List<Pool> pools = poolRepository.findBySection(section);
 
         return pools.stream().map(p -> PoolWithSectionResponseDto.from(p, userId)).toList();
     }
