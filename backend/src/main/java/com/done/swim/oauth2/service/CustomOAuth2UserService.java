@@ -28,12 +28,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        // 어떤 OAuth2 제공자인지 확인 (네이버 or 카카오)
+        // 어떤 OAuth2 제공자인지 확인 (네이버 / 카카오 / 깃허브)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo;
 
-        // 네이버는 카카오랑 로직 달라서 바꿔야함 (    // response 키 안에 사용자 정보 있음 (네이버))
-        // 네이버의 경우 response 객체 내부의 id를 사용해야 함
+        // 네이버의 경우 response 객체 내부의 id를 사용해야 함 (response 키 안에 사용자 정보 있음)
         // 네이버 로그인 시 id 속성이 null이어서 발생하는 오류 -> userNameAttributeName 가져옴
         if (Provider.NAVER.toLowerCase().equals(registrationId)) {
             Map<String, Object> responseMap = (Map<String, Object>) oAuth2User.getAttributes()
@@ -46,24 +45,33 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         } else if (Provider.GITHUB.toLowerCase().equals(registrationId)) {
             oAuth2UserInfo = new GithubUserInfo(oAuth2User.getAttributes());
-
             if (oAuth2UserInfo.getEmail() == null) {
                 String generatedEmail = "github_" + oAuth2UserInfo.getProviderId() + "@github.com";
                 ((GithubUserInfo) oAuth2UserInfo).setEmail(generatedEmail);
-
             }
         } else {
             throw new OAuth2AuthenticationException(ErrorCode.INVALID_REQUEST.getMessage());
         }
 
-        User user = userRepository.findByEmail(oAuth2UserInfo.getEmail())
-                .orElseGet(() -> userRepository.save(User.builder()
-                        .email(oAuth2UserInfo.getEmail())
-                        .nickname(oAuth2UserInfo.getNickname())
-                        .imageUrl(oAuth2UserInfo.getUserImageUrl())
-                        .provider(oAuth2UserInfo.getProvider().name())
-                        .providerId(oAuth2UserInfo.getProviderId())
-                        .build()));
+        // 이메일로 사용자 조회
+        User user = userRepository.findByEmail(oAuth2UserInfo.getEmail()).orElse(null);
+
+        if (user == null) {
+            // 새 사용자 저장
+            user = userRepository.save(User.builder()
+                    .email(oAuth2UserInfo.getEmail())
+                    .nickname(oAuth2UserInfo.getNickname())
+                    .imageUrl(oAuth2UserInfo.getUserImageUrl())
+                    .provider(oAuth2UserInfo.getProvider().name())
+                    .providerId(oAuth2UserInfo.getProviderId())
+                    .build());
+        } else {
+            // 기존 사용자가 로그인하면 provider 업데이트해줌
+            if (!user.getProvider().equals(oAuth2UserInfo.getProvider().name())) {
+                user.updateProvider(oAuth2UserInfo.getProvider().name(), oAuth2UserInfo.getProviderId()); // 최근 로그인한 provider로 덮어쓰기
+                userRepository.save(user);
+            }
+        }
 
         return new CustomOAuth2User(user, oAuth2User);
     }
