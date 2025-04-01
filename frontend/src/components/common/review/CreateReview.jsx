@@ -52,7 +52,7 @@ export default function CreateReview() {
         {isModalOpen && (
           <AlertModal
             isSingleButton={true} // 확인 버튼만 표시
-            message={'리뷰 내용이 수정되었습니다.'}
+            message={'소중한 리뷰를 작성해 주셔서 감사합니다!'}
             onConfirm={closeModal}
           />
         )}
