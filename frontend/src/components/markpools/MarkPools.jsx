@@ -34,7 +34,6 @@ export default function MarkPools() {
       setHasNext(false);
     } finally {
       setIsLoadingData(false);
-      dispatch(hideLoading());
     }
   };
 
