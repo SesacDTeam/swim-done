@@ -4,13 +4,13 @@ import { useNavigate, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
 import { toggleMark } from '../../utils/toggleMark';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
-import { logo } from '../../utils/staticImagePath';
 import NoContent from '../common/NoContent';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 export default function PoolList() {
   const navigate = useNavigate();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const name = useSelector((state) => state.kakaoMap.name)
+  const name = useSelector((state) => state.kakaoMap.name);
 
   const [isLoading, setIsLoading] = useState(false);
   const [pools, setPools] = useState(useSelector((state) => state.kakaoMap.pools));
@@ -21,7 +21,6 @@ export default function PoolList() {
   const getPools = () => {
     setIsLoading(true);
     try {
-
       //처음에 5개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
       setCurrentIndex((prev) => prev + 2); // 인덱스로 바꾸면 될듯
       setHasNext(currentIndex < pools.length);
@@ -46,20 +45,15 @@ export default function PoolList() {
 
   useEffect(() => {
     if (name === null) {
-      navigate("/")
+      navigate('/');
     }
   }, []);
 
-  useEffect(() => { 
-  }, [pools])
+  useEffect(() => {}, [pools]);
 
   return (
     <>
-      {isLoading && (
-        <div className="absolute top-0 bottom-0 left-0 right-0 z-3000 flex justify-center bg-white">
-          <img src={logo} alt="" className="animate-spin w-30" />
-        </div>
-      )}
+      {isLoading && <LoadingSpinner></LoadingSpinner>}
       <div class="p-6">
         <h1 class="text-2xl font-bold mb-4">
           <span class="text-black">'{name}'</span> 수영할 곳 찾고 계셨죠?

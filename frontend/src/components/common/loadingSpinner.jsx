@@ -1,11 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { logo } from '../../utils/staticImagePath';
 
-const LoadingSpinner = () => {
-  const isLoading = useSelector((state) => state.loading.isLoading);
-
+const LoadingSpinner = (isLoading) => {
   if (!isLoading) return null;
 
   return (

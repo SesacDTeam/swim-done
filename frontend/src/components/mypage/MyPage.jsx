@@ -8,7 +8,6 @@ import userApi from '../../api/userApi';
 import useErrorResolver from '../../hooks/useErrorResolver';
 import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { showLoading, hideLoading } from '../../store/slices/loadingSlice';
 
 import {
   profile,
@@ -24,12 +23,12 @@ export default function MyPage() {
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.FALLBACK_UI);
   const navigate = useNavigate();
-  const isLoading = useSelector((state) => state.loading.isLoading);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   useEffect(() => {
     const getUserInfo = async () => {
-      dispatch(showLoading());
+      setIsLoading(true);
       try {
         const response = await userApi.getUserInfo();
         setUserInfo(response.data);
@@ -37,7 +36,7 @@ export default function MyPage() {
         setError(error);
       } finally {
         setIsLoadingData(false);
-        dispatch(hideLoading());
+        setIsLoading(false);
       }
     };
     getUserInfo();
@@ -73,14 +72,10 @@ export default function MyPage() {
     }
   };
 
-  // if (isLoading || !userInfo) {
-  //   return <LoadingSpinner />;
-  // }
-
   return (
     <div className="select-none">
       {isLoadingData ? ( // 데이터가 로딩 중일 때는 로딩 UI만 표시
-        <LoadingSpinner />
+        <LoadingSpinner isLoading={isLoading} />
       ) : (
         <>
           <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky text-center">마이페이지</h1>

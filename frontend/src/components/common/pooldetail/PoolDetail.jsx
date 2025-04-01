@@ -9,9 +9,7 @@ import useErrorResolver from '../../../hooks/useErrorResolver';
 import Timetable from './TimeTable';
 
 // 로딩 관련
-import { useSelector, useDispatch } from 'react-redux';
 import LoadingSpinner from '../LoadingSpinner';
-import { showLoading, hideLoading } from '../../../store/slices/loadingSlice';
 
 export default function PoolDetail() {
   const mapContainer = useRef();
@@ -19,12 +17,11 @@ export default function PoolDetail() {
   const [poolDetail, setPoolDetail] = useState(null);
   const mapRef = useRef(null);
   const { setError } = useErrorResolver();
-  const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.loading.isLoading);
+  const [isLoading, setIsLoading] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useEffect(() => {
-    dispatch(showLoading());
+    setIsLoading(true);
     setIsDataLoaded(false);
 
     (async () => {
@@ -35,7 +32,7 @@ export default function PoolDetail() {
       } catch (error) {
         setError(error);
       } finally {
-        dispatch(hideLoading());
+        setIsLoading(false);
       }
     })();
   }, [poolId]);
