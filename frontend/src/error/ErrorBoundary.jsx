@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import RequestError from './RequestError';
-import instance from '../api/axios';
-import ERROR_CODE from './ERROR_CODE';
-import ERROR_DISPLAY_MODE from './ERROR_DISPLAY_MODE';
 import { Link } from 'react-router';
 
 class ErrorBoundary extends Component {

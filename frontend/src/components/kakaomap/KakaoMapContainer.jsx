@@ -15,16 +15,15 @@ import InfoWindowContentPortal from '../poollist/InfoWindowContentPortal.jsx';
 import ERROR_CODE from '../../error/ERROR_CODE';
 import RequestError from '../../error/RequestError';
 import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
-import { setRequestError } from '../../store/slices/errorSlice';
 import useErrorResolver from '../../hooks/useErrorResolver.jsx';
+
 export default function KakaoMapContainer() {
   const mapContainer = useRef(null);
 
-  const [selectedPool, setSelectedPool] = useState(null); // ✅ 선택된 수영장 데이터
-  const [infoWindowContainer, setInfoWindowContainer] = useState(null); // ✅ 인포윈도우 컨테이너
+  const [selectedPool, setSelectedPool] = useState(null); // 선택된 수영장 데이터
+  const [infoWindowContainer, setInfoWindowContainer] = useState(null); // 인포윈도우 컨테이너
 
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -98,16 +97,19 @@ export default function KakaoMapContainer() {
     try {
       const { data: pool } = await kakaoMapApi.getPool(marker.getTitle());
 
-      // ✅ 기존 인포윈도우 내용을 비우고 새로운 컨테이너를 생성
+      // 기존 인포윈도우 내용을 비우고 새로운 컨테이너를 생성
       const container = document.createElement('div');
       container.className = 'bg-white shadow-lg rounded-lg p-4 w-[337px] border border-gray-200';
-      setInfoWindowContainer(container); // ✅ 포탈을 위한 컨테이너 저장
-      setSelectedPool(pool); // ✅ 선택한 수영장 데이터 업데이트
+      setInfoWindowContainer(container); // 포탈을 위한 컨테이너 저장
+      setSelectedPool(pool); // 선택한 수영장 데이터 업데이트
 
-      infoWindow.setContent(container); // ✅ 인포윈도우에 React 컨테이너 적용
+      infoWindow.setContent(container); // 인포윈도우에 React 컨테이너 적용
       infoWindow.open(marker.getMap(), marker);
-      dispatch(setInfoWindow({ infoWindow })); // ✅ 인포윈도우 리덕스에 보관
-    } catch (error) {}
+      dispatch(setInfoWindow({ infoWindow })); // 인포윈도우 리덕스에 보관
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    }
   }
   //#endregion
 
@@ -177,9 +179,9 @@ export default function KakaoMapContainer() {
         dispatch(setName({ name }));
         navigate('pools');
       } catch (error) {
-        console.log(error);
-
-        setError(new RequestError('연결 상태를 확인해 주세요', ERROR_CODE.INTERNAL_SERVER_ERROR));
+        setError(
+          new RequestError('네트워크 연결을 확인해주세요', ERROR_CODE.INTERNAL_SERVER_ERROR),
+        );
       }
     });
   }
