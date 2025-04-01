@@ -8,7 +8,7 @@ export default function AuthenticateRoute({ children, cancleAction }) {
     return state.auth.isLoggedIn;
   });
 
-  const name = useSelector((state) => state.kakaoMap.name);
+  const section = useSelector((state) => state.kakaoMap.section);
   const pools = useSelector((state) => state.kakaoMap.pools);
 
   const navigate = useNavigate();
@@ -29,8 +29,8 @@ export default function AuthenticateRoute({ children, cancleAction }) {
       sessionStorage.setItem('poolName', location.state?.poolName);
     }
 
-    if (name !== null) {
-      sessionStorage.setItem('sectionName', name);
+    if (section !== null) {
+      sessionStorage.setItem('sectionName', section);
     }
 
     if (pools !== null) {

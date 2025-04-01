@@ -30,7 +30,6 @@ export const useToggleMark = () => {
           ...updatedPools[index],
           mark: !isMarked,
         };
-
         return updatedPools;
       });
     } catch (error) {

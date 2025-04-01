@@ -8,7 +8,7 @@ const initialState = {
   },
   markers: [],
   pools: [],
-  name: null,
+  section: null,
   infoWindow: null,
 };
 
@@ -17,37 +17,46 @@ const kakaoMapSlice = createSlice({
   initialState,
   reducers: {
     resetMap: (state, action) => {
-      if (state.map){
+      if (state.map) {
         state.map.setLevel(state.options.level);
         state.map.panTo(state.options.center);
       }
       if (state.markers) {
         state.markers.forEach((marker) => marker.setMap(null));
       }
-      if(state.infoWindow) {
-        console.log("infoWindow", state.infoWindow.getMap());
-        
+      if (state.infoWindow) {
         state.infoWindow.close();
       }
     },
     setMap: (state, action) => {
-      state.map = action.payload.map;
+      state.map = action.payload;
     },
     setInfoWindow: (state, action) => {
-      state.infoWindow = action.payload.infoWindow;
+      state.infoWindow = action.payload;
     },
     updateMarkers: (state, action) => {
-      state.markers = [...state.markers, ...action.payload.markers];
+      state.markers = [...state.markers, ...action.payload];
     },
     setPools: (state, action) => {
-      state.pools = action.payload.pools;
+      state.pools = [...action.payload];
     },
-    setName: (state, action) => {
-      state.name = action.payload.name;
+    updatePools: (state, action) => {
+      const { poolId, pools } = action.payload;
+      const updatePools = [...pools];
+      const isMarked = updatePools[poolId].mark;
+
+      updatePools[poolId] = {
+        ...updatePools[poolId],
+        mark: !isMarked,
+      };
+      state.pools = [...updatePools];
+    },
+    setSection: (state, action) => {
+      state.section = action.payload;
     },
   },
 });
 
-export const { resetMap, setMap, setInfoWindow, updateMarkers, setPools, setName } =
+export const { resetMap, setMap, setInfoWindow, updateMarkers, setPools, updatePools, setSection } =
   kakaoMapSlice.actions;
 export default kakaoMapSlice.reducer;

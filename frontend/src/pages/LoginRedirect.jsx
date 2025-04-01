@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { login } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
-import { setName, setPools } from '../store/slices/kakaoMapSlice';
+import { useDispatch } from 'react-redux';
+import { setSection, setPools } from '../store/slices/kakaoMapSlice';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 export default function LoginRedirect() {
@@ -35,12 +35,12 @@ export default function LoginRedirect() {
       const poolName = sessionStorage.getItem('poolName');
 
       if (name !== null) {
-        dispatch(setName({ name }));
+        dispatch(setSection({ name }));
       }
 
       if (mapPools !== null) {
         const pools = JSON.parse(mapPools);
-        dispatch(setPools({ pools }));
+        dispatch(setPools(pools));
       }
 
       navigate(path || '/', { replace: true, state: { poolName } }).then(() => {

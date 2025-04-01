@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
@@ -7,24 +7,29 @@ import NoContent from '../common/NoContent';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useToggleMark } from '../../hooks/useToggleMark';
 import AuthenticateRoute from '../common/AuthenticateRoute';
+import { updatePools } from '../../store/slices/kakaoMapSlice';
 
 export default function PoolList() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const name = useSelector((state) => state.kakaoMap.name);
+  const section = useSelector((state) => state.kakaoMap.section);
+  const [pools, setPools] = useState(useSelector((state) => state.kakaoMap.pools));
 
   const [isLoading, setIsLoading] = useState(false);
-  const [pools, setPools] = useState(useSelector((state) => state.kakaoMap.pools));
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hasNext, setHasNext] = useState(true);
   const { toggleMark, showLoginModal, setShowLoginModal } = useToggleMark();
 
+  const updatePoolsHandler = (poolId, pools) => {
+    dispatch(updatePools({ poolId, pools }));
+  };
   const getPools = () => {
     setIsLoading(true);
     try {
-      //처음에 5개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
-      setCurrentIndex((prev) => prev + 2); // 인덱스로 바꾸면 될듯
+      //처음에 6개만 보여줬다가 스크롤 내려가면 더 보여주기, 데이터는 pools 에 있음
+      setCurrentIndex((prev) => prev + 6);
       setHasNext(currentIndex < pools.length);
     } catch {
       // TODO: 에러 핸들링 예정
@@ -46,7 +51,7 @@ export default function PoolList() {
   };
 
   useEffect(() => {
-    if (name === null) {
+    if (section === null) {
       navigate('/');
     }
   }, []);
@@ -57,9 +62,10 @@ export default function PoolList() {
     <>
       {isLoading && <LoadingSpinner></LoadingSpinner>}
       {showLoginModal && <AuthenticateRoute cancleAction={() => setShowLoginModal(false)} />}
-      <div class="p-6">
-        <h1 class="text-2xl font-bold mb-4">
-          <span class="text-black">'{name}'</span> 수영할 곳 찾고 계셨죠?
+
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">
+          <span className="text-black">'{section}'</span> 수영할 곳 찾고 계셨죠?
         </h1>
         <section className="flex flex-col items-center gap-5 w-full mt-10">
           {pools?.length === 0 ? (
@@ -72,7 +78,10 @@ export default function PoolList() {
                   name={pool.name}
                   address={pool.address}
                   isMarked={pool.mark}
-                  onToggleMark={() => toggleMark(index, pools, setPools)}
+                  onToggleMark={() => {
+                    updatePoolsHandler(index, pools);
+                    toggleMark(index, pools, setPools);
+                  }}
                   onClick={() => handlePoolListItemClick(pool.id)}
                 />
               );

@@ -7,7 +7,7 @@ import {
   setMap,
   updateMarkers,
   setPools,
-  setName,
+  setSection,
   setInfoWindow,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
@@ -105,9 +105,8 @@ export default function KakaoMapContainer() {
 
       infoWindow.setContent(container); // 인포윈도우에 React 컨테이너 적용
       infoWindow.open(marker.getMap(), marker);
-      dispatch(setInfoWindow({ infoWindow })); // 인포윈도우 리덕스에 보관
+      dispatch(setInfoWindow(infoWindow)); // 인포윈도우 리덕스에 보관
     } catch (error) {
-      console.log(error);
       setError(error);
     }
   }
@@ -117,18 +116,18 @@ export default function KakaoMapContainer() {
   /**
    * @description 폴리곤 출력
    * @param {Array} coordinates - 좌표 배열
-   * @param {string} name - 지역명
+   * @param {string} section - 지역명
    */
-  function displayArea(coordinates, name) {
+  function displayArea(coordinates, section) {
     const path = coordinates.map(([lng, lat]) => new kakao.maps.LatLng(lat, lng));
     const polygon = new kakao.maps.Polygon({
       map,
       path,
       strokeWeight: 2,
-      strokeColor: '#004c80',
+      strokeColor: '#056FC4',
       strokeOpacity: 0.8,
-      fillColor: '#ffffff',
-      fillOpacity: 0.7,
+      fillColor: '#fff',
+      fillOpacity: 0.4,
     });
     polygons.push(polygon);
 
@@ -137,8 +136,8 @@ export default function KakaoMapContainer() {
     kakao.maps.event.addListener(polygon, 'mouseover', (e) => {
       polygon.setOptions({ fillColor: '#09f' });
       customOverlay.setContent(
-        `<div class="absolute bg-white border border-gray-500 rounded-sm text-xs top-[-5px] left-[15px] p-[2px]">
-        ${name}
+        `<div class="absolute bg-white border border-gray-500 rounded-sm text-lg top-[-15px] left-[15px] p-1">
+        ${section}
       </div>`,
       );
       customOverlay.setPosition(e.latLng);
@@ -153,7 +152,7 @@ export default function KakaoMapContainer() {
     // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
     // 커스텀 오버레이를 지도에서 제거합니다
     kakao.maps.event.addListener(polygon, 'mouseout', () => {
-      polygon.setOptions({ fillColor: '#fff' });
+      polygon.setOptions({ fillColor: '#fff', fillOpacity: 0.4 });
       customOverlay.setMap(null);
     });
 
@@ -167,16 +166,15 @@ export default function KakaoMapContainer() {
         customOverlay.setMap(null);
         polygon.setOptions({ fillColor: '#fff' });
 
-        const { data: pools } = await kakaoMapApi.getSectionWithPools(name);
-
+        const { data: pools } = await kakaoMapApi.getSectionWithPools(section);
         const markers = pools.map(({ latitude, longitude, name }) =>
           createMarker(new kakao.maps.LatLng(latitude, longitude), name),
         );
         // 마커 화면에서 제거에 활용
-        dispatch(updateMarkers({ markers }));
+        dispatch(updateMarkers(markers));
         // 지역별 수영장 정보
-        dispatch(setPools({ pools }));
-        dispatch(setName({ name }));
+        dispatch(setPools(pools));
+        dispatch(setSection(section));
         navigate('pools');
       } catch (error) {
         setError(
@@ -198,7 +196,7 @@ export default function KakaoMapContainer() {
 
   useEffect(() => {
     if (kakao && kakao.maps) {
-      dispatch(setMap({ map: createMap(mapContainer.current) }));
+      dispatch(setMap(createMap(mapContainer.current)));
       drawPolygons(seoulGu);
     }
   }, []);
