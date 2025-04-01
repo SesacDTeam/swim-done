@@ -17,7 +17,7 @@ export default function PoolDetail() {
   const mapContainer = useRef();
   const { poolId } = useParams();
   const [poolDetail, setPoolDetail] = useState(null);
-  const mapRef = useRef(null);
+  const mapRef = useRef();
   const { setError } = useErrorResolver();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loading.isLoading);

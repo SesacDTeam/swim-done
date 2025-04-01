@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function ErrorCatcher({ children }) {
+const ErrorCatcher = memo(({ children }) => {
   const error = useSelector((state) => state.error.error);
 
   useEffect(() => {
-    if (!error) {
-      return;
-    }
+    if (!error) return;
 
     toast.error(error.message, {
       className: 'p-0 w-[400px]',
@@ -21,4 +19,6 @@ export default function ErrorCatcher({ children }) {
       <ToastContainer />
     </>
   );
-}
+});
+
+export default ErrorCatcher;
