@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import ERROR_DISPLAY_MODE from '../error/ERROR_DISPLAY_MODE';
 import useErrorResolver from './useErrorResolver';
+import RequestError from '../error/RequestError';
 
-export const useSubmitReview = (content = '', submitApi) => {
+export const useSubmitReview = (content = null, submitApi) => {
   const { error, setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const [reviewContent, setReviewContent] = useState(content);
 
@@ -18,7 +19,10 @@ export const useSubmitReview = (content = '', submitApi) => {
       await submitApi(reviewContent);
     } catch (error) {
       setError(error);
+      return false
     }
+
+    return true
   };
 
   return { reviewContent, setReviewContent, handleSubmit, error };
