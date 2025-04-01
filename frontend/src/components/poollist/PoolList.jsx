@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router';
 import PoolListItem from '../common/PoolListItem';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
@@ -7,14 +7,14 @@ import NoContent from '../common/NoContent';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useToggleMark } from '../../hooks/useToggleMark';
 import AuthenticateRoute from '../common/AuthenticateRoute';
-import { setPools } from '../../store/slices/kakaoMapSlice';
+import { updatePools } from '../../store/slices/kakaoMapSlice';
 
 export default function PoolList() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
-  const name = useSelector((state) => state.kakaoMap.name);
-  const pools = useSelector((state) => state.kakaoMap.pools);
-  const [poolList, setPoolList] = useState(pools);
+  const section = useSelector((state) => state.kakaoMap.section);
+  const [pools, setPools] = useState(useSelector((state) => state.kakaoMap.pools));
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,6 +22,9 @@ export default function PoolList() {
   const [hasNext, setHasNext] = useState(true);
   const { toggleMark, showLoginModal, setShowLoginModal } = useToggleMark();
 
+  const updatePoolsHandler = (poolId, pools) => {
+    dispatch(updatePools({ poolId, pools }));
+  };
   const getPools = () => {
     setIsLoading(true);
     try {
@@ -48,7 +51,7 @@ export default function PoolList() {
   };
 
   useEffect(() => {
-    if (name === null) {
+    if (section === null) {
       navigate('/');
     }
   }, []);
@@ -62,7 +65,7 @@ export default function PoolList() {
 
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">
-          <span className="text-black">'{name}'</span> 수영할 곳 찾고 계셨죠?
+          <span className="text-black">'{section}'</span> 수영할 곳 찾고 계셨죠?
         </h1>
         <section className="flex flex-col items-center gap-5 w-full mt-10">
           {pools?.length === 0 ? (
@@ -75,7 +78,10 @@ export default function PoolList() {
                   name={pool.name}
                   address={pool.address}
                   isMarked={pool.mark}
-                  onToggleMark={() => toggleMark(index, poolList, setPoolList)}
+                  onToggleMark={() => {
+                    updatePoolsHandler(index, pools);
+                    toggleMark(index, pools, setPools);
+                  }}
                   onClick={() => handlePoolListItemClick(pool.id)}
                 />
               );

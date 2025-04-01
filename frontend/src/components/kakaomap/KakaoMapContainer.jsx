@@ -7,7 +7,7 @@ import {
   setMap,
   updateMarkers,
   setPools,
-  setName,
+  setSection,
   setInfoWindow,
 } from '../../store/slices/kakaoMapSlice.js';
 import { useNavigate } from 'react-router';
@@ -107,7 +107,6 @@ export default function KakaoMapContainer() {
       infoWindow.open(marker.getMap(), marker);
       dispatch(setInfoWindow(infoWindow)); // 인포윈도우 리덕스에 보관
     } catch (error) {
-      console.log(error);
       setError(error);
     }
   }
@@ -117,9 +116,9 @@ export default function KakaoMapContainer() {
   /**
    * @description 폴리곤 출력
    * @param {Array} coordinates - 좌표 배열
-   * @param {string} name - 지역명
+   * @param {string} section - 지역명
    */
-  function displayArea(coordinates, name) {
+  function displayArea(coordinates, section) {
     const path = coordinates.map(([lng, lat]) => new kakao.maps.LatLng(lat, lng));
     const polygon = new kakao.maps.Polygon({
       map,
@@ -138,7 +137,7 @@ export default function KakaoMapContainer() {
       polygon.setOptions({ fillColor: '#09f' });
       customOverlay.setContent(
         `<div class="absolute bg-white border border-gray-500 rounded-sm text-lg top-[-15px] left-[15px] p-1">
-        ${name}
+        ${section}
       </div>`,
       );
       customOverlay.setPosition(e.latLng);
@@ -167,7 +166,7 @@ export default function KakaoMapContainer() {
         customOverlay.setMap(null);
         polygon.setOptions({ fillColor: '#fff' });
 
-        const { data: pools } = await kakaoMapApi.getSectionWithPools(name);
+        const { data: pools } = await kakaoMapApi.getSectionWithPools(section);
         const markers = pools.map(({ latitude, longitude, name }) =>
           createMarker(new kakao.maps.LatLng(latitude, longitude), name),
         );
@@ -175,7 +174,7 @@ export default function KakaoMapContainer() {
         dispatch(updateMarkers(markers));
         // 지역별 수영장 정보
         dispatch(setPools(pools));
-        dispatch(setName(name));
+        dispatch(setSection(section));
         navigate('pools');
       } catch (error) {
         setError(
