@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { markPoolApi } from '../../api/markPoolApi';
 import { useSelector, useDispatch } from 'react-redux';
 import PoolListItem from '../common/PoolListItem';
-import { logo } from '../../utils/staticImagePath';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import NoContent from '../common/NoContent';
 import { Outlet, useNavigate } from 'react-router';
@@ -10,12 +9,10 @@ import useErrorResolver from '../../hooks/useErrorResolver';
 import ERROR_DISPLAY_MODE from '../../error/ERROR_DISPLAY_MODE';
 import { useToggleMark } from '../../hooks/useToggleMark';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { hideLoading } from '../../store/slices/loadingSlice';
 
 export default function MarkPools() {
   const [markedPools, setMarkedPools] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const isLoading = useSelector((state) => state.loading.isLoading);
   const isDetailViewHidden = useSelector((state) => state.detailView.isHidden);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,7 +44,7 @@ export default function MarkPools() {
   }, []);
 
   const onIntersect = async (entry, observer) => {
-    if (isLoading || !hasNext) return;
+    if (!hasNext) return;
     await getMarkedPools();
   };
 

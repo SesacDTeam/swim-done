@@ -20,8 +20,6 @@ export default function MyReviewPage() {
   const isLoadingRef = useRef(false);
 
   const fetchReviews = async (reset = false) => {
-    // setIsLoading(true);
-    // setIsDataLoaded(false);
     if (isLoadingRef.current) return;
 
     if (reset) {
@@ -49,7 +47,6 @@ export default function MyReviewPage() {
       setIsDataLoaded(true);
     } catch (error) {
     } finally {
-      // setIsLoading(false);
       setIsFetching(false);
       isLoadingRef.current = false;
     }

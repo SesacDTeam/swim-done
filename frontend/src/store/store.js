@@ -6,7 +6,6 @@ import detailViewSlice from './slices/detailViewSlice';
 import kakaoMapSlice from './slices/kakaoMapSlice';
 import sideBarSlice from './slices/sideBarSlice';
 import errorSlice from './slices/errorSlice';
-import loadingSlice from './slices/loadingSlice';
 
 const store = configureStore({
   reducer: {
@@ -17,7 +16,6 @@ const store = configureStore({
     user: userSlice,
     sideBar: sideBarSlice,
     error: errorSlice,
-    loading: loadingSlice,
   },
 });
 

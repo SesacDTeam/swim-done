@@ -4,16 +4,15 @@ import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { setName, setPools } from '../store/slices/kakaoMapSlice';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { showLoading, hideLoading } from '../store/slices/loadingSlice';
 
 export default function LoginRedirect() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const isLoading = useSelector((state) => state.loading.isLoading);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(showLoading());
+    setIsLoading(true);
     try {
       // 현재 url에서 토큰 가져오기
       const urlParams = new URLSearchParams(window.location.search);
@@ -52,7 +51,8 @@ export default function LoginRedirect() {
       });
     } catch (error) {
       setError(true);
-      dispatch(hideLoading());
+      setIsLoading(false);
+
       navigate('/'); // 토큰 없으면 home으로 이동
     }
   }, [navigate, dispatch]);
