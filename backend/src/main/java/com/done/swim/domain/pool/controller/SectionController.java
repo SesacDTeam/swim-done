@@ -30,7 +30,6 @@ public class SectionController {
     public ResponseEntity<ApiResponse<List<PoolWithSectionResponseDto>>> getPoolsWithSection(
             @AuthenticationPrincipal User user,
             @PathVariable String section) {
-        log.info("section : {}", section);
         List<PoolWithSectionResponseDto> pools = poolService.getPoolsWithSection(section, user != null ? user.getId() : null);
         return ResponseEntity.ok(
                 ApiResponse.ok(pools)
