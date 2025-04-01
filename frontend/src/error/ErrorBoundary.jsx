@@ -26,7 +26,7 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError && this.state.error instanceof RequestError) {
       return (
-        <div className="h-full flex flex-col items-center justify-center text-white gap-5 font-pretendard text-title">
+        <div className="h-full flex flex-col items-center justify-center gap-5 font-pretendard text-title">
           <h1 className=" font-bold text-3xl mx-10 whitespace-pre-line text-center text-title w-full">
             찾을 수 없는 페이지
           </h1>
