@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { logo } from '../../utils/staticImagePath';
+import { poolBuoy } from '../../utils/staticImagePath';
 
 const LoadingSpinner = (isLoading) => {
   if (!isLoading) return null;
@@ -8,7 +8,7 @@ const LoadingSpinner = (isLoading) => {
   return (
     <>
       <div className="flex items-center justify-center h-screen">
-        <img src={logo} alt="" className="animate-spin w-30" />
+        <img src={poolBuoy} alt="" className="animate-spin w-30" />
       </div>
     </>
   );
