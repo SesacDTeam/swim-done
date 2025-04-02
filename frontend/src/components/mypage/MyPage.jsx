@@ -116,7 +116,7 @@ export default function MyPage() {
               </button>
             </div>
           </div>
-          <div className="relative top-40 h-55 w-85 mx-auto flex flex-col justify-between">
+          <div className="relative top-40 h-55 w-85 mx-auto flex flex-col space-y-20 justify-start">
             <MyPageItem
               image={myReview}
               hoverImage={myReviewColor}
@@ -137,7 +137,7 @@ export default function MyPage() {
           </div>
           <div className="flex justify-center">
             <button
-              className="relative top-69 h-10 cursor-pointer outline-none"
+              className="absolute bottom-10 h-10 cursor-pointer outline-none"
               onClick={handleWithdraw}
             >
               회원 탈퇴
