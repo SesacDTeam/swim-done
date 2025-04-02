@@ -1,5 +1,7 @@
 package com.done.swim.oauth2.service;
 
+import static org.springframework.boot.convert.Delimiter.NONE;
+
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.domain.user.repository.UserRepository;
 import com.done.swim.global.exception.ErrorCode;
@@ -71,6 +73,7 @@ public class OAuth2TokenService {
             .maxAge(0) // 만료 시간 0으로 설정 -> 삭제 처리
             .httpOnly(true)
             .secure(true)
+            .sameSite(NONE)
             .build();
 
 //         쿠키 삭제 응답 헤더에 추가
