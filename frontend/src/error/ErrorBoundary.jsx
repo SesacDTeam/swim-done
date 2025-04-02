@@ -34,9 +34,11 @@ class ErrorBoundary extends Component {
             요청하신 페이지에 접근할 수 없습니다.<br></br>입력하신 주소를 다시 한 번 확인해 주세요.
           </p>
           <div className="font-pretendard text-center text-title mt-10 flex flex-col items-start gap-5">
-            <button className='cursor-pointer' onClick={this.resetError}>📯 다시시도</button>
+            <button className="cursor-pointer" onClick={this.resetError}>
+              ⚡️ &nbsp;다시 시도
+            </button>
             <span>
-              <Link to="/">🏠 홈으로 가기</Link>
+              <Link to="/">🏡 홈으로 가기</Link>
             </span>
           </div>
         </div>
