@@ -66,7 +66,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // TODO : 배포 환경에서 수정 필요 =>  .domain("실제도메인") / .secure(true) / .sameSite("NONE")
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-//            .domain("localhost")
+            .domain("https://swimheyeom.com")
             .path("/")
             .httpOnly(true)
             .secure(secure) // HTTPS가 아닌 환경에서도 쿠키 설정 가능

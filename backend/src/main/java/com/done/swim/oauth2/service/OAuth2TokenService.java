@@ -7,6 +7,7 @@ import com.done.swim.global.exception.GlobalException;
 import com.done.swim.global.exception.InvalidRefreshTokenException;
 import com.done.swim.global.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -39,8 +38,8 @@ public class OAuth2TokenService {
      */
     public void saveRefreshToken(Long userId, String refreshToken) {
         redisTemplate.opsForValue()
-                .set("REFRESH_TOKEN:" + userId, refreshToken, refreshTokenValidityInMilliseconds,
-                        TimeUnit.MILLISECONDS);
+            .set("REFRESH_TOKEN:" + userId, refreshToken, refreshTokenValidityInMilliseconds,
+                TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -64,11 +63,12 @@ public class OAuth2TokenService {
         // 쿠키에서 리프레시 토큰 삭제
         // 쿠키 만료 시간을 현재 시간보다 이전으로 설정해서 브라우저에서 쿠키 자동 삭제함
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
-                .path("/") // 쿠키 경로 설정
-                .maxAge(0) // 만료 시간 0으로 설정 -> 삭제 처리
-                .httpOnly(true)
-                .secure(true)
-                .build();
+            .domain("https://swimheyeom.com")
+            .path("/") // 쿠키 경로 설정
+            .maxAge(0) // 만료 시간 0으로 설정 -> 삭제 처리
+            .httpOnly(true)
+            .secure(true)
+            .build();
 
 //         쿠키 삭제 응답 헤더에 추가
         response.addHeader("Set-Cookie", refreshTokenCookie.toString());
@@ -99,15 +99,14 @@ public class OAuth2TokenService {
 
         // 유저 정보 조회
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
-
+            .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
 
         // 새로운 액세스 토큰 발급
         String newAccessToken = jwtTokenProvider.createAccessToken(user);
 
         return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + newAccessToken)
-                .body("새로운 액세스 토큰이 발급되었습니다.");
+            .header("Authorization", "Bearer " + newAccessToken)
+            .body("새로운 액세스 토큰이 발급되었습니다.");
     }
 
     /**
