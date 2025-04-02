@@ -116,7 +116,7 @@ export default function MyPage() {
               </button>
             </div>
           </div>
-          <div className="relative top-40 h-55 w-85 mx-auto flex flex-col space-y-10 justify-start">
+          <div className="relative top-40 h-55 w-85 mx-auto flex flex-col space-y-20 justify-start">
             <MyPageItem
               image={myReview}
               hoverImage={myReviewColor}
