@@ -1,7 +1,5 @@
 package com.done.swim.oauth2.handler;
 
-import static org.springframework.boot.convert.Delimiter.NONE;
-
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.global.jwt.JwtTokenProvider;
 import com.done.swim.oauth2.provider.CustomOAuth2User;
@@ -76,7 +74,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             .httpOnly(true)
             .secure(true) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
             .maxAge(30 * 24 * 60 * 60)
-            .sameSite(NONE)
+            .sameSite("NONE")
             .build();
 
         // 응답 헤더에 추가
