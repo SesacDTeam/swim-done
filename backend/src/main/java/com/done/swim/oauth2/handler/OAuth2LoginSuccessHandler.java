@@ -6,14 +6,13 @@ import com.done.swim.oauth2.provider.CustomOAuth2User;
 import com.done.swim.oauth2.service.OAuth2TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException {
+        Authentication authentication) throws IOException {
 
         // authentication에서 principal을 가져옴
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
@@ -56,10 +55,10 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // 리프레시 토큰을 HttpOnly 쿠키에 저장
         addRefreshTokenCookie(response, refreshToken);
 
-
         // 리다이렉트
         getRedirectStrategy().sendRedirect(request, response,
-                successLogin + "/login-success?token=" + accessToken + "&provider=" + oAuth2User.getUser().getProvider());
+            successLogin + "/login-success?token=" + accessToken + "&provider="
+                + oAuth2User.getUser().getProvider());
     }
 
     // 리프레시 토큰을 HttpOnly 쿠키에 저장 (함수로 따로 뺌)
@@ -67,13 +66,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // TODO : 배포 환경에서 수정 필요 =>  .domain("실제도메인") / .secure(true) / .sameSite("NONE")
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-                .domain("localhost")
-                .path("/")
-                .httpOnly(true)
-                .secure(secure) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
-                .maxAge(30 * 24 * 60 * 60)
-                .sameSite(sameSite)
-                .build();
+//            .domain("localhost")
+            .path("/")
+            .httpOnly(true)
+            .secure(secure) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
+            .maxAge(30 * 24 * 60 * 60)
+            .sameSite(sameSite)
+            .build();
 
         // 응답 헤더에 추가
         response.addHeader("Set-Cookie", cookie.toString());
