@@ -98,7 +98,7 @@ export default function Login() {
       </div>
 
       <Link to="/">
-        <div className="text-center text-gray04 mt-10">🏠 홈으로 가기</div>
+        <div className="text-center text-gray04 mt-10">🏡 홈으로 가기</div>
       </Link>
     </>
   );

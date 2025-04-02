@@ -14,6 +14,7 @@ export default function MyReviewPageItem({
   reviewId,
   fetchReviews,
   setTotalCount,
+  onDelete,
 }) {
   const [isToggled, setIsToggled] = useState(false);
   const navigate = useNavigate();
@@ -49,9 +50,9 @@ export default function MyReviewPageItem({
       const response = await reviewApi.deleteReview(reviewId);
 
       if (response.status === 204) {
+        onDelete(reviewId);
         fetchReviews();
         setIsToggled(false);
-        setTotalCount((prev) => prev - 1);
       } else {
         setError('리뷰 삭제에 실패했습니다.');
       }
