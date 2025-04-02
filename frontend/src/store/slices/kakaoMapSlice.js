@@ -39,8 +39,6 @@ const kakaoMapSlice = createSlice({
     },
     setPools: (state, action) => {
       state.pools = [...action.payload];
-      console.log(state.pools);
-      
     },
     updatePools: (state, action) => {
       const { poolId, pools } = action.payload;
