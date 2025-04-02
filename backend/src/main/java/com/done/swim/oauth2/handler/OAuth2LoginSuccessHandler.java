@@ -77,5 +77,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // 응답 헤더에 추가
         response.addHeader("Set-Cookie", cookie.toString());
 
+
     }
+
 }
