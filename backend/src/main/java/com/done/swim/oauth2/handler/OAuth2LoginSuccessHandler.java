@@ -1,5 +1,7 @@
 package com.done.swim.oauth2.handler;
 
+import static org.springframework.boot.convert.Delimiter.NONE;
+
 import com.done.swim.domain.user.entity.User;
 import com.done.swim.global.jwt.JwtTokenProvider;
 import com.done.swim.oauth2.provider.CustomOAuth2User;
@@ -35,6 +37,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Value("${SUCCESS_LOGIN}")
     private String successLogin;
 
+    @Value("${COOKIE_DOMAIN}")
+    private String cookieDomain;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException {
@@ -66,12 +71,12 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // TODO : 배포 환경에서 수정 필요 =>  .domain("실제도메인") / .secure(true) / .sameSite("NONE")
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-            .domain("https://swimheyeom.com")
+            .domain(cookieDomain)
             .path("/")
             .httpOnly(true)
-            .secure(secure) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
+            .secure(true) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
             .maxAge(30 * 24 * 60 * 60)
-            .sameSite(sameSite)
+            .sameSite(NONE)
             .build();
 
         // 응답 헤더에 추가

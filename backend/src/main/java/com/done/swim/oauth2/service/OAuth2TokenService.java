@@ -33,6 +33,9 @@ public class OAuth2TokenService {
     @Value("${cookie.secure}")
     private boolean secure;
 
+    @Value("${COOKIE_DOMAIN}")
+    private String cookieDomain;
+
     /**
      * 리프레시 토큰 저장(redis)
      */
@@ -63,7 +66,7 @@ public class OAuth2TokenService {
         // 쿠키에서 리프레시 토큰 삭제
         // 쿠키 만료 시간을 현재 시간보다 이전으로 설정해서 브라우저에서 쿠키 자동 삭제함
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
-            .domain("https://swimheyeom.com")
+            .domain(cookieDomain)
             .path("/") // 쿠키 경로 설정
             .maxAge(0) // 만료 시간 0으로 설정 -> 삭제 처리
             .httpOnly(true)
