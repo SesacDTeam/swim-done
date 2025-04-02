@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import seoulGu from '../../utils/seoul-gu.json';
-import { kickPan } from '../../utils/staticImagePath';
+import { mapMarker } from '../../utils/staticImagePath';
 import kakaoMapApi from '../../api/kakaoMapApi';
 import { useDispatch } from 'react-redux';
 import {
@@ -36,7 +36,7 @@ export default function KakaoMapContainer() {
   const markers = [];
   const infoWindow = new kakao.maps.InfoWindow({ removable: true });
   const customOverlay = new kakao.maps.CustomOverlay({});
-  const markerImageSize = new kakao.maps.Size(20, 30);
+  const markerImageSize = new kakao.maps.Size(60, 60);
   //#endregion 지도 기본 설정
 
   //#region Map 생성
@@ -73,7 +73,7 @@ export default function KakaoMapContainer() {
     const marker = new kakao.maps.Marker({
       map,
       position,
-      image: new kakao.maps.MarkerImage(kickPan, markerImageSize),
+      image: new kakao.maps.MarkerImage(mapMarker, markerImageSize),
       clickable: true,
       title,
     });
