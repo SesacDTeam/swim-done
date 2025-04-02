@@ -30,7 +30,7 @@ public class OAuth2TokenService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
-    @Value("${cookie.secure}")
+    @Value("${SECURE}")
     private boolean secure;
 
     @Value("${COOKIE_DOMAIN}")
@@ -70,8 +70,7 @@ public class OAuth2TokenService {
             .path("/") // 쿠키 경로 설정
             .maxAge(0) // 만료 시간 0으로 설정 -> 삭제 처리
             .httpOnly(true)
-            .secure(true)
-            .sameSite("NONE")
+            .secure(secure)
             .build();
 
 //         쿠키 삭제 응답 헤더에 추가

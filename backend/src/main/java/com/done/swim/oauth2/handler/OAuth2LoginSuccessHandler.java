@@ -26,10 +26,10 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Value("${origin}")
     private String origin;
 
-    @Value("${cookie.secure}")
+    @Value("${SECURE}")
     private boolean secure;
 
-    @Value("${cookie.same-site}")
+    @Value("${SAMESITE}")
     private String sameSite;
 
     @Value("${SUCCESS_LOGIN}")
@@ -72,9 +72,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             .domain(cookieDomain)
             .path("/")
             .httpOnly(true)
-            .secure(true) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
+            .secure(secure) // HTTPS가 아닌 환경에서도 쿠키 설정 가능
             .maxAge(30 * 24 * 60 * 60)
-            .sameSite("NONE")
+            .sameSite(sameSite)
             .build();
 
         // 응답 헤더에 추가
