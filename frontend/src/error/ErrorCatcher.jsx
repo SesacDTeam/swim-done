@@ -2,7 +2,7 @@ import React, { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 
-const ErrorCatcher = memo(({ children }) => {
+const ErrorCatcher = ({ children }) => {
   const error = useSelector((state) => state.error.error);
 
   useEffect(() => {
@@ -19,6 +19,6 @@ const ErrorCatcher = memo(({ children }) => {
       <ToastContainer />
     </>
   );
-});
+};
 
 export default ErrorCatcher;
