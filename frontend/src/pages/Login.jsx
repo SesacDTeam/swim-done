@@ -3,8 +3,8 @@ import KakaoLoginButton from '../components/sociallogin/KakaoLoginButton';
 import NaverLoginButton from '../components/sociallogin/NaverLoginButton';
 import GithubLoginButton from '../components/sociallogin/GithubLoginButton';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../store/slices/authSlice';
+import { useSelector } from 'react-redux';
+import RecentLoginLabel from '../components/sociallogin/RecentLoginLabel';
 
 export default function Login() {
   // 리덕스에서 로그인 이력 가져오기
@@ -15,7 +15,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="font-pretendard font-bold text-center text-5xl mt-30 mb-10 text-title">
+      <div className="font-bold text-center text-5xl mt-30 mb-10 text-title">
         <h1 className="mb-5">
           <span className="text-blue01">자유 수영</span>의 모든 것
         </h1>
@@ -23,7 +23,7 @@ export default function Login() {
           <span className="text-blue01">오수완</span>에 오신 걸 환영해요!
         </h1>
       </div>
-      <div className="font-pretendard font-semibold text-center text-xl text-title/80">
+      <div className="font-semibold text-center text-xl text-title/80">
         <p>자유 수영 정보를 한눈에 확인하고 내가 원하는 시간에 수영을 즐겨보세요 🏊‍♂️</p>
       </div>
 
@@ -31,49 +31,25 @@ export default function Login() {
       <div className="flex flex-col mt-15 space-y-3 font-semibold items-center">
         {/* 카카오 로그인 */}
         <div className="relative w-fit flex">
-          {recentProvider === 'KAKAO' && (
-            <div className="absolute top-[-20px] left-30 bg-white text-title border border-gray02 text-xs px-3 py-1 rounded-md shadow-md">
-              최근 로그인
-              <div
-                className="absolute left-1/2 -translate-x-1/2 bottom-[-6px] w-4 h-3 bg-white border-l border-r border-gray02"
-                style={{ clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)' }}
-              ></div>
-            </div>
-          )}
+          {recentProvider === 'KAKAO' && <RecentLoginLabel />}
           <KakaoLoginButton />
         </div>
 
         {/* 네이버 로그인 */}
         <div className="relative w-fit flex">
-          {recentProvider === 'NAVER' && (
-            <div className="absolute top-[-20px] left-30 bg-white text-title border border-gray02 text-xs px-3 py-1 rounded-md shadow-md">
-              최근 로그인
-              <div
-                className="absolute left-1/2 -translate-x-1/2 bottom-[-6px] w-4 h-3 bg-white border-l border-r border-gray02"
-                style={{ clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)' }}
-              ></div>
-            </div>
-          )}
+          {recentProvider === 'NAVER' && <RecentLoginLabel />}
           <NaverLoginButton />
         </div>
 
         {/* 깃허브 로그인 */}
-        <div className="relative">
+        <div className="relative w-fit flex">
+          {recentProvider === 'GITHUB' && <RecentLoginLabel />}
           <GithubLoginButton />
-          {recentProvider === 'GITHUB' && (
-            <div className="absolute top-[-20px] left-30 bg-white text-title border border-gray02 text-xs px-3 py-1 rounded-md shadow-md">
-              최근 로그인
-              <div
-                className="absolute left-1/2 -translate-x-1/2 bottom-[-6px] w-4 h-3 bg-white border-l border-r border-gray02"
-                style={{ clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)' }}
-              ></div>
-            </div>
-          )}
         </div>
       </div>
 
       <Link to="/">
-        <div className="font-pretendard text-center text-gray04 mt-10">🏠 홈으로 가기</div>
+        <div className="text-center text-gray04 mt-10">🏠 홈으로 가기</div>
       </Link>
     </>
   );

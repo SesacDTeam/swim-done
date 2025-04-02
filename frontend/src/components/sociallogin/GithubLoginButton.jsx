@@ -10,11 +10,11 @@ export default function GithubLoginButton() {
     <div className="flex justify-center">
       <button
         onClick={handleGithubLogin}
-        className="min-w-[180px] font-pretendard font-semibold flex items-center bg-title text-white rounded-md px-40 py-4 gap-3 mb-2"
+        className="min-w-[180px] font-semibold flex items-center bg-title text-white rounded-md px-40 py-4 gap-3 mb-2"
       >
         <svg
-          width="18"
-          height="18"
+          width="15"
+          height="15"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 496 512"
           fill="none"
