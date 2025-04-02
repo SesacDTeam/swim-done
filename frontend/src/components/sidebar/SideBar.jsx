@@ -59,11 +59,11 @@ export default function SideBar() {
         <img
           src={logo}
           alt=""
-          className="w-2/3 mt-5 cursor-pointer select-none"
+          className=" cursor-pointer select-none px-3 my-10"
           draggable={false}
           onClick={handleToMain}
         />
-        <div className="h-[0.5px] w-full bg-gray03 mt-[20px]"></div>
+        <div className="h-[0.5px] w-full bg-gray03"></div>
 
         {sideBarItems.map((item, index) => {
           return (
