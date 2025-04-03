@@ -7,11 +7,12 @@ import { xmark, back } from '../../../utils/staticImagePath';
 import ReviewForm from './ReviewForm';
 import { useSubmitReview } from '../../../hooks/useSubmitReview';
 import AlertModal from '../AlertModal';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default function UpdateReview() {
   const [canSubmit, setCanSubmit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const { reviewId } = useParams();
   const location = useLocation();
   const poolName = location.state?.poolName;
@@ -36,6 +37,10 @@ export default function UpdateReview() {
     navigate(newPath);
   };
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <div className="relative flex justify-center items-center">
@@ -47,7 +52,9 @@ export default function UpdateReview() {
         </section>
         <ReviewForm
           onSubmit={async (e) => {
+            setIsLoading(true);
             const isSuccess = await handleSubmit(e);
+            setIsLoading(false);
             if (isSuccess) {
               setIsModalOpen(true);
             }
