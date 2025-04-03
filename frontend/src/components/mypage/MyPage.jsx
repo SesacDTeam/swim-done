@@ -28,10 +28,12 @@ export default function MyPage() {
   const errorResolverToast = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
   const navigate = useNavigate();
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalAction, setModalAction] = useState(() => () => {});
+  const [isSingleButton, setIsSingleButton] = useState(false);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -54,17 +56,28 @@ export default function MyPage() {
   const handleLogout = () => {
     setModalMessage(['로그아웃 하시겠습니까?']);
     setModalAction(() => logoutAction); // 로그아웃 액션을 모달의 확인 버튼에 연결
+    setIsSingleButton(false);
     setIsModalOpen(true);
+  };
+
+  const handleProcessSuccess = () => {
+    dispatch(logout()); // Redux 상태 초기화
+    navigate('/'); // 메인 페이지로 이동
   };
 
   // 로그아웃 액션
   const logoutAction = async () => {
+    setIsProcessing(true);
     try {
       await instance.post('/logout');
-      dispatch(logout());
-      navigate('/');
+      setModalMessage('로그아웃이 완료되었습니다.');
+      setModalAction(() => handleProcessSuccess); // 회원 탈퇴 액션을 모달의 확인 버튼에 연결
+      setIsSingleButton(true);
+      setIsModalOpen(true);
     } catch (error) {
       console.error('로그아웃 중 오류 발생', error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -75,26 +88,37 @@ export default function MyPage() {
       '회원 탈퇴를 원하시면 확인 버튼을 눌러주세요.',
     ]);
     setModalAction(() => withdrawAction); // 회원 탈퇴 액션을 모달의 확인 버튼에 연결
+    setIsSingleButton(false);
     setIsModalOpen(true);
   };
 
   // 회원 탈퇴 액션
   const withdrawAction = async () => {
+    setIsProcessing(true);
     try {
       await instance.delete('/withdraw');
-      dispatch(logout()); // Redux 상태 초기화
-      navigate('/'); // 메인 페이지로 이동
+      setModalMessage('회원 탈퇴가 완료되었습니다.');
+      setModalAction(() => handleProcessSuccess);
+      setIsSingleButton(true);
+      setIsModalOpen(true);
     } catch (error) {
       errorResolverToast.setError(
         new RequestError('회원 탈퇴 중 오류가 발생했습니다.', ERROR_CODE.INTERNAL_SERVER_ERROR),
       );
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
     <div className="select-none">
+      {isProcessing && (
+        <div className="fixed inset-0 z-1000">
+          <LoadingSpinner backgroundColor={'bg-title/30'} />
+        </div>
+      )}
       {isLoadingData ? ( // 데이터가 로딩 중일 때는 로딩 UI만 표시
-        <LoadingSpinner isLoading={isLoadingData} />
+        <LoadingSpinner />
       ) : (
         <>
           <h1 className="pretendard-bold text-2xl mt-10 ml-5 sticky text-center">마이페이지</h1>
@@ -154,7 +178,7 @@ export default function MyPage() {
 
       {isModalOpen && (
         <AlertModal
-          isSingleButton={false} // 두 개의 버튼(취소, 확인) 필요
+          isSingleButton={isSingleButton} // 두 개의 버튼(취소, 확인) 필요
           message={modalMessage}
           onCancel={() => setIsModalOpen(false)} // 취소 버튼 클릭 시 모달 닫기
           onConfirm={() => {
