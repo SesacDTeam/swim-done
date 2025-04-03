@@ -70,7 +70,7 @@ export default function MyReviewPageItem({
 
   return (
     <>
-      <article className="w-[full] mt-10">
+      <article className="w-[full] mt-10 relative">
         <div className="flex justify-between items-baseline mb-2">
           <div className="flex gap-3 bg-blue02/30 rounded-xl text-sm pretendard-normal h-12 pl-3 pr-3">
             <img src={swimming} alt="" className="h-full w-8 aspect-square" />
@@ -82,17 +82,20 @@ export default function MyReviewPageItem({
             <div className="pretendard-normal text-xm absolute right-12 w-35 top-7">
               {createdAt}
             </div>
-            <div
-              className="absolute left-5 w-10 h-6 cursor-pointer top-8 z-2"
+            <img
+              src={more}
+              alt=""
+              className="w-20 relative top-5 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsToggled(!isToggled);
               }}
-            ></div>
-            <img src={more} alt="" className="w-20 relative top-5" />
-
+            />
+            {/* 드롭다운 메뉴 */}
             {isToggled && (
-              <div className="dropdown-menu absolute top-14 w-32 h-18 right-8 bg-blue02/30 rounded-md flex flex-col justify-around text-center">
+              <div
+                className="dropdown-menu absolute top-14 w-32 h-auto right-8 bg-white rounded-md flex flex-col justify-around text-center z-[9999]"
+              >
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -103,7 +106,7 @@ export default function MyReviewPageItem({
                       },
                     });
                   }}
-                  className="cursor-pointer"
+                  className="cursor-pointer py-2 hover:bg-blue02/50 bg-blue02/30 rounded-t-md"
                 >
                   수정하기
                 </button>
@@ -113,7 +116,7 @@ export default function MyReviewPageItem({
                     e.stopPropagation();
                     reviewDelete();
                   }}
-                  className="z-2 cursor-pointer"
+                  className="cursor-pointer py-2 hover:bg-blue02/50 bg-blue02/30 rounded-b-md"
                 >
                   삭제하기
                 </button>
@@ -122,10 +125,13 @@ export default function MyReviewPageItem({
           </div>
         </div>
 
-        <div className="border-b-1 pb-1 border-title">
+        {/* 텍스트 컨텐츠 */}
+        <div className="border-b-[1px] pb-1 border-title relative z-[0]">
           <p className="mb-6 mt-6 text-2xl">{content}</p>
         </div>
       </article>
+
+      {/* 모달 */}
       {isModalOpen && (
         <AlertModal
           isSingleButton={false} // 확인, 취소 버튼 2개 표시

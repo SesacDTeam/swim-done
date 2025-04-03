@@ -6,10 +6,12 @@ import reviewApi from '../../../api/reviewApi';
 import ReviewForm from './ReviewForm';
 import { useSubmitReview } from '../../../hooks/useSubmitReview';
 import AlertModal from '../AlertModal';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default function CreateReview() {
   const [canSubmit, setCanSubmit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { poolId } = useParams();
   const location = useLocation();
@@ -36,13 +38,16 @@ export default function CreateReview() {
   return (
     <>
       <main className="flex flex-col items-center w-full">
+        {isLoading && <LoadingSpinner backgroundColor={'bg-title/30'} />}
         <DetailViewHeader backButtonImage={back} closeButtonImage={xmark}></DetailViewHeader>
         <section className="w-[80%] flex flex-col items-center mb-10">
           <h1 className="font-pretendard font-bold text-3xl">{poolName}</h1>
         </section>
         <ReviewForm
           onSubmit={async (e) => {
+            setIsLoading(true);
             const isSuccess = await handleSubmit(e);
+            setIsLoading(false);
             if (isSuccess) {
               setIsModalOpen(true);
             }

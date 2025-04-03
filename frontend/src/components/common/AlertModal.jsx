@@ -21,7 +21,7 @@ export default function AlertModal({
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 bg-gray03/60 flex justify-center items-center z-10000">
+    <div className="fixed top-0 left-0 right-0 bottom-0 bg-title/30 flex justify-center items-center z-10000">
       <div className="bg-white w-100 h-50 rounded-2xl flex flex-col items-center justify-between pt-6 overflow-hidden">
         <div className="mt-10 text-center pretendard-medium">
           {Array.isArray(message) ? (
