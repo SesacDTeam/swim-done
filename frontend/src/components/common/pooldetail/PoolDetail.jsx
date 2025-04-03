@@ -7,28 +7,24 @@ import { Link, useParams } from 'react-router';
 import { extractDate } from '../../../utils/extractDate';
 import useErrorResolver from '../../../hooks/useErrorResolver';
 import Timetable from './TimeTable';
-
-// 로딩 관련
 import LoadingSpinner from '../LoadingSpinner';
 
 export default function PoolDetail() {
-  const mapContainer = useRef();
-  const { poolId } = useParams();
   const [poolDetail, setPoolDetail] = useState(null);
-  const mapRef = useRef();
-  const { setError } = useErrorResolver();
   const [isLoading, setIsLoading] = useState(false);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const mapContainer = useRef();
+  const mapRef = useRef();
+  const { poolId } = useParams();
+  const { setError } = useErrorResolver();
+  
 
   useEffect(() => {
     setIsLoading(true);
-    setIsDataLoaded(false);
 
     (async () => {
       try {
         const data = await poolApi.getPoolDetail(poolId);
         setPoolDetail(data.data);
-        setIsDataLoaded(true);
       } catch (error) {
         setError(error);
       } finally {
@@ -53,7 +49,7 @@ export default function PoolDetail() {
     }
   }, [isLoading, poolDetail]);
 
-  if (!isDataLoaded) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
 

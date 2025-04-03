@@ -8,6 +8,7 @@ import useErrorResolver from '../../../hooks/useErrorResolver';
 import RequestError from '../../../error/RequestError';
 import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
 import AlertModal from '../AlertModal';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default function SubmittedImage() {
   const { poolId } = useParams();
@@ -17,6 +18,7 @@ export default function SubmittedImage() {
 
   const [inputData, setInputData] = useState({ file: null });
   const [previewImage, setPreviewImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fileInputRef = useRef(null);
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
@@ -62,9 +64,11 @@ export default function SubmittedImage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
     if (!inputData.file) {
       // alert창 대신 토스트로 변경
       setError(new RequestError('파일을 선택해 주세요!'));
+      setIsLoading(false);
       return;
     }
 
@@ -78,17 +82,22 @@ export default function SubmittedImage() {
       setIsModalOpen(true);
     } catch (error) {
       setError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate(-1); // 모달 닫은 후 이전 페이지로 돌아가기
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(/\/[^\/]+$/, '');
+    navigate(newPath);
   };
 
   return (
     <>
       <main className="flex flex-col items-center w-full font-pretendard">
+      {isLoading && <LoadingSpinner backgroundColor={'bg-title/30'} />}
         <DetailViewHeader backButtonImage={back} closeButtonImage={xmark}></DetailViewHeader>
         <section className="w-[80%] flex flex-col items-center mb-10">
           <h1 className="font-bold text-3xl">{poolName}</h1>
@@ -118,6 +127,7 @@ export default function SubmittedImage() {
             <button
               className={`rounded-[10px] px-4 py-2 mt-4 ${inputData.file ? 'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'} `}
               type="submit"
+              disabled={!inputData.file}
             >
               제출하기
             </button>

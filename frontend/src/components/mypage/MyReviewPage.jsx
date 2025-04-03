@@ -9,16 +9,16 @@ import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 export default function MyReviewPage() {
   const [reviews, setReviews] = useState([]); // 리뷰 데이터
   const [totalCount, setTotalCount] = useState(0); // 총 리뷰 개수
-  const [isFetching, setIsFetching] = useState(false); // 데이터 로딩 중 여부
+  const [isLoading, setIsLoading] = useState(false); // 데이터 로딩 중 여부
   const [hasNext, setHasNext] = useState(true); // 다음 페이지 여부
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 번호
 
   // 리뷰 데이터 가져오기
   const fetchReviews = useCallback(
     async (page) => {
-      if (isFetching || !hasNext) return; // 중복 요청 방지
+      if (isLoading || !hasNext) return; // 중복 요청 방지
 
-      setIsFetching(true);
+      setIsLoading(true);
 
       try {
         const response = await myPageApi.getMyReview(page, 4);
@@ -31,10 +31,10 @@ export default function MyReviewPage() {
       } catch (error) {
         console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
       } finally {
-        setIsFetching(false);
+        setIsLoading(false);
       }
     },
-    [isFetching, hasNext],
+    [isLoading, hasNext],
   );
 
   // `useInfiniteScroll`을 활용하여 무한스크롤 감지
@@ -62,6 +62,10 @@ export default function MyReviewPage() {
     return new Date(dateString).toLocaleDateString('ko-KR', options);
   };
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <main className="flex flex-col items-center w-full">
@@ -87,8 +91,6 @@ export default function MyReviewPage() {
 
         {/* 무한스크롤 트리거 */}
         {hasNext && <div ref={bottomRef} className="h-20 relative -mt-10"></div>}
-
-        {isFetching && <LoadingSpinner />}
       </main>
     </>
   );
