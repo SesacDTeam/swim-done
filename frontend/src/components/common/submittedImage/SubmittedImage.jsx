@@ -83,7 +83,9 @@ export default function SubmittedImage() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate(-1); // 모달 닫은 후 이전 페이지로 돌아가기
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(/\/[^\/]+$/, '');
+    navigate(newPath);
   };
 
   return (
