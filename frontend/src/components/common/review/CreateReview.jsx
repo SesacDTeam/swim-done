@@ -6,10 +6,12 @@ import reviewApi from '../../../api/reviewApi';
 import ReviewForm from './ReviewForm';
 import { useSubmitReview } from '../../../hooks/useSubmitReview';
 import AlertModal from '../AlertModal';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default function CreateReview() {
   const [canSubmit, setCanSubmit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { poolId } = useParams();
   const location = useLocation();
@@ -33,6 +35,10 @@ export default function CreateReview() {
     navigate(newPath);
   };
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <main className="flex flex-col items-center w-full">
@@ -42,7 +48,9 @@ export default function CreateReview() {
         </section>
         <ReviewForm
           onSubmit={async (e) => {
+            setIsLoading(true);
             const isSuccess = await handleSubmit(e);
+            setIsLoading(false);
             if (isSuccess) {
               setIsModalOpen(true);
             }
