@@ -68,6 +68,7 @@ export default function SubmittedImage() {
     if (!inputData.file) {
       // alert창 대신 토스트로 변경
       setError(new RequestError('파일을 선택해 주세요!'));
+      setIsLoading(false);
       return;
     }
 
@@ -126,6 +127,7 @@ export default function SubmittedImage() {
             <button
               className={`rounded-[10px] px-4 py-2 mt-4 ${inputData.file ? 'bg-blue01 text-white cursor-pointer' : 'bg-gray04/10 cursor-not-allowed'} `}
               type="submit"
+              disabled={!inputData.file}
             >
               제출하기
             </button>
