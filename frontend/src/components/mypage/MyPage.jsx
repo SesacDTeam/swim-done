@@ -19,6 +19,7 @@ import {
 import AlertModal from '../common/AlertModal';
 import RequestError from '../../error/RequestError';
 import ERROR_CODE from '../../error/ERROR_CODE';
+import { resetMap } from '../../store/slices/kakaoMapSlice';
 
 export default function MyPage() {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ export default function MyPage() {
 
   const handleProcessSuccess = () => {
     dispatch(logout()); // Redux 상태 초기화
+    dispatch(resetMap());
     navigate('/'); // 메인 페이지로 이동
   };
 

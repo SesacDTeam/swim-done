@@ -47,9 +47,6 @@ export default function SideBar() {
 
   const handleToMain = () => {
     navigate('/');
-    setSelectedIndex(null);
-    dispatch(setSelectedIndex(null));
-    dispatch(hideListBar());
     dispatch(resetMap());
   };
 
