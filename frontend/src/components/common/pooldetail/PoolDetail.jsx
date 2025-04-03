@@ -75,7 +75,7 @@ export default function PoolDetail() {
           </div>
         </div>
         <Link to="submitted-images" className="self-end" state={{ poolName: poolDetail?.name }}>
-          <button className="bg-blue01 w-30 h-10 rounded-[10px] text-white pretendard-normal text-sm">
+          <button className="bg-blue01 w-30 h-10 rounded-[10px] text-white pretendard-normal text-sm cursor-pointer">
             수정 제안하기
           </button>
         </Link>
@@ -89,7 +89,7 @@ export default function PoolDetail() {
       <section className="flex flex-col items-center w-[80%] mb-10">
         <h2 className="self-start pretendard-semibold text-2xl">리뷰</h2>
         <Link to="reviews" className="self-end" state={{ poolName: poolDetail?.name }}>
-          <button className="text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-sm">
+          <button className="text-white bg-blue01 w-30 h-10 rounded-[10px] pretendard-normal text-sm cursor-pointer">
             리뷰 쓰러가기
           </button>
         </Link>
