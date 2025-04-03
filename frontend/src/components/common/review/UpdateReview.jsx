@@ -37,12 +37,9 @@ export default function UpdateReview() {
     navigate(newPath);
   };
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <>
+      {isLoading && <LoadingSpinner backgroundColor={'bg-title/30'} />}
       <div className="relative flex justify-center items-center">
         <DetailViewHeader closeButtonImage={xmark} backButtonImage={back}></DetailViewHeader>
       </div>

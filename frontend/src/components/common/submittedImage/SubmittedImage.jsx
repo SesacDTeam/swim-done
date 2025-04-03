@@ -93,13 +93,10 @@ export default function SubmittedImage() {
     navigate(newPath);
   };
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <>
       <main className="flex flex-col items-center w-full font-pretendard">
+      {isLoading && <LoadingSpinner backgroundColor={'bg-title/30'} />}
         <DetailViewHeader backButtonImage={back} closeButtonImage={xmark}></DetailViewHeader>
         <section className="w-[80%] flex flex-col items-center mb-10">
           <h1 className="font-bold text-3xl">{poolName}</h1>
