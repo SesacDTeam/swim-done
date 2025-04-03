@@ -8,6 +8,7 @@ import useErrorResolver from '../../../hooks/useErrorResolver';
 import RequestError from '../../../error/RequestError';
 import ERROR_DISPLAY_MODE from '../../../error/ERROR_DISPLAY_MODE';
 import AlertModal from '../AlertModal';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default function SubmittedImage() {
   const { poolId } = useParams();
@@ -17,6 +18,7 @@ export default function SubmittedImage() {
 
   const [inputData, setInputData] = useState({ file: null });
   const [previewImage, setPreviewImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fileInputRef = useRef(null);
   const { setError } = useErrorResolver(ERROR_DISPLAY_MODE.TOAST);
@@ -62,6 +64,7 @@ export default function SubmittedImage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
     if (!inputData.file) {
       // alert창 대신 토스트로 변경
       setError(new RequestError('파일을 선택해 주세요!'));
@@ -78,6 +81,8 @@ export default function SubmittedImage() {
       setIsModalOpen(true);
     } catch (error) {
       setError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,6 +92,10 @@ export default function SubmittedImage() {
     const newPath = currentPath.replace(/\/[^\/]+$/, '');
     navigate(newPath);
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
