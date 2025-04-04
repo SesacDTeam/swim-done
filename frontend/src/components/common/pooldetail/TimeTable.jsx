@@ -2,8 +2,10 @@ export default function Timetable({ schedule }) {
   if (!schedule || !schedule.length) {
     return (
       <>
-        <div className="text-body01 font-bold">준비된 시간표가 없습니다</div>
-        <hr className="m-2" />
+    <div className="w-full flex flex-col items-start">
+      <div className="text-body01 font-bold">준비된 시간표가 없습니다.</div>
+      <hr className="mt-2 w-full border-black" />
+    </div>
       </>
     );
   }

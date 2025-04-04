@@ -32,11 +32,11 @@ export default function AlertModal({
         </div>
         <div className="flex w-full h-12">
           {!isSingleButton && onCancel && (
-            <button className="flex-1 bg-gray03 text-white w-full" onClick={onCancel}>
+            <button className="flex-1 bg-gray03 text-white w-full cursor-pointer" onClick={onCancel}>
               취소
             </button>
           )}
-          <button className="flex-1 bg-blue01 text-white w-full" onClick={onConfirm}>
+          <button className="flex-1 bg-blue01 text-white w-ful cursor-pointer" onClick={onConfirm}>
             확인
           </button>
         </div>

@@ -133,7 +133,7 @@ export default function MyPage() {
               <div>{userInfo?.email}</div>
             </div>
             <div className="w-20 h-18">
-              <img src={profile} alt="프로필" className="h-full w-full" />
+              <img src={profile} alt="프로필" className="h-full w-full mb-2" />
               <button
                 className="w-full text-center cursor-pointer outline-none"
                 onClick={handleLogout}
