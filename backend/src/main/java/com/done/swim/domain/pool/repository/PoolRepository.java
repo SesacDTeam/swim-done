@@ -33,8 +33,6 @@ public interface PoolRepository extends JpaRepository<Pool, Long> {
             FROM Pool p
             LEFT JOIN FETCH p.swimmingTimes st
             WHERE p.name = :poolName
-            AND (st.dayOfWeek = :nowDayOfWeek OR st IS NULL)
-            ORDER BY st.startTime ASC
             """)
     Optional<Pool> getPoolWithName(@Param("poolName") String poolName, @Param("nowDayOfWeek") Week nowDayOfWeek);
 

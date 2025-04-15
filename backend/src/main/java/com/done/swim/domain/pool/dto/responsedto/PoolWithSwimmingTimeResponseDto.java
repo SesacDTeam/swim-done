@@ -24,12 +24,15 @@ public class PoolWithSwimmingTimeResponseDto {
     public static PoolWithSwimmingTimeResponseDto from(Pool entity, String nowDayOfWeek) {
 
         return PoolWithSwimmingTimeResponseDto.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .address(entity.getAddress())
-                .dayOfWeek(nowDayOfWeek)
-                .swimmingTimes(entity.getSwimmingTimes().stream().map(SwimmingTimeResponseDto::from).toList())
-                .build();
+          .id(entity.getId())
+          .name(entity.getName())
+          .address(entity.getAddress())
+          .dayOfWeek(nowDayOfWeek)
+          .swimmingTimes(entity.getSwimmingTimes().stream()
+            .filter((element) -> element.getDayOfWeek().getKoreanName().equals(nowDayOfWeek))
+            .map(SwimmingTimeResponseDto::from).toList()
+          )
+          .build();
 
     }
 
