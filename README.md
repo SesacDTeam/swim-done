@@ -40,7 +40,7 @@
 
 # 기술 스택
 - 프론트엔드
-  - <img height="24" src="https://cdn.simpleicons.org/react/61DAFB?viewbox=auto" /><sub>React</sub> <img height="24" src="https://cdn.simpleicons.org/reactrouter/CA4245?viewbox=auto" /><sub>React Router</sub> <img height="24" src="https://cdn.simpleicons.org/redux/764ABC?viewbox=auto" /><sub>Redux</sub>
+  - <img height="24" src="https://cdn.simpleicons.org/react/61DAFB?viewbox=auto" /><sub>React</sub> <img height="20" width= "34" src="https://cdn.simpleicons.org/reactrouter/CA4245?viewbox=auto" /><sub>React Router</sub> <img height="24" src="https://cdn.simpleicons.org/redux/764ABC?viewbox=auto" /><sub>Redux</sub>
 - 백엔드
   - <img height="24" src="https://cdn.simpleicons.org/springboot/6DB33F?viewbox=auto" /><sub>Spring Boot</sub> <img height="24" src="https://cdn.simpleicons.org/hibernate/59666C?viewbox=auto" /><sub>Hibernate</sub>
 - 데이터베이스
