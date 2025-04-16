@@ -38,27 +38,28 @@
 - 프로젝트 참여인원: 5명
 </br>
 
-# 기술 스택
-- 프론트엔드
-- 백엔드
-- 데이터베이스
-- 인프라
-- 버전 및 이슈 관리
+# 🛠️ 기술 스택
+- 프론트엔드 : React, Redux, Axios, Tailwind, React-Router
+- 백엔드 : Spring Boot, JPA(Hibernate)
+- 데이터베이스 : Redis, MySQL
+- 인프라 : AWS(EC2, S3), Docker, GitHub Actions
+- 버전 및 이슈 관리 : Git, Git Hooks, GitHub, Jira
+</br>
 
-# 아키텍처
+# 🏗️ 아키텍처
 
-## CI/CD
+### - CI/CD
 ![cicd](readme/cicd.png)
 
-## 서비스 아키텍처
+### - 서비스 아키텍처
 ![service](readme/architecture.png)
 
-# 시연 영상
+# 🌟 시연 영상
 
-# 팀 소개
+# 👥 팀 소개
 | [김동훈](https://github.com/hnihoon) | [서승덕](https://github.com/ssdeok) | [이재현](https://github.com/CloakingGhost) | [이태영](https://github.com/lxodud) | [차윤선](https://github.com/hisunny1007) |
 | :---: | :---: | :---: | :---: | :---: |
 | ![김동훈](https://github.com/hnihoon.png) | ![서승덕](https://github.com/ssdeok.png) | ![이재현](https://github.com/CloakingGhost.png) | ![이태영](https://github.com/lxodud.png) | ![차윤선](https://github.com/hisunny1007.png) |
 
-# 참고 링크
+# 🔗 참고 링크
 - [GitHub Wiki](https://github.com/SesacDTeam/swim-done/wiki/%EC%B0%B8%EA%B3%A0-%EC%9E%90%EB%A3%8C)
