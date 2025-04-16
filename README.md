@@ -33,17 +33,22 @@
 </br>
 
 # 📖 프로젝트 개요
-- 도메인 : https://swimheyeom.com
+- 도메인 : **https://swimheyeom.com**
 - 프로젝트 기간: 2025.03.10. ~ 2025.04.03.
 - 프로젝트 참여인원: 5명
 </br>
 
 # 기술 스택
 - 프론트엔드
+  - <img height="24" src="https://cdn.simpleicons.org/react/61DAFB?viewbox=auto" /><sub>React</sub> <img height="24" src="https://cdn.simpleicons.org/reactrouter/CA4245?viewbox=auto" /><sub>React Router</sub> <img height="24" src="https://cdn.simpleicons.org/redux/764ABC?viewbox=auto" /><sub>Redux</sub>
 - 백엔드
+  - <img height="24" src="https://cdn.simpleicons.org/springboot/6DB33F?viewbox=auto" /><sub>Spring Boot</sub> <img height="24" src="https://cdn.simpleicons.org/hibernate/59666C?viewbox=auto" /><sub>Hibernate</sub>
 - 데이터베이스
+  - <img height="24" src="https://cdn.simpleicons.org/mysql/4479A1?viewbox=auto" /><sub>MySQL</sub> <img height="24" src="https://cdn.simpleicons.org/redis/FF4438?viewbox=auto" /><sub>Redis</sub>
 - 인프라
+  - <img height="24" src="https://cdn.simpleicons.org/amazons3/569A31?viewbox=auto" /><sub>S3</sub> <img height="24" src="https://cdn.simpleicons.org/amazonec2/FF9900?viewbox=auto" /><sub>EC2</sub> <img height="24" src="https://cdn.simpleicons.org/docker/2496ED?viewbox=auto" /><sub>Docker</sub> <img height="24" src="https://cdn.simpleicons.org/githubactions/2088FF?viewbox=auto" /><sub>Github Actions</sub> 
 - 버전 및 이슈 관리
+  - <img height="24" src="https://cdn.simpleicons.org/git/F05032?viewbox=auto" /><sub>Git, Git Hooks</sub> <img height="24" src="https://cdn.simpleicons.org/github/181717?viewbox=auto" /><sub>GitHub</sub> <img height="24" src="https://cdn.simpleicons.org/jira/0052CC?viewbox=auto" /><sub>Jira</sub>
 
 # 아키텍처
 
@@ -53,7 +58,7 @@
 ## 서비스 아키텍처
 ![service](readme/architecture.png)
 
-# 시연 영상
+<!-- # 시연 영상 -->
 
 # 팀 소개
 | [김동훈](https://github.com/hnihoon) | [서승덕](https://github.com/ssdeok) | [이재현](https://github.com/CloakingGhost) | [이태영](https://github.com/lxodud) | [차윤선](https://github.com/hisunny1007) |
