@@ -33,7 +33,7 @@
 </br>
 
 # 📖 프로젝트 개요
-- 도메인 : https://swimheyeom.com
+- 도메인 : **https://swimheyeom.com**
 - 프로젝트 기간: 2025.03.10. ~ 2025.04.03.
 - 프로젝트 참여인원: 5명
 </br>
@@ -54,7 +54,7 @@
 ### - 서비스 아키텍처
 ![service](readme/architecture.png)
 
-# 🌟 시연 영상
+<!-- # 시연 영상 -->
 
 # 👥 팀 소개
 | [김동훈](https://github.com/hnihoon) | [서승덕](https://github.com/ssdeok) | [이재현](https://github.com/CloakingGhost) | [이태영](https://github.com/lxodud) | [차윤선](https://github.com/hisunny1007) |
