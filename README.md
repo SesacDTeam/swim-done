@@ -54,7 +54,21 @@
 ### - 서비스 아키텍처
 ![service](readme/architecture.png)
 
-<!-- # 시연 영상 -->
+# 🎥 시연 영상
+
+### 소셜로그인
+![네이버로그인](https://github.com/user-attachments/assets/db2b2175-5ca8-40f0-9e1a-c515ba6c242b)
+### 지도 기반 수영장 찾기
+![수영장 찾기](https://github.com/user-attachments/assets/4ad268e7-d0ca-47eb-860e-46c536100638)
+### 수영장 찜하기
+![찜하기](https://github.com/user-attachments/assets/cda7042e-89bf-437d-b708-37a1d05acade)
+### 수영장 리뷰 작성
+![리뷰작성](https://github.com/user-attachments/assets/0ad4536a-c1bf-4bfa-9170-3e092c4b6c95)
+### 내가 작성한 리뷰 수정,삭제
+![내가작성한리뷰수정삭제](https://github.com/user-attachments/assets/5b3b144b-2027-473a-95aa-166635fdfa77)
+### 수영장 자유수영 시간표 제보하기
+![제보하기](https://github.com/user-attachments/assets/8bdd3c9e-6766-4291-9f19-2e8274f55a17)
+
 
 # 👥 팀 소개
 | [김동훈](https://github.com/hnihoon) | [서승덕](https://github.com/ssdeok) | [이재현](https://github.com/CloakingGhost) | [이태영](https://github.com/lxodud) | [차윤선](https://github.com/hisunny1007) |
